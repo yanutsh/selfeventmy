@@ -1141,21 +1141,36 @@ footer {
   margin-right: 15px; 
 }  
 
-.buttons a.enter.active{
+.buttons a.enter{
   width: 90px;
   height: 45px;
-  background-color: #AE4A84;
+  background-color: #fff;
   border-radius: 10px; 
-  color:  #fff; 
+  color:  #AE4A84; 
 }
 
-.buttons a.register.active {  
+.buttons a.enter.active,
+.buttons a.register.active{
+   background-color: #AE4A84;
+   color:  #fff; 
+}
+
+.buttons a.register {  
   width: 184px;
   height: 45px;
-  background-color: #AE4A84;
+  background-color: #fff;
   border-radius: 10px; 
-  color:  #fff;  
+  color:  #AE4A84;  
 }
+
+.buttons a.enter:hover,
+.buttons a.enter:focus,
+.buttons a.register:hover,
+.buttons a.register:focus  {
+  background-color: #AE4A84;
+  color:  #fff;
+}
+
 
 /*===============================  Section-1 ======================*/
 section.section-1{

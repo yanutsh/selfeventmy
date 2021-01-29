@@ -22,7 +22,8 @@ class TemplateAsset extends AssetBundle {
     //public $basePath = '@webroot';
     //public $baseUrl = '@web';
     public $css = [
-        'css/style.css',        
+        'css/style.css',
+        'css/templates/template-main.css'        
     ];
     public $js = [
         'js/script.js',
