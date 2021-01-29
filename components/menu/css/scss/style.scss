@@ -1,0 +1,42 @@
+@charset "utf-8";
+
+@import "compass";
+@import "compass/layout/stretching";
+
+/*@include global-reset();*/
+
+/*@include nested-reset();*/
+
+@import "../../../../assets/css/scss/variables/typography";
+@import "../../../../assets/css/scss/variables/colors";
+@import "../../../../assets/css/scss/variables/size";
+/*@import "../../../../assets/css/scss/variables/images";*/
+
+@import "../../../../assets/css/scss/mixin/font-size";
+/*@import "../../../../assets/css/scss/mixin/font-awesome";*/
+/*@import "../../../../assets/css/scss/mixin/block-middle";*/
+@import "../../../../assets/css/scss/mixin/font-props";
+@import "../../../../assets/css/scss/mixin/respond-to";
+/*@import "mixin/video-impulse";*/
+
+/*@import "common/block";*/
+/*@import "../../../../assets/css/scss/common/popup-form";*/
+/*@import "common/page";*/
+
+
+.navigation-main {
+    @include inline-block(middle);
+    padding-left: 18px;
+    margin: 0;
+    li {
+        @include inline-block(top);
+        margin: 0 4px;
+        a {
+            @include font-props(3.5, $color-white, $font-cn);
+            text-decoration: none;
+        }
+        &.active, a:hover {
+            @include font-props(3.5, $color-mandyspink, $font-cn);;
+        }
+    }
+}

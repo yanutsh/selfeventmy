@@ -1,0 +1,30 @@
+{
+    "name": "porcelanosa/yii2-magnific-popup",
+    "description": "JQuery magnific popup widget",
+    "version": "dev-master",
+    "keywords": [
+        "yii",
+        "yii2",
+        "yii 2",
+        "jquery",
+        "magnific popup"
+    ],
+    "type": "yii2-extension",
+    "homepage": "https://github.com/porcelanosa/yii2-magnific-popup",
+    "authors": [
+        {
+            "name": "Alex Porcelanosa",
+            "email": "porcelanosam@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "porcelanosa\\magnificPopup\\": ""
+        }
+    }
+}

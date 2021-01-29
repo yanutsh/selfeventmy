@@ -1,0 +1,42 @@
+/*@include global-reset();*/
+/*@include nested-reset();*/
+/*@import url('//fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Roboto:400,700|Exo+2:400,700&subset=cyrillic');*/
+/*$font-exo: 'Exo 2', sans-serif;*/
+/**
+*
+* @link http://www.htmlcsscolor.com/ Color name
+*
+**/
+/*@import "../../../../assets/css/scss/variables/images";*/
+/*@import "../../../../assets/css/scss/mixin/font-awesome";*/
+/*@import "../../../../assets/css/scss/mixin/block-middle";*/
+/*@import "mixin/video-impulse";*/
+/*@import "common/block";*/
+/*@import "../../../../assets/css/scss/common/popup-form";*/
+/*@import "common/page";*/
+.navigation-main {
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  *zoom: 1;
+  *display: inline;
+  padding-left: 18px;
+  margin: 0; }
+  .navigation-main li {
+    display: inline-block;
+    vertical-align: top;
+    *vertical-align: auto;
+    *zoom: 1;
+    *display: inline;
+    margin: 0 4px; }
+    .navigation-main li a {
+      font-size: 15px;
+      color: #ffffff;
+      font-family: "Roboto Condensed", sans-serif;
+      text-decoration: none; }
+    .navigation-main li.active, .navigation-main li a:hover {
+      font-size: 15px;
+      color: #FFB895;
+      font-family: "Roboto Condensed", sans-serif; }
+
+/*# sourceMappingURL=style.css.map */

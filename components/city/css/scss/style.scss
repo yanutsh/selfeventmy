@@ -1,0 +1,135 @@
+@charset "utf-8";
+
+@import "compass";
+@import "compass/layout/stretching";
+
+/*@include global-reset();*/
+
+/*@include nested-reset();*/
+
+@import "../../../../assets/css/scss/variables/typography";
+@import "../../../../assets/css/scss/variables/colors";
+@import "../../../../assets/css/scss/variables/size";
+@import "../../../../assets/css/scss/variables/images";
+
+@import "../../../../assets/css/scss/mixin/font-size";
+@import "../../../../assets/css/scss/mixin/font-awesome";
+@import "../../../../assets/css/scss/mixin/block-middle";
+@import "../../../../assets/css/scss/mixin/font-props";
+@import "../../../../assets/css/scss/mixin/respond-to";
+/*@import "mixin/video-impulse";*/
+
+/*@import "common/block";*/
+@import "../../../../assets/css/scss/common/popup-form";
+/*@import "common/page";*/
+
+
+.city-widget {
+    @include inline-block(middle);
+    width: 180px;
+    a {
+        @include font-props(3.5, $color-white, $font-cn);
+        text-decoration: none;
+        .image {
+            @include inline-block(middle);
+            padding-right: 15px;
+        }
+        .name {
+            @include inline-block(middle);
+            padding-right: 5px;
+        }
+        &:after {
+            @include font-awesome($fa-icon-angle-down);
+        }
+    }
+}
+.popup-city {
+    width: $size-width-max;
+    .country {
+        display: none;
+        padding-bottom: 10px;
+        @include font-props(4, $color-black90);
+        span {
+            @include inline-block(middle);
+            @include block-middle-inner(img);
+            padding: 0;
+            margin-right: 10px;
+            width: 22px;
+            height: 17px;
+            text-align: center;
+            background: $color-black20;
+            @include border-radius(2px);
+        }
+    }
+    .popup-header {
+        padding: 20px 35px;
+        @include font-props(5, $color-black90);
+    }
+    form {
+        padding: 0 35px;
+        select {
+            width: 258px;
+            height: 38px;
+            border: 1px solid $color-jordyblue;
+            @include border-radius(5px);
+            @include font-props(3.5, $color-black90);
+            @include inline-block(top);
+            margin-right: 30px;
+            background: $color-white;
+            padding: 0 10px;
+        }
+        .input-group {
+            @include inline-block(top);
+            input[type=text] {
+                @include input-placeholder{
+                    color: $color-black50;
+                }
+                @include font-props(3.5, $color-black90);
+                width: 258px;
+                height: 38px;
+                border: 1px solid $color-jordyblue;
+                @include border-radius(5px 0 0 5px);
+                padding: 0 10px;
+            }
+            .input-group-btn {
+                @include inline-block(top);
+                button {
+                    height: 38px;
+                    @include font-props(3.5, $color-black90);
+                    @include border-radius(0 5px 5px 0);
+                }
+            }
+        }
+    }
+    .city-list {
+        max-height: 600px;
+        overflow: auto;
+        margin: 30px 0;
+        padding: 10px 35px;
+        ul {
+            @include column-count(4);
+            li {
+                margin: 0 0 15px;
+                a {
+                    color: $color-black80;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }    
+    @include respond-to(middle) {
+        width: 80%;
+        .city-list {
+            ul {
+                @include column-count(2);
+            }
+        }
+        form {
+            select {
+                margin-bottom: 20px;
+                width: 345px;
+            }
+        }
+    }
+}
+
