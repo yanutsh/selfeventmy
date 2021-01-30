@@ -1467,5 +1467,14 @@ a.search__link{
   .footer__flex .shops a{
     margin-left: 30px;
   }
-/*================== footer конец=====================*/
+/*====================== footer конец=====================---------*/
 
+
+/*==================== Модальные окна ===============================*/
+.modal-backdrop{
+  z-index: 40!important;
+}
+
+.modal-dialog {
+  margin-top: 150px!important;
+}

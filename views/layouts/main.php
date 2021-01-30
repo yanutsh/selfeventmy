@@ -5,6 +5,8 @@
 use yii\helpers\Html;
 use app\assets\FontAsset;
 use app\assets\AppAsset;
+use yii\bootstrap\Modal; // для модального окна
+use yii\bootstrap\ActiveForm;
 use porcelanosa\magnificPopup\MagnificPopup;
 use app\components\city\CityWidget;
 
@@ -69,7 +71,26 @@ AppAsset::register($this);
                             <?php if (Yii::$app->user->isGuest) 
                             { ?>
                                 <a href="/login" class="enter active">Вход</a>
-                                <a href="/signup" class="register">Регистрация</a>
+
+                                <!-- модальное окно Регистрация-1    -->
+                                <?php                                  
+                                Modal::begin([
+                                    'header' => '<h2>Hello world</h2>',
+                                    'toggleButton' => [
+                                        'label' => 'Регистрация',
+                                        'tag' => 'a',
+                                        'class' => 'register'
+                                    ],
+                                    'footer' => 'Низ окна',
+                                ]); ?>
+
+                                 <!-- тело окна  -->
+                                <h1>тело окна</h1>                                
+
+                                <?php Modal::end();?>
+                            <!-- модальное окно Конец    -->
+
+                                <!-- <a href="/signup" class="register">Регистрация</a> -->
                             <?php 
                             } else {?>
                                 <a href="/logout" class="register active">Выход</a>
@@ -83,7 +104,7 @@ AppAsset::register($this);
         </header>
 
         <?= $content ?>
-
+        
         <footer>
         <section class="section__footer">
             <div class="wrapper">
