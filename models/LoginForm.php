@@ -11,6 +11,7 @@ use yii\base\Model;
  * @property-read User|null $user This property is read-only.
  *
  */
+
 class LoginForm extends Model
 {
     public $username;
@@ -47,6 +48,9 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
 
+            //echo ("password=".$this->password);
+            //debug($user);
+
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
@@ -58,16 +62,25 @@ class LoginForm extends Model
      * @return bool whether the user is logged in successfully
      */
     public function login()
-    {
-
-        //debug($this->getUser());
+    {       
         if ($this->validate()) {
             if ($this->rememberMe) {
+                //echo "Validate"; debug($this); die;
+
                 $u = $this->getUser();
                 $u -> generateAuthKey();
                 $u -> save();
-            }    
+            }
+            // Запоминаем авторизацию юзера 
+            //echo "ЛогинForm Валидация";
+            //debug($this->getUser());
+            
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            //Yii::$app->user->login($this->getUser());  //, $this->rememberMe ? 3600*24*30 : 3600*24*30);
+            //echo ("Юзер-".Yii::$app->user->identity->username);
+            //die;
+           
+            
         }
         return false;
     }
@@ -80,9 +93,9 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
+            //echo ("username=".$this->username);           
             $this->_user = User::findByUsername($this->username);
         }
-
         return $this->_user;
     }
 }

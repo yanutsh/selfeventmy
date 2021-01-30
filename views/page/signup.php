@@ -10,9 +10,9 @@ use app\components\page\PageAttributeWidget as PAW;
 //TemplateAsset::register($this);
 AppAsset::register($this);
 
+//echo "View/Signup"; die;
 
-
-$this->title = $page->name; 
+$this->title = "Регистрация Заказчика"; //$page->name; 
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>

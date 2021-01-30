@@ -11,7 +11,6 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 //use app\models\Article;
-use app\models\LoginForm;
 use app\models\NavigationMain;
 use app\models\Page;
 //use app\models\Product;
@@ -23,6 +22,8 @@ use app\models\Settings;
 use app\models\BuyRequestForm;
 use app\models\SearchForm;
 use app\models\SignupForm;
+use app\models\LoginForm;
+use app\models\User;
 
 /**
  * PageController implements the CRUD actions for Page model.
@@ -111,7 +112,7 @@ class PageController extends Controller
         else
         {
             $parentPages   = Page::find()->where(['status' => 1])->asArray()->all();
-		//            $parentPages   = array_merge([ 'id' => 0, 'name' => '(нет)' ], $parents);
+		      //  $parentPages   = array_merge([ 'id' => 0, 'name' => '(нет)' ], $parents);
             array_unshift($parentPages, ['id' => 0, 'name' => '(нет)']);
             $model->parent = 0;
             return $this->render('create', [
@@ -196,6 +197,7 @@ class PageController extends Controller
      * @return Page the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+
     protected function findModel($id)
     {
         if(($model = Page::findOne($id)) !== null)
@@ -216,8 +218,8 @@ class PageController extends Controller
 
         $pageModel = Page::findOne(['id' => $id, 'status' => 1]);
  
- 		//if(\Yii::$app->request->get('region')) {echo "есть запрос региона"; die;}
- 		// если в GET новый город - записываем в кукис
+ 		  //if(\Yii::$app->request->get('region')) {echo "есть запрос региона"; die;}
+ 		  // если в GET новый город - записываем в кукис
         if(\Yii::$app->request->get('inputCity')) {
             	
             \Yii::$app->view->params['inputCity'] = \Yii::$app->request->get('inputCity'); //
@@ -375,6 +377,14 @@ class PageController extends Controller
       }
       } */
 
+
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
+    }
+
     /**
      * Signs user up.
      *
@@ -382,16 +392,42 @@ class PageController extends Controller
      */
     public function actionSignup()
     {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-            return $this->goHome();
-        }
+      
+      // Регистрация нового юзера
+      
+      if (!Yii::$app->user->isGuest) {  // если юзер авторизован перенаправляем на главную?
+        echo "УЖЕ Залогинился - КУДА ИДЕМ?"; 
+        die;
+        return $this->goHome();
+      }
 
+        $model = new SignupForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) 
+        {
+         
+            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+
+             //echo "Регистрация прошла успешно"; 
+             
+             // Логинирование только что зарегистрированного пользователя
+              $model2 = new LoginForm();
+              $model2->username = $model->username;
+              $model2->password = $model->password;
+
+              //debug($model2);
+
+              if ($model2->login()) {  // если логинирование прошло
+                  //echo ("isGuest-".Yii::$app->user->isGuest);  die;
+                  //echo ("Юзер-".Yii::$app->user->identity->username);
+                  //die;
+                  return $this->goHome();
+              }              
+        }
+        // Логин не прошел  
         return $this->render('signup', [
-            'model' => $model,
-        ]);
-    }  
+            'model' => $model, ]);
+    }
 
     public function actionArtists()
     {

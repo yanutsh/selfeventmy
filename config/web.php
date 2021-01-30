@@ -24,7 +24,7 @@ $config = [
         'user'         => [
             'identityClass'   => 'app\models\User',
             'enableAutoLogin' => true,
-            'loginUrl' => '/admin/auth/login',
+            //'loginUrl' => '/admin/auth/login',
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -34,7 +34,7 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => false,
+            'useFileTransport' => true,
         ],
         'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -56,6 +56,7 @@ $config = [
                 'artists' => 'page/artists',
                 'requests' => 'page/requests',
                 'signup' => 'page/signup',
+                'logout' => 'page/logout',
                
             // [
                     // 'pattern' => 'sitemap.xml',

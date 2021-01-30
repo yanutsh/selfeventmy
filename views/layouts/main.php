@@ -66,14 +66,20 @@ AppAsset::register($this);
                         </div> -->
 
                         <div class="buttons">
-                            <a href="#!" class="enter active">Вход</a>
-                            <a href="#!" class="register">Регистрация</a>
-
+                            <?php if (Yii::$app->user->isGuest) 
+                            { ?>
+                                <a href="/login" class="enter active">Вход</a>
+                                <a href="/signup" class="register">Регистрация</a>
+                            <?php 
+                            } else {?>
+                                <a href="/logout" class="register active">Выход</a>
+                            <?php } ?>                            
                         </div>
+                        
                     </div>    
                 </div>   
             </div>
-
+            
         </header>
 
         <?= $content ?>
