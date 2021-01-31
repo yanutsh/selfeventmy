@@ -160,7 +160,7 @@ body {
     padding: 25px; }
     .popup-form .form-content .product-info .image {
       display: inline-block;
-      vertical-align: top;
+      vertical-align: top;nter
       *vertical-align: auto;
       *zoom: 1;
       *display: inline;
@@ -402,6 +402,7 @@ header {
     position: fixed;
     background-color: #fff;
     z-index: 1000;
+    opacity: 0.9;
     padding: 10px 0;
     *position: relative;
     *border-bottom: 1px solid #DFDCDC; }
@@ -1131,6 +1132,7 @@ footer {
   font-size: 18px;
   line-height: 45px;
   text-align: center;
+  cursor: pointer;
 }
 
 .buttons a.enter{
@@ -1476,5 +1478,93 @@ a.search__link{
 }
 
 .modal-dialog {
+  width: 436px !important;
+  height: 541px;
   margin-top: 150px!important;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 2px 5px 10px rgba(0,0,0,0.1);
+}
+
+.modal_header{
+  font-size: 36px;
+  line-height: 42px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.modal_text{
+  margin: 0 auto;
+  width: 298px;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: normal;
+  text-align: center;
+  color: #424242;
+  margin-bottom: 60px;
+}
+
+.who_you{
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.who_you__item{
+  width: 45%;
+  text-align: center;
+}
+
+.modal__b1,
+.modal__b2 {
+  display: inline-block;
+  width: 84px;
+  height: 84px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.modal__b1{
+  /*margin-left: 80px;*/
+  background: #F7B491;
+}
+
+.modal__b2{
+  /*margin-left: 104px;*/
+  background: #AE4A84;
+}
+
+.who_you__title{
+  font-size: 18px;
+  line-height: 21px;
+  font-weight: bold;
+  color: #2F2F2F;
+  margin-bottom: 12px;
+}
+
+.who_you__text{
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: normal;
+  color: #2F2F2F;
+  margin-bottom: 32px;
+}
+
+.modal__body img{
+  display: block;
+  margin: 0 auto;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+#w1 .modal-header{
+  padding: 0;
+  border: none;
+}
+
+#w1 button.close{
+  display: none;
 }

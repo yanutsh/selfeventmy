@@ -75,17 +75,43 @@ AppAsset::register($this);
                                 <!-- модальное окно Регистрация-1    -->
                                 <?php                                  
                                 Modal::begin([
-                                    'header' => '<h2>Hello world</h2>',
+                                    'header' => Null, //'<h2>Hello world</h2>',
                                     'toggleButton' => [
                                         'label' => 'Регистрация',
                                         'tag' => 'a',
                                         'class' => 'register'
                                     ],
-                                    'footer' => 'Низ окна',
+                                    'footer' => Null, //'Низ окна',
+                                    'bodyOptions' => ['class' => 'modal__body'],
                                 ]); ?>
 
                                  <!-- тело окна  -->
-                                <h1>тело окна</h1>                                
+                                <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
+                                <div class="modal_header">Кто вы?</div>
+                                <div class="modal_text">
+                                    Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите <a href="#!">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите <a href="#!">Ищу исполнителя</a> 
+                                </div> 
+
+                                <div class="who_you">
+                                    <div class="who_you__item">
+                                        <a href="#!"> 
+                                            <div class="modal__b1"></div>
+                                        </a>
+
+                                        <div class="who_you__title">Я исполнитель</div>                                           
+                                        <div class="who_you__text">Получай заказы с гарантией оплаты и зарабатывай на постоянном потоке заказов</div>
+                                    </div>
+                                    <div class="who_you__item">
+                                        <a href="#!">    
+                                            <div class="modal__b2"></div>
+                                        </a>
+
+                                        <div class="who_you__title">Ищу исполнитель</div>
+
+                                        <div class="who_you__text">Организуй свой праздник<br>по своим правилам
+                                        </div>
+                                    <div class="who_you__item">    
+                                </div>                                   
 
                                 <?php Modal::end();?>
                             <!-- модальное окно Конец    -->
