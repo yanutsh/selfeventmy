@@ -11,6 +11,6 @@ $config = require __DIR__ . '/../config/web.php';
 
 require_once __DIR__ . '/../libs/functions.php';
 
-//debug("Индекс-старт");
+//debug($config);
 
 (new yii\web\Application($config))->run();

@@ -89,7 +89,7 @@ AppAsset::register($this);
                                 <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
                                 <div class="modal_header">Кто вы?</div>
                                 <div class="modal_text">
-                                    Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите <a href="#!">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите <a href="#!">Ищу исполнителя</a> 
+                                    Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите <a href="#!">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите <a href="/regcust">Ищу исполнителя</a> 
                                 </div> 
 
                                 <div class="who_you">
@@ -102,7 +102,7 @@ AppAsset::register($this);
                                         <div class="who_you__text">Получай заказы с гарантией оплаты и зарабатывай на постоянном потоке заказов</div>
                                     </div>
                                     <div class="who_you__item">
-                                        <a href="#!">    
+                                        <a href="/regcust">    
                                             <div class="modal__b2"></div>
                                         </a>
 

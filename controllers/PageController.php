@@ -80,6 +80,56 @@ class PageController extends Controller
     	//return $this->redirect(['page/frontend', 'id' => 1]);
     }
 
+
+    //========================== Первичный контроллер ==========================
+    public function actionFrontend($id = Null)
+    {    
+      
+      // если id не передали - выводим первую страницу
+      if ($id === Null) $id=1;
+
+        $pageModel = Page::findOne(['id' => $id, 'status' => 1]);
+ 
+      //if(\Yii::$app->request->get('region')) {echo "есть запрос региона"; die;}
+      // если в GET новый город - записываем в кукис
+        if(\Yii::$app->request->get('inputCity')) {
+              
+            \Yii::$app->view->params['inputCity'] = \Yii::$app->request->get('inputCity'); //
+            // записываем город в кукис
+            $cookies = \Yii::$app->response->cookies;
+            $cookies->add(new \yii\web\Cookie([
+                'name'   => 'city',
+                'value'  => \Yii::$app->request->get('inputCity'),
+                'expire' => time() + 60 * 60 * 24 * 30,
+            ]));
+        }
+        
+      if($pageModel)
+        {
+
+            $templateName = $pageModel->template;
+                       
+            if(!$templateName) $templateName = 'template-simple';
+            
+            //$template     = '../template/' . $templateName;
+            $template     = '../page/' . $templateName;
+
+            //$model = new User::
+            return $this->render($template, [
+                        // common
+                        'page' => $pageModel,                        
+            ]);
+        }
+        else
+        {
+            Yii::$app->response->setStatusCode(404);
+            return $this->render('../site/error', [
+                        'name'    => 'Страница не найдена',
+                        'message' => 'Страница не найдена',
+            ]);
+        }
+    }
+
     /**
      * Displays a single Page model.
      * @param integer $id
@@ -210,54 +260,7 @@ class PageController extends Controller
         }
     }
 
-    public function actionFrontend($id = Null)
-    {    
-    	
-    	// если id не передали - выводим первую страницу
-    	if ($id === Null) $id=1;
-
-        $pageModel = Page::findOne(['id' => $id, 'status' => 1]);
- 
- 		  //if(\Yii::$app->request->get('region')) {echo "есть запрос региона"; die;}
- 		  // если в GET новый город - записываем в кукис
-        if(\Yii::$app->request->get('inputCity')) {
-            	
-            \Yii::$app->view->params['inputCity'] = \Yii::$app->request->get('inputCity'); //
-            // записываем город в кукис
-            $cookies = \Yii::$app->response->cookies;
-            $cookies->add(new \yii\web\Cookie([
-                'name'   => 'city',
-                'value'  => \Yii::$app->request->get('inputCity'),
-                'expire' => time() + 60 * 60 * 24 * 30,
-            ]));
-        }
-        
- 	    if($pageModel)
-        {
-
-            $templateName = $pageModel->template;
-
-                       
-            if(!$templateName) $templateName = 'template-simple';
-            
-            //$template     = '../template/' . $templateName;
-            $template     = '../page/' . $templateName;
-
-            //$model = new User::
-            return $this->render($template, [
-                        // common
-                        'page' => $pageModel,                        
-            ]);
-        }
-        else
-        {
-            Yii::$app->response->setStatusCode(404);
-            return $this->render('../site/error', [
-                        'name'    => 'Страница не найдена',
-                        'message' => 'Страница не найдена',
-            ]);
-        }
-    }
+    
 
     public function actionSearch()
     {
@@ -439,5 +442,22 @@ class PageController extends Controller
     {
         //debug("Requests");
         return $this->render('requests');
-    }  
+    }
+
+    
+    public function actionRegcust()
+{
+    $model = new \app\models\RegCustForm();
+
+    if ($model->load(Yii::$app->request->post())) {
+        if ($model->validate()) {
+            // form inputs are valid, do something here
+            return;
+        }
+    }
+
+    return $this->render('regCust', [
+        'model' => $model,
+    ]);
+}
 }

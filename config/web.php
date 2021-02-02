@@ -8,6 +8,7 @@ $config = [
     'basePath'      => dirname(__DIR__),
     'name'          => 'SelfEvent',
     'defaultRoute'  => 'page/frontend',
+    
     /**
      * @todo Добавить компрессию после завершения разработки
      */
@@ -57,6 +58,7 @@ $config = [
                 'requests' => 'page/requests',
                 'signup' => 'page/signup',
                 'logout' => 'page/logout',
+                'regcust' => 'page/regcust',
                
             // [
                     // 'pattern' => 'sitemap.xml',

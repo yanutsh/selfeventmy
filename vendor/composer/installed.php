@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'be17980e0a4a49ef235a5588424463321e866683',
+    'reference' => '8fb450014b60504135745dbcf31711e057c83d44',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -371,6 +371,16 @@
       array (
       ),
       'reference' => '02baee5e06a5dfbc94b71dc8c13ca87789716b29',
+    ),
+    'kartik-v/yii2-widget-datepicker' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '1.4.x-dev',
+      ),
+      'reference' => '98257627814abf52aa8c1e6dc020d8eb6c1c39b5',
     ),
     'kartik-v/yii2-widget-fileinput' => 
     array (
@@ -980,7 +990,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'be17980e0a4a49ef235a5588424463321e866683',
+      'reference' => '8fb450014b60504135745dbcf31711e057c83d44',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (

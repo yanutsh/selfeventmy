@@ -27,7 +27,8 @@
         "kartik-v/yii2-widget-fileinput": "@dev",
         "johnitvn/yii2-ajaxcrud": "*",
         "johnitvn/yii2-rbac-plus": "*",
-        "kartik-v/bootstrap-fileinput": "dev-master"
+        "kartik-v/bootstrap-fileinput": "dev-master",
+        "kartik-v/yii2-widget-datepicker": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\CategoryPhoto;
+use app\models\WorkForm;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CategoryPhotoController implements the CRUD actions for CategoryPhoto model.
+ * WorkFormController implements the CRUD actions for WorkForm model.
  */
-class CategoryPhotoController extends Controller
+class WorkFormController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,15 +30,13 @@ class CategoryPhotoController extends Controller
     }
 
     /**
-     * Lists all CategoryPhoto models.
+     * Lists all WorkForm models.
      * @return mixed
      */
     public function actionIndex()
-    {   
-        // Набирать  category-photo
-        //debug('Category/Index');
+    {
         $dataProvider = new ActiveDataProvider([
-            'query' => CategoryPhoto::find(),
+            'query' => WorkForm::find(),
         ]);
 
         return $this->render('index', [
@@ -47,7 +45,7 @@ class CategoryPhotoController extends Controller
     }
 
     /**
-     * Displays a single CategoryPhoto model.
+     * Displays a single WorkForm model.
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -60,13 +58,13 @@ class CategoryPhotoController extends Controller
     }
 
     /**
-     * Creates a new CategoryPhoto model.
+     * Creates a new WorkForm model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new CategoryPhoto();
+        $model = new WorkForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -78,7 +76,7 @@ class CategoryPhotoController extends Controller
     }
 
     /**
-     * Updates an existing CategoryPhoto model.
+     * Updates an existing WorkForm model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -98,7 +96,7 @@ class CategoryPhotoController extends Controller
     }
 
     /**
-     * Deletes an existing CategoryPhoto model.
+     * Deletes an existing WorkForm model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -112,15 +110,15 @@ class CategoryPhotoController extends Controller
     }
 
     /**
-     * Finds the CategoryPhoto model based on its primary key value.
+     * Finds the WorkForm model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return CategoryPhoto the loaded model
+     * @return WorkForm the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = CategoryPhoto::findOne($id)) !== null) {
+        if (($model = WorkForm::findOne($id)) !== null) {
             return $model;
         }
 

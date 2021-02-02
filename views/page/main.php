@@ -16,9 +16,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
     <section class="section-1">
 
-        <div class="wrapper">
-            
-            
+        <div class="wrapper">           
 
             <div class="header">Найдите исполнителя для<br>вашего мероприятия или<br>стань исполнителем и<br>зарабатывай</div>           
 
