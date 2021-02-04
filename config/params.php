@@ -17,5 +17,5 @@ return [
     'servicePageId'   => 25,
     'industryPageId'  => 29,
     'reviewPageId'    => 59,
-    'user.passwordMinLength' => 8,
+    'user.passwordMinLength' => 3,
 ];

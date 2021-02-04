@@ -8,6 +8,7 @@ use app\components\page\PageAttributeWidget as PAW;
 use app\models\WorkForm;
 use app\models\Sex;
 use kartik\date\DatePicker;
+use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
 
@@ -21,13 +22,25 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
         <div class="wrapper__regcust">
 
+            <?php  Pjax::begin();  ?>
             <div class="form_title">Регистрация заказчика</div>
 
             <div class="regcust">
-                <?php //debug(WorkForm::find()->select(['work_form_name', 'id'])->indexBy('id')->column()) 
-                //debug( ['M','Ж']) ?>
+                
+                <?php  //Pjax::begin();  ?>
+                <?php $form = ActiveForm::begin([
+                    'options' => [
+                        'data-pjax' => true,
+                        ],
+                ]); ?>
 
-                <?php $form = ActiveForm::begin(); ?>
+                <!-- вывод flesh - сообщения -->
+                <?php if( Yii::$app->session->hasFlash('success') ): ?>
+                     <div class="alert alert-success alert-dismissible" role="alert">
+                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <?php echo Yii::$app->session->getFlash('success'); ?>
+                     </div>
+                <?php endif;?>
 
                     <?= $form->field($model, 'isexec')->hiddenInput(['value' => '0'])->label(false); ?>
 
@@ -94,36 +107,48 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                      <div class="personal_check">
                         <label class="checkbox">
                             
-                            <input type="checkbox"  class="chkbox"  
-                            id="personal" 
-                            name="personal" 
-                            value="0">
+                            <input type="checkbox"  class="chkbox" 
+                                <?php if ($model->personal=='yes') echo "checked"?> 
+                                name="RegCustForm[personal]"  
+                                value="yes">
                             <div class="block-image">
-                                <img src="/web/uploads/images/interface-1.png" alt="Согласен">
+                                <img src="/web/uploads/images/check_box_24px.svg" alt="Согласен">
                             </div> 
                             <div class="personal_check__text">Даю согласие на обработку персональных данных</div>                           
                         </label>
                     </div>
+                    
                     <div class="personal_check">
                         <label class="checkbox">
                             
                             <input type="checkbox"  class="chkbox"  
-                            id="agreement" 
-                            name="agreement" 
-                            value="0">
+                                <?php if ($model->agreement=='yes') echo "checked"?> 
+                                name="RegCustForm[agreement]" 
+                                value="yes">
                             <div class="block-image">
-                                <img src="/web/uploads/images/interface-1.png" alt="Согласен">
+                                <img src="/web/uploads/images/check_box_24px.svg" alt="Согласен">
                             </div> 
                             <div class="personal_check__text">Принимаю пользовательское соглашение</div>                           
                         </label>
                     </div>
 
+                    <!-- вывод flesh - сообщения об ошибках-->
+                    <?php if( Yii::$app->session->hasFlash('errors') ): ?>
+                         <div class="alert alert-danger alert-dismissible" role="alert">
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                         <?php echo Yii::$app->session->getFlash('errors'); ?>
+                         </div>
+                    <?php endif;?>
+
                     <div class="form-group">
                         <?= Html::submitButton('Зарегистрироваться', ['class' => 'register__user']) ?>
                     </div>
                 <?php ActiveForm::end(); ?>
+                <?php //Pjax::end(); ?>
 
             </div><!-- page-regCust -->
+            <?php Pjax::end(); ?>
+            
         </div>
     
 </div> 

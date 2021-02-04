@@ -10,15 +10,9 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-//use app\models\Article;
 use app\models\NavigationMain;
 use app\models\Page;
-//use app\models\Product;
-//use app\models\ProductAttributeToProduct;
-//use app\models\ProductCategory;
-//use app\models\ProductImage;
 use app\models\Settings;
-//use app\helpers\CatalogImport;
 use app\models\BuyRequestForm;
 use app\models\SearchForm;
 use app\models\SignupForm;
@@ -446,18 +440,42 @@ class PageController extends Controller
 
     
     public function actionRegcust()
-{
-    $model = new \app\models\RegCustForm();
+    {
+      $model = new \app\models\RegCustForm();
 
-    if ($model->load(Yii::$app->request->post())) {
-        if ($model->validate()) {
-            // form inputs are valid, do something here
-            return;
-        }
+      if ($model->load(Yii::$app->request->post())) {
+
+          //if ($model->validate()) {
+          //debug($model->personal);          
+          //debug(Yii::$app->request->post());
+          // form inputs are valid, do something here
+          //return;
+          if(Yii::$app->request->isPjax){
+            
+            $errors = Null;
+            if (!($model->personal =='yes')) $errors="- нет согласия на обработку персональных данных";
+            if (!($model->agreement =='yes')) $errors .="<br>- надо принять пользовательское соглашение";
+
+            if ($errors) {  
+               Yii::$app->session->setFlash('errors', $errors);
+               return $this->render('regCust', compact('model'));
+            } 
+
+          //return $this->render('sendCode', ['model' => $model]);
+          //$url=URL::to('confirm-data/send-code'); 
+          //debug($url);
+          Yii::$app->getResponse()->redirect(
+                ['confirm-data/send-code',
+                 'phone' => $model->phone,
+                 'email' => $model->email,
+                ])->send();
+          return;    
+          }          
+      }
+      return $this->render('regCust', [
+          'model' => $model,
+      ]);
     }
 
-    return $this->render('regCust', [
-        'model' => $model,
-    ]);
-}
+
 }

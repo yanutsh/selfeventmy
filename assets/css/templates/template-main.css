@@ -1573,161 +1573,178 @@ a.search__link{
 
 /*==================== Страница регистрации Заказчика =======================*/
 
-.wrapper__regcust{
-  width: 1040px;
-  margin: 0 auto;
-  margin-top: 140px;
-  margin-bottom: 30px;
-  border-radius: 10px;
-  background: #fff;
-}
-.regcust{
-  margin: 0 auto;
-  width: 343px;
-}
-.form_title{
-  font-size: 42px;
-  line-height: 49px;
-  font-weight: bold;
+  .wrapper__regcust{
+    width: 1040px;
+    margin: 0 auto;
+    margin-top: 140px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .regcust{
+    margin: 0 auto;
+    width: 343px;
+  }
+  .form_title{
+    font-size: 42px;
+    line-height: 49px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 48px;
+    margin-bottom: 32px;
+  }
+
+  .form_subtitle{
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  #w0 .control-label{
+    font-size: 18px;
+    line-height: 21px;
+    font-weight: normal;
+    margin-bottom: 8px;
+    color: #424242;
+  }
+
+  .user-photo{
+    width: 342px;
+    height: 160px;
+    margin: 0 auto;
+    border: 1px dashed #C4C4C4;
+    border-radius: 20px;
+    margin-bottom: 32px;
+  }
+
+  .user-photo img{
+    display: block;
+    width: 36px;
+    margin: 32px auto;
+  }
+
+  .photo_text{
+    width: 160px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .register__user{
+    background-color: #AE4A84;
+    border-radius: 8px; 
+    color:  #fff; 
+    width: 100%;
+    height: 40px;
+    font-size: 14px;
+    font-weight: 700;
+    background: #ae4a84;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05),
+                0 3px 8px rgba(0,0,0,0.04),
+                0 1px 9px rgba(0,0,0,0.08);
+    margin-top: 32px;            
+    margin-bottom: 48px;  
+  }
+
+  .pass__f1,
+  .pass__f2{
+    position: relative;
+  }
+
+  .password-control1, .password-control2, .password-control3 {
+      position: absolute;
+      top: 35px;
+      right: 10px;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+  }
+
+  .password-control1.view,
+  .password-control2.view,
+  .password-control3.view  {
+      background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;    
+  }
+
+  .personal_check__text{
+    font-size: 12.5px;
+    width: 100%;
+    line-height: 20px;
+  }
+
+  .personal_check__text::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 20px;
+      height: 20px;
+      border-style: solid;
+      border-radius: 3px;
+      border-color: #ae4a84;
+      border-width: 3px;
+      background: #fff;
+      /* box-shadow: inset 0 2px 3px rgb(0 0 0 / 20%); */
+      transition: .2s;
+  }
+
+  label.checkbox {
+      position: relative;
+      cursor: pointer;
+  }
+
+  .checkbox input[type=checkbox] {
+    position: absolute;
+    margin-left: -20px;
+  }
+
+  .checkbox input {/*
+      position: absolute;*/
+      z-index: -1;
+      opacity: 0;
+      margin: 4px 0 0 20px;    
+  }
+
+  .block-image {
+      opacity: 0;
+      right: 4px;
+      top: 2px;
+      position: absolute;
+      z-index: 10;
+      transition: .5s;
+      *cursor: pointer;
+  } 
+  .block-image img {
+      width: 12px;
+      height: auto;
+      max-width: 100%;
+      vertical-align: middle;
+      border: 0;
+  }
+
+  .checkbox input:checked + .block-image {
+      display: inline-block;
+      opacity: 1;
+      transition: .5s;
+  }  
+
+  .pass__f2{
+    margin-bottom: 32px;
+  }  
+/*==================== Страница регистрации Заказчика КОНЕЦ==================*/
+
+/*==================== Страница подтверждения данных =======================*/
+.confirm_title{
   text-align: center;
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: bold;
   padding-top: 48px;
   margin-bottom: 32px;
 }
-
-.form_subtitle{
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-#w0 .control-label{
+.choose{
   font-size: 18px;
   line-height: 21px;
-  font-weight: normal;
-  margin-bottom: 8px;
   color: #424242;
+  margin-bottom: 8px;
 }
-
-.user-photo{
-  width: 342px;
-  height: 160px;
-  margin: 0 auto;
-  border: 1px dashed #C4C4C4;
-  border-radius: 20px;
-  margin-bottom: 32px;
-}
-
-.user-photo img{
-  display: block;
-  width: 36px;
-  margin: 32px auto;
-}
-
-.photo_text{
-  width: 160px;
-  margin: 0 auto;
-  text-align: center;
-  font-size: 12px;
-}
-
-.register__user{
-  background-color: #AE4A84;
-  border-radius: 8px; 
-  color:  #fff; 
-  width: 100%;
-  height: 40px;
-  font-size: 14px;
-  font-weight: 700;
-  background: #ae4a84;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05),
-              0 3px 8px rgba(0,0,0,0.04),
-              0 1px 9px rgba(0,0,0,0.08);
-  margin-top: 32px;            
-  margin-bottom: 48px;  
-}
-
-.pass__f1,
-.pass__f2{
-  position: relative;
-}
-
-.password-control1, .password-control2, .password-control3 {
-    position: absolute;
-    top: 35px;
-    right: 10px;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
-}
-
-.password-control1.view,
-.password-control2.view,
-.password-control3.view  {
-    background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;    
-}
-
-.personal_check__text{
-  font-size: 12.5px;
-  width: 100%;
-  line-height: 20px;
-}
-
-.personal_check__text::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 20px;
-    height: 20px;
-    border-style: solid;
-    border-radius: 5px;
-    border-color: #034bd3;
-    border-width: 1px;
-    background: #fff;
-    /* box-shadow: inset 0 2px 3px rgb(0 0 0 / 20%); */
-    transition: .2s;
-}
-
-label.checkbox {
-    position: relative;
-    cursor: pointer;
-}
-
-.checkbox input[type=checkbox] {
-  position: absolute;
-  margin-left: -20px;
-}
-
-.checkbox input {/*
-    position: absolute;*/
-    z-index: -1;
-    opacity: 0;
-    margin: 4px 0 0 20px;    
-}
-
-.block-image {
-    opacity: 0;
-    right: 4px;
-    top: 2px;
-    position: absolute;
-    z-index: 10;
-    transition: .5s;
-    *cursor: pointer;
-} 
-img {
-    width: 12px;
-    height: auto;
-    max-width: 100%;
-    vertical-align: middle;
-    border: 0;
-}
-
-.checkbox input:checked + .block-image {
-    display: inline-block;
-    opacity: 1;
-    transition: .5s;
-}  
-
-.pass__f2{
-  margin-bottom: 32px;
-}  
