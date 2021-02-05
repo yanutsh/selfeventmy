@@ -16,57 +16,81 @@ class ConfirmDataController extends Controller {
 
     public function actionSendCode() {
 
-    	$model = new \app\models\ConfirmDataForm();
-      	if ($model->load(Yii::$app->request->post())) {
+    	//print_r($_POST);           
+        if(Yii::$app->request->isPjax){	              
+            //print_r($_POST);
+            
+            if ($_POST['phone_email']) {   // Генерируем код подтверждения        	
+            
+            	// Генерируем код подтверждения  Отправляем код по почте или смс
+            	$confirm_code = confirm_code(6);
+            	// запоминаем хешированный пароль в сессии
+            	$_SESSION['confirm_code'] =hash('md5', $confirm_code);
 
-      	  //print_r($_POST);
-      		
-      	  //echo "<br>";	
-          //debug($model);          
-          //debug(Yii::$app->request->post());''
-          
-	        if(Yii::$app->request->isPjax){	              
-	            //print_r($_POST);
-	            //echo($_POST['ConfirmDataForm']['phone_email']);
-	            //die;
-	            if ($_POST['ConfirmDataForm']['phone_email']) {	            	
-	            	// Генерируем код подтверждения
-	            	
-	            	// Определяем что передали - тел или email
-	            	// Генерируем и Отправляем код по почте или смс
-	            	$confirm_code = confirm_code(6);
-	            	// отправляем код по смс
-	            	// отправляем код по почте
-	            	Yii::$app->mailer->compose()
-					    ->setFrom('from@domain.com')
-					    ->setTo('to@domain.com')
-					    ->setSubject('Confirm code-Код подтверждения')
-					    ->setTextBody('Введите этот код - Enter this code'.$confirm_code.' в форму подтверждения')
-					    ->setHtmlBody('Введите этот код - Enter this code<b>'.$confirm_code.'</b>  форму подтверждения')
-					    ->send();
+            	// Определяем что передали - тел или email
+            	if (strpos($_POST['phone_email'], '@')>0) {	// либо email
+            		$what_confirm = 'email'; 
+            		$_SESSION['what_confirm'] = 'Email';
 
-					echo "Сгенерирован код=".$confirm_code. "Письмо отправлено";    
-	            	die;
-	            }	            
-	            
-	            
+            		// отправляем код по почте
+            		Yii::$app->mailer->compose()
+				    ->setFrom('from@domain.com')
+				    ->setTo('to@domain.com')
+				    ->setSubject('Confirm code-Код подтверждения')
+				    ->setTextBody('Введите этот код - Enter this code'.$confirm_code.' в форму подтверждения')
+				    ->setHtmlBody('Введите этот код - Enter this code<b>'.$confirm_code.'</b>  форму подтверждения')
+				    ->send();
 
-	             if ($_POST['ConfirmDataForm']['code']) {
-	             	echo("Введен КОД подтверждения");
-	             	die;
-	             }
-	             // сравниваем код с отправленным
-	             // отмечаем в БД подтверждение телефона или мейла
-	             // авторизуем пользователя.	
-	            
+					//echo "Сгенерирован код=".$confirm_code. "Письмо отправлено";    
+	            	Yii::$app->session->setFlash('send_code', 'Сгенерирован код='.$confirm_code. ' Письмо отправлено');	
+	            	return;  
+            		            	
+            	}else {										// либо телефон
+            		$what_confirm = 'Телефон';            		 
+            		// отправляем код по смс
+            		//echo "Отправляем смс";
+            		return;
+            	}	
+            }          
+            
+            // сравниваем полученный код с отправленным
+            if ($_POST['code'] && hash('md5',$_POST['code'])== $_SESSION['confirm_code']) {             	
 
-	            if ($errors) {  
-	               Yii::$app->session->setFlash('errors', $errors);
-	               return $this->render('send-code', compact('model'));
-	            } 
-	        }    
-	    	//return $this->render('send-code');  //, compact('model'));
-    	}
-    	return $this->render('send-code');  //, compact('model'));    
+             	//echo("Введенный КОД ПОДТВЕРЖДЕН");
+             	//echo "what_confirm=".$_SESSION['what_confirm'];
+             	//return $this->render('confirmcode'); //, compact('what_confirm'));
+ 				Yii::$app->getResponse()->redirect(
+               		['confirm-data/confirm-code',
+                 	'what_confirm' => $_SESSION['what_confirm'],                 	
+                	])->send();
+          return;
+
+             	// отмечаем в БД подтверждение телефона или мейла
+             	// авторизуем пользователя.	
+             	
+             }else {
+             	//echo "Введенный код неверен. Введите правильный код";
+             	Yii::$app->session->setFlash('error_code',"Введенный код неверен. Введите правильный код");	
+	            return; 
+	        }            
+
+            if ($errors) {  
+               Yii::$app->session->setFlash('errors', $errors);
+               return $this->render('send-code', compact('model'));
+            } 
+        }    
+    	//return $this->render('send-code');  //, compact('model'));
+	
+        else {
+			return $this->render('send-code');  //, compact('model')); 
+		}   
     }
+
+     public function actionConfirmCode() {
+
+     	//echo "Рендерим успешное подтверждение";
+     	//echo "what_confirm=".$_GET['what_confirm'];
+     	return $this->render('confirm-code', ['what_confirm' => $_GET['what_confirm']]);
+
+     }	
 }

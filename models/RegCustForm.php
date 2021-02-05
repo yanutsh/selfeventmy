@@ -102,7 +102,7 @@ class RegCustForm extends Model
             //'id' => 'ID',
             //'photo' => 'Фотография',
             'work_form_id' => 'Форма работы',
-            'username' => 'Наименование ИП',
+            'username' => 'ФИО или Наименование организации',
             'sex_id' => 'Пол',
             'birthday' => 'Дата рождения',
             'phone' => 'Телефон',

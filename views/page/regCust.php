@@ -23,7 +23,8 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
         <div class="wrapper__regcust">
 
             <?php  Pjax::begin();  ?>
-            <div class="form_title">Регистрация заказчика</div>
+            
+            <div class="form_title">Регистрация <?php if($_GET['isexec']) echo "исполнтеля"; else echo "заказчика" ?></div>
 
             <div class="regcust">
                 

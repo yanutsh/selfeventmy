@@ -9,6 +9,7 @@ use yii\bootstrap\Modal; // для модального окна
 use yii\bootstrap\ActiveForm;
 use porcelanosa\magnificPopup\MagnificPopup;
 use app\components\city\CityWidget;
+use yii\helpers\Url; 
 
 FontAsset::register($this);
 AppAsset::register($this);
@@ -89,12 +90,14 @@ AppAsset::register($this);
                                 <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
                                 <div class="modal_header">Кто вы?</div>
                                 <div class="modal_text">
-                                    Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите <a href="#!">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите <a href="/regcust">Ищу исполнителя</a> 
+                                    Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите 
+                                    <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите 
+                                    <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">Ищу исполнителя</a> 
                                 </div> 
 
                                 <div class="who_you">
                                     <div class="who_you__item">
-                                        <a href="#!"> 
+                                        <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>"> 
                                             <div class="modal__b1"></div>
                                         </a>
 
@@ -102,11 +105,12 @@ AppAsset::register($this);
                                         <div class="who_you__text">Получай заказы с гарантией оплаты и зарабатывай на постоянном потоке заказов</div>
                                     </div>
                                     <div class="who_you__item">
-                                        <a href="/regcust">    
+                                        <!-- <a href="/regcust"> -->
+                                        <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">    
                                             <div class="modal__b2"></div>
                                         </a>
 
-                                        <div class="who_you__title">Ищу исполнитель</div>
+                                        <div class="who_you__title">Ищу исполнителя</div>
 
                                         <div class="who_you__text">Организуй свой праздник<br>по своим правилам
                                         </div>

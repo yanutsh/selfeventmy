@@ -15,6 +15,7 @@ use app\models\Page;
 use app\models\Settings;
 use app\models\BuyRequestForm;
 use app\models\SearchForm;
+use app\models\RegCustForm;
 use app\models\SignupForm;
 use app\models\LoginForm;
 use app\models\User;

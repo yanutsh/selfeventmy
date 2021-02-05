@@ -1,4 +1,26 @@
+//ssend_code = null;
+
 $(document).ready(function() {
+    
+    //console.log ("ssend_code-ready="+ssend_code);
+
+    // управление css кнопок на странице Подтверждения данных  
+  if(typeof(ssend_code) != "undefined" && ssend_code !== null) {  
+    if (ssend_code=='ok' || ssend_code=='confirm_error' ){   
+    // если код подтверждения отправлен или подтвержден с ошибкой
+      $('#send_code').attr('disabled','disabled');
+      $('#send_code').css('opacity','0.5');
+      $("select[name='phone_email']").attr('readonly','readonly');      
+      $('.choose_send').css('opacity','0.5');
+
+      $('#confirm_code').removeAttr('disabled');
+      $('#confirm_code').css('opacity','1');
+      $("input[name='code']").removeAttr('disabled'); 
+      $('label.choose_code').css('opacity','1');
+      //ssend_code=null;
+    }
+
+  }   
 
 // управление видом кнопок Вход и Регистрация	
 	$('.buttons a.register').on('click', function() {
@@ -12,7 +34,25 @@ $(document).ready(function() {
         $('.buttons a.enter').addClass('active');
         $('.buttons a.register').removeClass('active');
     })
-// управление видом кнопок Вход и Регистрация К
+// управление видом кнопок Вход и Регистрация Конец
+    $('#send_code').on('click', function() {
+        //alert("нажали кнопку Выслать код");
+      $('#send_code').submit();   
+      $('#send_code').attr('disabled','disabled');
+      $('#send_code').css('opacity','0.5');
+      $("select[name='phone_email']").attr('readonly','readonly');      
+      $('.choose_send').css('opacity','0.5');
+
+      $('#confirm_code').removeAttr('disabled');
+      $('#confirm_code').css('opacity','1');
+      $("input[name='code']").removeAttr('disabled'); 
+      $('label.choose_code').css('opacity','1');
+  
+    })    
+// управление видом кнопок на странице Подтверждения данных
+
+
+// управление видом кнопок на странице Подтверждения данных Конец
 
 // ввод файла        
     // $("#input-44").fileinput({
@@ -60,9 +100,13 @@ $(document).ready(function() {
       } else {
         $('#wt'+val+ ' input:checkbox').prop('checked', false);
       }
-    });
+    });  
 
+
+    
 
 });
+
+
 
 

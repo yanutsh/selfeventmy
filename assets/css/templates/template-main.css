@@ -1742,9 +1742,55 @@ a.search__link{
   padding-top: 48px;
   margin-bottom: 32px;
 }
-.choose{
+.choose_send,
+.choose_code{
   font-size: 18px;
   line-height: 21px;
   color: #424242;
   margin-bottom: 8px;
+}
+
+.choose_code{
+  opacity:  0.5;
+}
+
+#w1 .register__user[disabled='disabled']{
+  opacity: 0.5;
+}
+/*==================== Страница подтверждения данных Конец=======================*/
+
+/*==================== Страница Успешного подтверждения  =======================*/
+
+.confirm_img{
+  display: block;;
+  margin: 0 auto;
+  margin-bottom: 24px;
+}
+
+.main_text{
+  font-size: 18px;
+  line-height: 21px;
+  text-align: center;
+
+}
+
+a.register__user{
+  display: block;
+  text-align: center;
+  line-height: 40px;
+  text-decoration: none;
+  margin-bottom: 50px;
+}
+
+a.register__user:hover{
+  color: #fff;
+  background-color: #8D4870;
+}
+
+.regcust__confirm .form-group{
+  padding-bottom: 2px;
+}
+
+.regcust__confirm a:visited{
+  color: #fff;
 }
