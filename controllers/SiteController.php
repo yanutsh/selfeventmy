@@ -101,7 +101,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        return $this->redirect([ 'page/admin' ]);
+        //return $this->redirect([ 'page/admin' ]);
 
         if( !Yii::$app->user->isGuest )
         {

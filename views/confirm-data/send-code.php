@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 
 use yii\web\User;
 use app\assets\TemplateAsset;
+use app\assets\SendCodeAsset;
 use app\components\page\PageAttributeWidget as PAW;
 use app\models\WorkForm;
 use app\models\Sex;
@@ -11,6 +12,7 @@ use kartik\date\DatePicker;
 use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
+SendCodeAsset::register($this);
 
 $this->title = $page->seo_title;
 $this->registerMetaTag(['name' => 'keywords', 'content' => $page->seo_keywords]);

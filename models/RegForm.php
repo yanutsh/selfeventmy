@@ -5,31 +5,11 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 
-/**
+/*********************************************
  * This is the model class for table "yii_user".
- *
- * @property int $id
- * @property string|null $photo
- * @property int $work_form_id
- * @property string $username Имя
- * @property int $sex
- * @property string|null $birthday
- * @property string $phone
- * @property string $email E-mail
- * @property int $isexec
- * @property string $password Пароль
- * @property string|null $auth_key
- * @property string|null $password_reset_token
- * @property int $status
- * @property int $created_at
- * @property int $updated_at
- * @property string|null $verification_token
- *
- * @property WorkForm $workForm
- * @property Sex $sex0
- */
-//class RegCustForm extends \yii\db\ActiveRecord
-class RegCustForm extends Model
+ **********************************************/
+//class RegForm extends \yii\db\ActiveRecord
+class RegForm extends Model
 {
     /**
      * {@inheritdoc}
@@ -86,6 +66,7 @@ class RegCustForm extends Model
            // [['password_reset_token'], 'unique'],
             //[['work_form_id'], 'exist', 'skipOnError' => true, 'targetClass' => WorkForm::className(), 'targetAttribute' => ['work_form_id' => 'id']],
             //[['sex'], 'exist', 'skipOnError' => true, 'targetClass' => Sex::className(), 'targetAttribute' => ['sex_id' => 'id']],
+            ['sex_id', 'default', 'value' => '0'],
             [['personal', 'agreement'], 'string', 'max'=> 3],
             [['personal', 'agreement'], 'safe'],            
         ];

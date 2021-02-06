@@ -15,7 +15,7 @@ use app\models\Page;
 use app\models\Settings;
 use app\models\BuyRequestForm;
 use app\models\SearchForm;
-use app\models\RegCustForm;
+use app\models\RegForm;
 use app\models\SignupForm;
 use app\models\LoginForm;
 use app\models\User;
@@ -433,38 +433,64 @@ class PageController extends Controller
         return $this->render('artists');
     }  
 
-     public function actionRequests()
+    
+    public function actionRequests()
     {
         //debug("Requests");
         return $this->render('requests');
     }
 
-    
+    // Регистрация пользователей **********************************************
     public function actionRegcust()
     {
-      $model = new \app\models\RegCustForm();
+      // // запоминаем пользователя - Исполнитель или Заказчик
+      // if (isset($_GET['isexec']))  $_SESSION['isexec'] = $_GET['isexec'];      
+            
+      $model = new RegForm();
 
       if ($model->load(Yii::$app->request->post())) {
 
           //if ($model->validate()) {
-          //debug($model->personal);          
-          //debug(Yii::$app->request->post());
           // form inputs are valid, do something here
           //return;
           if(Yii::$app->request->isPjax){
             
+          // проверяем на заполнение согласий  
             $errors = Null;
             if (!($model->personal =='yes')) $errors="- нет согласия на обработку персональных данных";
             if (!($model->agreement =='yes')) $errors .="<br>- надо принять пользовательское соглашение";
 
             if ($errors) {  
                Yii::$app->session->setFlash('errors', $errors);
-               return $this->render('regCust', compact('model'));
+               return $this->render('regUser', compact('model'));
             } 
+          // проверяем на заполнение согласий  КОНЕЦ
+            
+          // записать данные юзера из RegForm в User и в БД
+              //debug($model);            
 
-          //return $this->render('sendCode', ['model' => $model]);
-          //$url=URL::to('confirm-data/send-code'); 
-          //debug($url);
+              $user = new User();
+
+              $user->work_form_id = $model->work_form_id;
+              $user->username = $model->username;             
+              $user->sex_id = $model->sex_id;
+              //$user->birthday = $model->birthday;
+              $user->phone = $model->phone;
+              $user->email = $model->email;              
+              $user->isexec = $model->isexec;          
+                            
+              $user->setPassword($model->password);
+              $user->generateAuthKey();
+              //$user->generateEmailVerificationToken();     
+              
+              //debug($user);     
+              $user->save(); // && $this->sendEmail($user);
+              $_SESSION['user_id']=$user->getId(); //получили id нового юзера             
+
+              //echo "В БД записано";         
+          // записать данные юзера из RegForm в User и в БД  КОНЕЦ
+
+          // перейти к подтверждению данных  
           Yii::$app->getResponse()->redirect(
                 ['confirm-data/send-code',
                  'phone' => $model->phone,
@@ -473,8 +499,8 @@ class PageController extends Controller
           return;    
           }          
       }
-      return $this->render('regCust', [
-          'model' => $model,
+      return $this->render('regUser', [
+          'model' => $model, 
       ]);
     }
 

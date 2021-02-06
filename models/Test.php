@@ -1,90 +1,54 @@
 <?php
+
 namespace app\models;
 
 use Yii;
-use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * @property int $id
- * @property string|null $photo
- * @property int $work_form_id
- * @property string $username Имя
- * @property int $sex_id
- * @property string|null $birthday
- * @property string $phone
- * @property int $phone_confirm 1-подтвержден
- * @property string $email E-mail
- * @property int $email_confirm 1-подтвержден
- * @property int $isexec
- * @property string $password Пароль
- * @property string|null $auth_key
- * @property string|null $password_reset_token
- * @property int $status
- * @property int $created_at
- * @property int $updated_at
- * @property string|null $verification_token
+ * This is the model class for table "yii_test".
  *
- * @property WorkForm $workForm
- * @property Sex $sex
+ * @property int $id
+ * @property string $name
  */
-class User extends ActiveRecord implements IdentityInterface
-{
+class Test extends ActiveRecord implements IdentityInterface
+{   
+
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
-
-
+    /**
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
-        return 'yii_user';
+        return 'yii_test';
     }
-    /** Связь с таблицей WorkForm
-     * Gets query for [[WorkForm]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWorkForm()
-    {
-        return $this->hasOne(WorkForm::className(), ['id' => 'work_form_id']);
-    }
-
-    /** Связь с таблицей Sex
-     * Gets query for [[Sex]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSex()
-    {
-        return $this->hasOne(Sex::className(), ['id' => 'sex_id']);
-    }
-
-    
-    // public function behaviors()
-    // {
-    //     return [
-    //         TimestampBehavior::className(),
-    //     ];
-    // }
 
     /**
      * {@inheritdoc}
      */
-    // public function rules()
-    // {
-    //     return [
-    //         //['status', 'default', 'value' => self::STATUS_INACTIVE],
-    //         ['status', 'default', 'value' => self::STATUS_ACTIVE],
-    //         ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-    //     ];
-    // }
+    public function rules()
+    {
+        return [
+            [['name'], 'required'],
+            [['name'], 'string', 'max' => 100],
+        ];
+    }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'name' => 'Name',
+        ];
+    }
+
+     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }

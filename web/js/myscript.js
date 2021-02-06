@@ -68,23 +68,23 @@ $(document).ready(function() {
 
 // показ пароля
   $('body').on('click', '.password-control1', function(){     
-    if ($('#regcustform-password').attr('type') == 'password'){
+    if ($('#regform-password').attr('type') == 'password'){
       $(this).addClass('view');
-      $('#regcustform-password').attr('type', 'text');
+      $('#regform-password').attr('type', 'text');
     } else {
       $(this).removeClass('view');
-      $('#regcustform-password').attr('type', 'password');
+      $('#regform-password').attr('type', 'password');
     }
     return false;
   });
 
   $('body').on('click', '.password-control2', function(){      
-    if ($('#regcustform-password_repeat').attr('type') == 'password'){
+    if ($('#regform-password_repeat').attr('type') == 'password'){
       $(this).addClass('view');
-      $('#regcustform-password_repeat').attr('type', 'text');
+      $('#regform-password_repeat').attr('type', 'text');
     } else {
       $(this).removeClass('view');
-      $('#regcustform-password_repeat').attr('type', 'password');
+      $('#regform-password_repeat').attr('type', 'password');
     }
     return false;
   });

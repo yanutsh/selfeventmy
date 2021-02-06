@@ -1,4 +1,5 @@
 <?php
+// контроллер форм деятельности юридических лиц
 
 namespace app\controllers;
 

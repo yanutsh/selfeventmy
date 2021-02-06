@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 
 use yii\web\User;
 use app\assets\TemplateAsset;
+use app\assets\RegistrationAsset;
 use app\components\page\PageAttributeWidget as PAW;
 use app\models\WorkForm;
 use app\models\Sex;
@@ -11,10 +12,14 @@ use kartik\date\DatePicker;
 use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
+RegistrationAsset::register($this);
 
 $this->title = $page->seo_title;
 $this->registerMetaTag(['name' => 'keywords', 'content' => $page->seo_keywords]);
 $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_description]);
+
+// запоминаем кто регистрируется - Исполнитель или Заказчик
+if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
 ?>
 
 <!-- <div class="page-main template-main page"> -->
@@ -23,8 +28,8 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
         <div class="wrapper__regcust">
 
             <?php  Pjax::begin();  ?>
-            
-            <div class="form_title">Регистрация <?php if($_GET['isexec']) echo "исполнтеля"; else echo "заказчика" ?></div>
+
+            <div class="form_title">Регистрация <?php if($_GET['isexec']) echo "исполнителя"; else echo "заказчика" ?></div>
 
             <div class="regcust">
                 
@@ -43,7 +48,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                      </div>
                 <?php endif;?>
 
-                    <?= $form->field($model, 'isexec')->hiddenInput(['value' => '0'])->label(false); ?>
+                    <?= $form->field($model, 'isexec')->hiddenInput(['value' => $_GET['isexec']])->label(false); ?>
 
                     <?//= $form->field($model, 'photo') ?>
                     <div class="form_subtitle">Фотография</div>
@@ -68,8 +73,8 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                     <?//= $form->field($model, 'sex_id') ?>
                     <?= $form->field($model, 'sex_id')->dropdownList(
                             Sex::find()->select(['sex', 'id'])
-                            ->indexBy('id')->column(),
-                            ['prompt'=>'Выберите вариант']
+                            ->indexBy('id')->column() //,
+                            //['prompt'=>'Выберите вариант']
                         ); ?>                    
 
                     
@@ -98,19 +103,15 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                         <?= $form->field($model, 'password_repeat')->passwordInput() ?>
                         <a href="#!" class="password-control2"></a>
                     </div>
-                    
-                    <?//= $form->field($model, 'auth_key') ?>
-                    <?//= $form->field($model, 'password_reset_token') ?>
-                    <?//= $form->field($model, 'verification_token') ?>
-                    
-                     <?//= $form->field($model, 'personal')->checkbox() ?>
+                                        
+                    <?//= $form->field($model, 'personal')->checkbox() ?>
 
-                     <div class="personal_check">
+                    <div class="personal_check">
                         <label class="checkbox">
                             
                             <input type="checkbox"  class="chkbox" 
                                 <?php if ($model->personal=='yes') echo "checked"?> 
-                                name="RegCustForm[personal]"  
+                                name="RegForm[personal]"  
                                 value="yes">
                             <div class="block-image">
                                 <img src="/web/uploads/images/check_box_24px.svg" alt="Согласен">
@@ -124,7 +125,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                             
                             <input type="checkbox"  class="chkbox"  
                                 <?php if ($model->agreement=='yes') echo "checked"?> 
-                                name="RegCustForm[agreement]" 
+                                name="RegForm[agreement]" 
                                 value="yes">
                             <div class="block-image">
                                 <img src="/web/uploads/images/check_box_24px.svg" alt="Согласен">
