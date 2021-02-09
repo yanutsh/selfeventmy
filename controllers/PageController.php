@@ -19,6 +19,7 @@ use app\models\RegForm;
 use app\models\SignupForm;
 use app\models\LoginForm;
 use app\models\User;
+use yii\base\Response;
 
 /**
  * PageController implements the CRUD actions for Page model.
@@ -77,8 +78,7 @@ class PageController extends Controller
 
 
     //========================== Первичный контроллер ==========================
-    public function actionFrontend($id = Null)
-    {    
+    public function actionFrontend($id = Null)    {    
       
       // если id не передали - выводим первую страницу
       if ($id === Null) $id=1;
@@ -427,6 +427,42 @@ class PageController extends Controller
             'model' => $model, ]);
     }
 
+    /**
+     * Logs in a user.
+     *
+     * @return mixed
+     */
+    public function actionLogin()
+    {
+        //debug("ЛОГИН");
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+
+        if ($model->load(Yii::$app->request->post()))  // && $model->login()) 
+        {
+          //debug($model);
+          if ($model->login()) {       //debug("ЛОГИН прошел"); 
+             $identity = Yii::$app->user->identity;
+
+             // echo "username".$identity->username;
+             // echo "<br>username".$identity['username'];
+             // debug($identity);
+             Yii::$app->getResponse()->redirect(
+                  ['/user/index',
+                   'username' => $identity->username,
+                   'isexec'  => $identity->isexec,
+                  ])->send();
+            return;
+          }   
+            //return $this->goBack();
+        } //else {
+            return $this->goBack();;
+        //}
+    }
+
     public function actionArtists()
     {
         //debug("Artists");
@@ -447,26 +483,32 @@ class PageController extends Controller
       // if (isset($_GET['isexec']))  $_SESSION['isexec'] = $_GET['isexec'];      
             
       $model = new RegForm();
+      //if ($model->load(Yii::$app->request->post())) 
+      //{ //  && $model->signup()) { 
+ 
+          // if (Yii::$app->request->isAjax)  // && $model->load(Yii::$app->request->post())) 
+          // {
+          //   echo "Ajax запрос"; die;
+          //  //Yii::$app->response->format = Response::FORMAT_JSON;
+          //   return $model->validate('email');
+          // }    
 
-      if ($model->load(Yii::$app->request->post())) {
+          if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()))
+          {            
+            // проверяем на заполнение согласий  
+              $errors = Null;
+              if (!($model->personal =='yes')) $errors="- нет согласия на обработку персональных данных";
+              if (!($model->agreement =='yes')) $errors .="<br>- надо принять пользовательское соглашение";
 
-          //if ($model->validate()) {
-          // form inputs are valid, do something here
-          //return;
-          if(Yii::$app->request->isPjax){
+              if ($errors) {  
+                 Yii::$app->session->setFlash('errors', $errors);
+                 return $this->render('regUser', compact('model'));
+              } else{
+                Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+              }
+            // проверяем на заполнение согласий  КОНЕЦ
             
-          // проверяем на заполнение согласий  
-            $errors = Null;
-            if (!($model->personal =='yes')) $errors="- нет согласия на обработку персональных данных";
-            if (!($model->agreement =='yes')) $errors .="<br>- надо принять пользовательское соглашение";
-
-            if ($errors) {  
-               Yii::$app->session->setFlash('errors', $errors);
-               return $this->render('regUser', compact('model'));
-            } 
-          // проверяем на заполнение согласий  КОНЕЦ
-            
-          // записать данные юзера из RegForm в User и в БД
+            // записать данные юзера из RegForm в User и в БД
               //debug($model);            
 
               $user = new User();
@@ -484,21 +526,21 @@ class PageController extends Controller
               //$user->generateEmailVerificationToken();     
               
               //debug($user);     
-              $user->save(); // && $this->sendEmail($user);
-              $_SESSION['user_id']=$user->getId(); //получили id нового юзера             
+              if ($user->save()){ // && $this->sendEmail($user);
+                $_SESSION['user_id']=$user->getId(); //получили id нового юзера             
 
-              //echo "В БД записано";         
-          // записать данные юзера из RegForm в User и в БД  КОНЕЦ
+                //echo "В БД записано";         
+                
+                // перейти к подтверждению данных  
+                Yii::$app->getResponse()->redirect(
+                      ['confirm-data/send-code',
+                       'phone' => $model->phone,
+                       'email' => $model->email,
+                      ])->send();
+                return; 
+              }else echo "Не записано в БД";     
+          }    
 
-          // перейти к подтверждению данных  
-          Yii::$app->getResponse()->redirect(
-                ['confirm-data/send-code',
-                 'phone' => $model->phone,
-                 'email' => $model->email,
-                ])->send();
-          return;    
-          }          
-      }
       return $this->render('regUser', [
           'model' => $model, 
       ]);

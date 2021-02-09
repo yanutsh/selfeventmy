@@ -60,7 +60,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(Sex::className(), ['id' => 'sex_id']);
     }
-
     
     // public function behaviors()
     // {
@@ -72,14 +71,14 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    // public function rules()
-    // {
-    //     return [
-    //         //['status', 'default', 'value' => self::STATUS_INACTIVE],
-    //         ['status', 'default', 'value' => self::STATUS_ACTIVE],
-    //         ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-    //     ];
-    // }
+    public function rules()
+    {
+        return [
+            //['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],            
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -106,6 +105,12 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username]); //, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /* Finds user by email */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]); //, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**

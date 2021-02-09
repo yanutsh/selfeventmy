@@ -1,6 +1,6 @@
 <?php
 
-
+//use Yii;
 use yii\web\User;
 use app\assets\TemplateAsset;
 use app\components\page\PageAttributeWidget as PAW;
@@ -20,7 +20,12 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
             <div class="header">Найдите исполнителя для<br>вашего мероприятия или<br>стань исполнителем и<br>зарабатывай</div>           
 
-        <h3><?php echo ("Юзер- ".Yii::$app->user->identity->username); ?></h3>
+        <h3><?php 
+            echo ("Юзер- ".Yii::$app->user->identity->username); 
+            //debug(Yii::$app->defaultRoute) ;
+            //debug(Yii::$app->basePath) ;
+
+        ?></h3>
         <br>
         
 

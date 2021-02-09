@@ -10,9 +10,9 @@ TemplateAsset::register($this);
 <p>
 	<br><br><br><br><br><br><br><br><br><br><br><br>
 	
-	<h2>   Привет <?= $user ?>!  Это твой ЛК</h2>
+	<h2>   Привет <?= $_GET['username'] ?>!  Это твой ЛК</h2>
 
-	<?php echo "  Isexec=".$_SESSION['isexec']."<br>"; ?>
+	<?php echo "  Isexec=".$_GET['isexec']."<br>"; ?>
     You may change the content of this page by modifying
     the file
     <?php echo "<br>"; ?> 

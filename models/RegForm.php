@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\models\User;
 
 /*********************************************
  * This is the model class for table "yii_user".
@@ -56,8 +57,11 @@ class RegForm extends Model
             ['password_repeat', 'required'],
             ['password_repeat', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
 
-            [['email'], 'unique'],
-            [['email'], 'email'],
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => 'app\models\User', 'message' => 'This email address has already been taken.'],
 
             [['phone'], 'unique'],
             //[['phone'], 'match', 'pattern' => '[0-9]{3}'],
@@ -102,23 +106,13 @@ class RegForm extends Model
         ];
     }
 
-    /**
-     * Gets query for [[WorkForm]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    // public function getWorkForm()
-    // {
-    //     return $this->hasOne(WorkForm::className(), ['id' => 'work_form_id']);
-    // }
-
-    // *
-    //  * Gets query for [[Sex0]].
-    //  *
-    //  * @return \yii\db\ActiveQuery
-     
-    // public function getSex()
-    // {
-    //     return $this->hasOne(Sex::className(), ['id' => 'sex_id']);
-    // }
+     public function signup()
+    {
+        if (!$this->validate()) {
+            //return null;
+            $errors = $model->errors;
+            debug($errors);
+        }         
+       return true;
+    }
 }

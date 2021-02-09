@@ -10,6 +10,7 @@ use yii\bootstrap\ActiveForm;
 use porcelanosa\magnificPopup\MagnificPopup;
 use app\components\city\CityWidget;
 use yii\helpers\Url; 
+use app\models\LoginForm;
 
 FontAsset::register($this);
 AppAsset::register($this);
@@ -35,7 +36,8 @@ AppAsset::register($this);
         <header>
             <div class="line-bottom">
                 <div class="wrapper">
-                    <div class="wrapper__header">    
+                    <div class="wrapper__header">
+
                         <div class="logo"><?
                             if(is_file(Yii::getAlias('@webroot' . Yii::$app->settings->get('logo'))))
                             {
@@ -52,7 +54,8 @@ AppAsset::register($this);
                                     ?>
                                     <?= Html::a(Html::img(Yii::$app->imageresize->getUrl('@webroot' . Yii::$app->settings->get('logo'), 166, 77, 'inset')), Yii::$app->homeUrl) ?>
                                 <? } ?>      
-                            <? } ?></div>
+                            <? } ?>                            	
+                        </div>
 
                         <div class="slogan">
                             <?= nl2br(Yii::$app->settings->get('slogan')) ?>
@@ -63,74 +66,126 @@ AppAsset::register($this);
                             <div class="el"><span class="number">100 </span><br><span class="text">Праздников за неделю</span></div>
                         </div>
 
-                        <!-- <div class="phone-block">
-                            <div class="address"><img src="<?= Yii::$app->params['image_dir_url'] ?>place.png"><span><?= Yii::$app->settings->get('address') ?></span></div>
-                            <div class="phone"><img src="<?= Yii::$app->params['image_dir_url'] ?>phone.png"><span><?= Html::a(Yii::$app->settings->get('tel'), 'tel:+' . preg_replace('/[^0-9]/', '', Yii::$app->settings->get('tel'))) ?></span></div>
-                        </div> -->
-
                         <div class="buttons">
-                            <?php if (Yii::$app->user->isGuest) 
-                            { ?>
-                                <a href="/login" class="enter active">Вход</a>
+				        	<?php if (Yii::$app->user->isGuest) 
+				        	{ 
+                                $model = new LoginForm(); 
+                            ?>
+					            <!-- модальное окно Вход    -->						        
+						            <?php Modal::begin([
+						                'header' => Null,  // '<h2>Hello world</h2>',
+						                'toggleButton' => [
+						                    'label' => 'Вход',
+						                    'tag' => 'a',
+						                    'class' => 'enter active'
+						              ],
+						                'footer' => Null, //'Низ окна',
+						                'bodyOptions' => ['class' => 'modal__body modal__body__form'],
+    						            ]); ?>
 
-                                <!-- модальное окно Регистрация-1    -->
-                                <?php                                  
-                                Modal::begin([
-                                    'header' => Null, //'<h2>Hello world</h2>',
-                                    'toggleButton' => [
-                                        'label' => 'Регистрация',
-                                        'tag' => 'a',
-                                        'class' => 'register'
-                                    ],
-                                    'footer' => Null, //'Низ окна',
-                                    'bodyOptions' => ['class' => 'modal__body'],
-                                ]); ?>
+    						            <!-- тело окна  -->
+						                
+						                <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
+						                <div class="modal_header__login">Вход</div>
 
-                                 <!-- тело окна  -->
-                                <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
-                                <div class="modal_header">Кто вы?</div>
-                                <div class="modal_text">
-                                    Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите 
-                                    <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите 
-                                    <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">Ищу исполнителя</a> 
-                                </div> 
+                                            <?php $form = ActiveForm::begin(
+                                                [   'id' => 'login-form',
+                                                    'action' => 'page/login']); ?>
 
-                                <div class="who_you">
-                                    <div class="who_you__item">
-                                        <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>"> 
-                                            <div class="modal__b1"></div>
-                                        </a>
+                                                <?= $form->field($model, 'email')->textInput(
+                                                     ['placeholder'=>'Email']
+                                                 ) ?>
 
-                                        <div class="who_you__title">Я исполнитель</div>                                           
-                                        <div class="who_you__text">Получай заказы с гарантией оплаты и зарабатывай на постоянном потоке заказов</div>
-                                    </div>
-                                    <div class="who_you__item">
-                                        <!-- <a href="/regcust"> -->
-                                        <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">    
-                                            <div class="modal__b2"></div>
-                                        </a>
+                                                <?= $form->field($model, 'password')->passwordInput( ['placeholder'=>'Пароль']) ?>
 
-                                        <div class="who_you__title">Ищу исполнителя</div>
+                                                <?//= $form->field($model, 'rememberMe')->checkbox() ?>
+                                                <div class="personal_check">
+                                                    <label class="checkbox checkbox__login">
+                                                        
+                                                        <input type="checkbox"  class="chkbox" 
+                                                            <?php if ($model->rememberMe=='1') echo "checked"?> 
+                                                            name="LoginForm[rememberMe]"  
+                                                            value='1'>
+                                                        <div class="block-image">
+                                                            <img src="/web/uploads/images/check_box_24px.svg" alt="Запомнить меня">
+                                                        </div> 
+                                                        <div class="personal_check__text">Запомнить меня</div>                           
+                                                    </label>
+                                                </div>
 
-                                        <div class="who_you__text">Организуй свой праздник<br>по своим правилам
-                                        </div>
-                                    <div class="who_you__item">    
-                                </div>                                   
+                                                <!-- <div> -->
+                                                   <a href="page/request-password-reset" class = 'password-reset'>Забыли пароль?
+                                                   </a>            
+                                                <!-- </div> -->
 
-                                <?php Modal::end();?>
-                            <!-- модальное окно Конец    -->
+                                                <div class="form-group">
+                                                    <?= //Html::submitButton('Войти', ['class' => 'btn btn-primary', 'name' => 'login-button']) 
+                                                    Html::submitButton('Войти', ['class' => 'enter active login', 'name' => 'login-button']) ?>
+                                                </div>
+                                                <a href="<?php echo Url::to(['page/regcust']);?>" class="register register__login">Регистрация
+                                                </a> 
 
-                                <!-- <a href="/signup" class="register">Регистрация</a> -->
-                            <?php 
-                            } else {?>
-                                <a href="/logout" class="register active">Выход</a>
-                            <?php } ?>                            
-                        </div>
-                        
+                                            <?php ActiveForm::end(); ?>
+                                      						                                                 
+
+						            <?php Modal::end();?>
+						        <!-- модальное окно Вход  Конец    -->    
+
+						        <!-- модальное окно Регистрация-1    -->
+						       
+						            <?php Modal::begin([
+						                'header' => Null, //'<h2>Hello world</h2>',
+						                'toggleButton' => [
+						                    'label' => 'Регистрация',
+						                    'tag' => 'a',
+						                    'class' => 'register'
+						                ],
+						                'footer' => Null, //'Низ окна',
+						                'bodyOptions' => ['class' => 'modal__body'],
+						            ]); ?>
+
+						            <!-- тело окна  -->
+						                <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
+						                <div class="modal_header">Кто вы?</div>
+						                <div class="modal_text">
+						                    Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите 
+						                    <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите 
+						                    <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">Ищу исполнителя</a> 
+						                </div>
+
+						                <div class="who_you">
+		                                    <div class="who_you__item">
+		                                        <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>"> 
+		                                            <div class="modal__b1"></div>
+		                                        </a>
+
+		                                        <div class="who_you__title">Я исполнитель</div>                                           
+		                                        <div class="who_you__text">Получай заказы с гарантией оплаты и зарабатывай на постоянном потоке заказов</div>
+		                                    </div>
+		                                    <div class="who_you__item">
+		                                        <!-- <a href="/regcust"> -->
+		                                        <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">    
+		                                            <div class="modal__b2"></div>
+		                                        </a>
+
+		                                        <div class="who_you__title">Ищу исполнителя</div>
+
+		                                        <div class="who_you__text">Организуй свой праздник<br>по своим правилам
+		                                        </div>
+		                                    </div>    
+		                                </div>                                            
+
+						            <?php Modal::end();?> 
+						        <!-- модальное окно Регистрация Конец    -->            
+					        <?php 
+					        } else {?>  <!--  не гость -->
+					            <a href="/logout" class="register active">Выход</a>
+					        <?php } ?>                            
+					    </div> 
+
                     </div>    
                 </div>   
-            </div>
-            
+            </div>            
         </header>
 
         <?= $content ?>
