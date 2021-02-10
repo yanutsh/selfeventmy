@@ -63,8 +63,9 @@ class RegForm extends Model
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => 'app\models\User', 'message' => 'This email address has already been taken.'],
 
-            [['phone'], 'unique'],
-            //[['phone'], 'match', 'pattern' => '[0-9]{3}'],
+            //[['phone'], 'unique'],
+            //[['phone'], 'match', 'pattern' => '/^\+\d{1}-\d{3}-\d{3}-\d{2}-\d{2}$/'],
+            [['phone'], 'match', 'pattern' => '/^\d{11}$/', 'message' => 'Введите телефон в формате - 11 цифр, например, 792101234567'],
             
 
            // [['password_reset_token'], 'unique'],
@@ -109,9 +110,9 @@ class RegForm extends Model
      public function signup()
     {
         if (!$this->validate()) {
-            //return null;
-            $errors = $model->errors;
-            debug($errors);
+            return null;
+            //$errors = $model->errors;
+            //debug($errors);
         }         
        return true;
     }

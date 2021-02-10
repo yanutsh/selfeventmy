@@ -485,64 +485,59 @@ class PageController extends Controller
       // // запоминаем пользователя - Исполнитель или Заказчик
       // if (isset($_GET['isexec']))  $_SESSION['isexec'] = $_GET['isexec'];      
             
-      $model = new RegForm();
-      //if ($model->load(Yii::$app->request->post())) 
-      //{ //  && $model->signup()) { 
- 
-          // if (Yii::$app->request->isAjax)  // && $model->load(Yii::$app->request->post())) 
-          // {
-          //   echo "Ajax запрос"; die;
-          //  //Yii::$app->response->format = Response::FORMAT_JSON;
-          //   return $model->validate('email');
-          // }    
+      $model = new RegForm();                
 
-          if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()))
-          {            
-            // проверяем на заполнение согласий  
-              $errors = Null;
-              if (!($model->personal =='yes')) $errors="- нет согласия на обработку персональных данных";
-              if (!($model->agreement =='yes')) $errors .="<br>- надо принять пользовательское соглашение";
+      if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()) && $model->signup())
+      {            
+        // проверяем на заполнение согласий  
+          $errors = Null;
+          if (!($model->personal =='yes')) $errors="- нет согласия на обработку персональных данных";
+          if (!($model->agreement =='yes')) $errors .="<br>- надо принять пользовательское соглашение";
 
-              if ($errors) {  
-                 Yii::$app->session->setFlash('errors', $errors);
-                 return $this->render('regUser', compact('model'));
-              } else{
-                Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-              }
-            // проверяем на заполнение согласий  КОНЕЦ
+          if ($errors) {  
+             Yii::$app->session->setFlash('errors', $errors);
+             return $this->render('regUser', compact('model'));
+          } else{
+            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+          }
+        // проверяем на заполнение согласий  КОНЕЦ
+        
+        // записать данные юзера из RegForm в User и в БД
+          //debug($model);            
+
+          $user = new User();
+
+          $user->work_form_id = $model->work_form_id;
+          $user->username = $model->username;             
+          $user->sex_id = $model->sex_id;
+         
+          $birthday_tr=Yii::$app->formatter->asTimestamp($model->birthday);
+          $birthday_tr=Yii::$app->formatter->asDate($birthday_tr, 'yyyy-MM-dd');
+          $user->birthday = $birthday_tr;
+
+          $user->phone = $model->phone;
+          $user->email = $model->email;              
+          $user->isexec = $model->isexec;          
+                        
+          $user->setPassword($model->password);
+          $user->generateAuthKey();
+          //$user->generateEmailVerificationToken();     
+          
+          //debug($user);     
+          if ($user->save()){ // && $this->sendEmail($user);
+            $_SESSION['user_id']=$user->getId(); //получили id нового юзера             
+
+            //echo "В БД записано";         
             
-            // записать данные юзера из RegForm в User и в БД
-              //debug($model);            
-
-              $user = new User();
-
-              $user->work_form_id = $model->work_form_id;
-              $user->username = $model->username;             
-              $user->sex_id = $model->sex_id;
-              //$user->birthday = $model->birthday;
-              $user->phone = $model->phone;
-              $user->email = $model->email;              
-              $user->isexec = $model->isexec;          
-                            
-              $user->setPassword($model->password);
-              $user->generateAuthKey();
-              //$user->generateEmailVerificationToken();     
-              
-              //debug($user);     
-              if ($user->save()){ // && $this->sendEmail($user);
-                $_SESSION['user_id']=$user->getId(); //получили id нового юзера             
-
-                //echo "В БД записано";         
-                
-                // перейти к подтверждению данных  
-                Yii::$app->getResponse()->redirect(
-                      ['confirm-data/send-code',
-                       'phone' => $model->phone,
-                       'email' => $model->email,
-                      ])->send();
-                return; 
-              }else echo "Не записано в БД";     
-          }    
+            // перейти к подтверждению данных  
+            Yii::$app->getResponse()->redirect(
+                  ['confirm-data/send-code',
+                   'phone' => $model->phone,
+                   'email' => $model->email,
+                  ])->send();
+            return; 
+          }else echo "Не записано в БД";     
+      }    
 
       return $this->render('regUser', [
           'model' => $model, 
