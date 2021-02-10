@@ -11,6 +11,7 @@ use porcelanosa\magnificPopup\MagnificPopup;
 use app\components\city\CityWidget;
 use yii\helpers\Url; 
 use app\models\LoginForm;
+use yii\widgets\Pjax;
 
 FontAsset::register($this);
 AppAsset::register($this);
@@ -74,6 +75,7 @@ AppAsset::register($this);
 					            <!-- модальное окно Вход    -->						        
 						            <?php Modal::begin([
 						                'header' => Null,  // '<h2>Hello world</h2>',
+                                        'closeButton'=> False,
 						                'toggleButton' => [
 						                    'label' => 'Вход',
 						                    'tag' => 'a',
@@ -87,10 +89,13 @@ AppAsset::register($this);
 						                
 						                <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
 						                <div class="modal_header__login">Вход</div>
-
+                                            <?php  //Pjax::begin();  ?>
                                             <?php $form = ActiveForm::begin(
                                                 [   'id' => 'login-form',
-                                                    'action' => 'page/login']); ?>
+                                                    'action' => '/page/login',
+                                                    'options' => [
+                                                    'data-pjax' => true,],
+                                                ]); ?>
 
                                                 <?= $form->field($model, 'email')->textInput(
                                                      ['placeholder'=>'Email']
@@ -126,7 +131,7 @@ AppAsset::register($this);
                                                 </a> 
 
                                             <?php ActiveForm::end(); ?>
-                                      						                                                 
+                                      		<?php  //Pjax::end();  ?>				                                                 
 
 						            <?php Modal::end();?>
 						        <!-- модальное окно Вход  Конец    -->    
@@ -135,6 +140,7 @@ AppAsset::register($this);
 						       
 						            <?php Modal::begin([
 						                'header' => Null, //'<h2>Hello world</h2>',
+                                        'closeButton'=> False,
 						                'toggleButton' => [
 						                    'label' => 'Регистрация',
 						                    'tag' => 'a',

@@ -422,7 +422,7 @@ class PageController extends Controller
                   return $this->goHome();
               }              
         }
-        // Логин не прошел  
+        // Логин не рошел  
         return $this->render('signup', [
             'model' => $model, ]);
     }
@@ -442,25 +442,28 @@ class PageController extends Controller
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()))  // && $model->login()) 
+        //if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()))
         {
           //debug($model);
-          if ($model->login()) {       //debug("ЛОГИН прошел"); 
+          if ($model->login()) 
+          {       
+             //debug("ЛОГИН прошел"); 
              $identity = Yii::$app->user->identity;
 
-             // echo "username".$identity->username;
-             // echo "<br>username".$identity['username'];
-             // debug($identity);
+             //debug($identity);
              Yii::$app->getResponse()->redirect(
                   ['/user/index',
                    'username' => $identity->username,
                    'isexec'  => $identity->isexec,
                   ])->send();
             return;
-          }   
-            //return $this->goBack();
-        } //else {
-            return $this->goBack();;
-        //}
+          }
+          Yii::$app->session->setFlash('errors', "Пользователь с такой парой Email/Пароль не зарегистрирован"); 
+        }
+          
+        Yii::$app->getResponse()->redirect('/page/frontend')->send();
+        return;
+        
     }
 
     public function actionArtists()

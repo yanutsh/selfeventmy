@@ -16,9 +16,18 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
     <section class="section-1">
 
-        <div class="wrapper">           
+        <div class="wrapper">   
 
-            <div class="header">Найдите исполнителя для<br>вашего мероприятия или<br>стань исполнителем и<br>зарабатывай</div>           
+
+            <div class="header">Найдите исполнителя для<br>вашего мероприятия или<br>стань исполнителем и<br>зарабатывай</div> 
+
+            <!-- вывод flesh - сообщения об ошибках-->
+            <?php if( Yii::$app->session->hasFlash('errors') ): ?>
+                 <div class="alert alert-danger alert-dismissible" role="alert">
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <?php echo Yii::$app->session->getFlash('errors'); ?>
+                 </div>
+            <?php endif;?>           
 
         <h3><?php 
             echo ("Юзер- ".Yii::$app->user->identity->username); 
