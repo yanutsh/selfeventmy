@@ -72,30 +72,7 @@ class PageController extends Controller
      */
     public function actionIndex()
     {
-   		//debug('Page/Index');
-    // <!-- тест отправки смс сообщения -->
-    
-        $login='79771512915';
-        $password='CKvihRjRHN';
-        $$title='Код подтверждения'; 
-        $sadr='MrSelfevent';
-        $phone='79218471113';
-        $data='Код подтверждения - 123456';
-
-        // запрос баланса
-        $var = file_get_contents ('http://gateway.api.sc/get
-                ?user='.$login.'&pwd='.$password.'&balance=1');
-        echo $var;
-        echo "Брейк <br>";
-
-        $var = file_get_contents ('http://gateway.api.sc/get/
-                        ?user='.$login.'&pwd='.$password.'&name_deliver='.$title.'&sadr='.$sadr.'&dadr='.$phone.'&text='.$data);
-
-        echo $var;
-
-        
-    //<!-- тест отправки смс сообщения Конец-->
-    	//return $this->redirect(['page/frontend', 'id' => 1]);
+   		debug('Page/Index');
     }
 
 
