@@ -22,11 +22,13 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
         <div class="regcust regcust__confirm">
             <div class="confirm_title"><?= $what_confirm ?> подтвержден</div>
             <img src="/web/uploads/images/confirm.png" alt="Подтверждено" class="confirm_img">
-            <?php echo "Гость=".Yii::$app->user->isGuest; ?>
-            <p class='main_text'><?= $what_confirm ?> подтвержден. 'Телефон' вы сможете подтвердить в личном кабинете.</p> 
+
+            <?php //echo "Гость=".Yii::$app->user->isGuest; ?>
+            
+            <p class='main_text'><?= $what_confirm ?> подтвержден. <?php if ($what_confirm == 'Email') echo 'Телефон'; else echo 'Email';?>   вы сможете подтвердить в личном кабинете.</p> 
             <div class="form-group">
                 
-                <?php echo "  Isexec=".$_SESSION['isexec']."<br>"; ?>
+                <?php //echo "  Isexec=".$_SESSION['isexec']."<br>"; ?>
 
                 <a href="<?= Url::to(['/user/index'])?>" class='register__user'>Продолжить</a>
             </div>  

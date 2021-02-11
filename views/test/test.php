@@ -10,63 +10,48 @@ use app\components\page\PageAttributeWidget as PAW;
 
 TemplateAsset::register($this);
 ?>
+ <p>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <h1>Test/Index</h1>
+ <p>   
+
+<!-- тест отправки смс сообщения -->
+    <?php
+        //debug(\Yii::$app->params['login_sms']);
+        $login='79771512915';
+        $password='CKvihRjRHN';
+        $$title='Код подтверждения'; 
+        $sadr='MrSelfevent';
+        $phone='79218471113';
+        $data='Код подтверждения - 123456';
+
+        // запрос баланса
+        $var = file_get_contents ('http://gateway.api.sc/get/?user='.$login.'&pwd='.$password.'&balance=1');
+        echo $var; ?>
+
+<!-- тест отправки смс сообщения -->
+        <?php
+        $var = file_get_contents ('http://gateway.api.sc/get/?user='.$login.'&pwd='.$password.'&name_deliver='.$title.'&sadr='.$sadr.'&dadr='.$phone.'&text='.$data);
+
+        echo $var;
+
+        ?>
+<!-- тест отправки смс сообщения Конец-->
 
 
 
- <div class="modal__buttons">
-    <!-- <a href="/login" class="enter active">Вход</a> -->
 
-    <!-- модальное окно Вход    -->
-    <div class="but1">
-        <?php Modal::begin([
-            'header' => Null, //'<h2>Hello world</h2>',
-            'toggleButton' => [
-                'label' => 'Вход2',
-                'tag' => 'a',
-                'class' => 'enter active'
-            ],
-            'footer' => Null, //'Низ окна',
-            'bodyOptions' => ['class' => 'modal__body'],
-        ]); ?>
+<!-- <p>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <h1>Test/Index</h1>
+   
+    You may change the content of this page by modifying
+    the file
+    <?php //echo "<br>"; ?> 
+    <code><?= __FILE__; ?></code>.
+</p> -->
 
-        <!-- тело окна  -->
-            <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
-            <div class="modal_header">Кто вы?</div>
-            <div class="modal_text">
-                Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите 
-                <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите 
-                <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">Ищу исполнителя</a> 
-            </div>                                            
 
-        <?php Modal::end();?>
-    </div>    
-    <!-- модальное окно Вход  Конец    -->    
-
-    <!-- модальное окно Регистрация-1    -->
-    <div class="but2"> 
-    	<?php Modal::begin([
-            'header' => Null, //'<h2>Hello world</h2>',
-            'toggleButton' => [
-                'label' => 'Реагистрация',
-                'tag' => 'a',
-                'class' => 'enter active'
-            ],
-            'footer' => Null, //'Низ окна',
-            'bodyOptions' => ['class' => 'modal__body'],
-        ]); ?>
-
-        <!-- тело окна  -->
-            <img src="/web/uploads/images/logo_modal.svg" alt="Логотип">
-            <div class="modal_header">Кто вы?</div>
-            <div class="modal_text">
-                Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите 
-                <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите 
-                <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">Ищу исполнителя</a> 
-            </div>                                            
-
-        <?php Modal::end();?>            	                              
-        
-    </div>    
-    <!-- модальное окно Регистрация Конец    -->        
+     
                            
 </div>

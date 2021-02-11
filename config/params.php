@@ -18,4 +18,13 @@ return [
     'industryPageId'  => 29,
     'reviewPageId'    => 59,
     'user.passwordMinLength' => 3,
+    
+    // сервис отправки смс с кодом подтверждения
+    'login_sms'       => '79771512915',
+    'password_sms'    => 'CKvihRjRHN',
+    'title_sms'       => 'Код подтверждения', 
+    'sadr_sms'        => 'MrSelfevent',
+
+    // сервис отправки email с кодом подтверждения
+    'email_subject'   => 'Код подтверждения',
 ];

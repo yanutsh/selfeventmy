@@ -11,28 +11,11 @@ class TestController extends Controller {
 
 	public function actionIndex()
     {
-   		
-        return $this->render('test');
-    	//$model=User::find()->all();
-    	//debug($model);
+   		return $this->render('test');
 
-    	// $user= new Test();
-    	// $user->name = 'Галя';
-    	// $user->save();
-
-    	//$user= new User();
-
-    	// $user->work_form_id = 1;
-     //    $user->username = 'Вася222';             
-     //    $user->sex_id = 0;
-     //  //$user->birthday = $model->birthday;
-     //    $user->phone = '66778899998';
-     //    $user->email = 'yyy@mmm666.ru';              
-     //    $user->isexec = 0;                    
-     //    $user->password = '123ghghgh4567890';
-
-     //    debug($user);
-     //    $user->save();
+        // тест отправки смс сообщения
+        
+    	
     }
 }
 

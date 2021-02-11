@@ -27,27 +27,33 @@ class ConfirmDataController extends Controller {
             	$_SESSION['confirm_code'] =hash('md5', $confirm_code);
 
             	// Определяем что передали - тел или email
-            	if (strpos($_POST['phone_email'], '@')>0) {	// либо email
+            	if (strpos($_POST['phone_email'], '@')>0) {	// подтверждение на email
             		$what_confirm = 'email'; 
             		$_SESSION['what_confirm'] = 'Email';
 
             		// отправляем код по почте
-                		Yii::$app->mailer->compose()
-    				    ->setFrom('from@domain.com')
-    				    ->setTo('to@domain.com')
-    				    ->setSubject('Confirm code-Код подтверждения')
-    				    ->setTextBody('Введите этот код - Enter this code'.$confirm_code.' в форму подтверждения')
-    				    ->setHtmlBody('Введите этот код - Enter this code<b>'.$confirm_code.'</b>  форму подтверждения')
-    				    ->send();
+                        $email = $_POST['phone_email'];
+                        $text = 'Введите этот код - '.$confirm_code.' в форму подтверждения';
+                        send_email($email,$text);                		
 					  
-    	            	Yii::$app->session->setFlash('send_code', 'Сгенерирован код='.$confirm_code. ' Письмо отправлено');	
+    	            	
     	            	return; 
                     // отправляем код по почте Конец       
             		            	
-            	}else {										// либо телефон
-            		$what_confirm = 'Телефон';            		 
+            	}else {										// подтверждение на телефон
+            		$what_confirm = 'Телефон';
+                    $_SESSION['what_confirm'] = 'Телефон'; 
+
             		// отправляем код по смс
-            		//echo "Отправляем смс";
+
+            		$phone = $_POST['phone_email'];
+                    $text = 'Введите этот код - '.$confirm_code.' в форму подтверждения';
+                    $id_sms = send_sms($phone,$text);
+                    // if ($id_sms)
+                    //     Yii::$app->session->setFlash('send_code', 'Сгенерирован код='.$confirm_code. ' СМС отправлено'); 
+                    // else 
+                    //     Yii::$app->session->setFlash('send_code', 'Сгенерирован код='.$confirm_code. ' СМС НЕ отправлено'); 
+
             		return;
             	}	
             }          
@@ -94,7 +100,6 @@ class ConfirmDataController extends Controller {
      public function actionConfirmCode() {
 
      	//echo "Рендерим успешное подтверждение";
-     	//echo "what_confirm=".$_GET['what_confirm'];
      	return $this->render('confirm-code', ['what_confirm' => $_GET['what_confirm']]);
 
      }	

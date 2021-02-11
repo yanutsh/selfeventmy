@@ -1,4 +1,5 @@
 <?php
+//use Yii;
 use yii\helpers\Url;
 use app\assets\TemplateAsset;
 use app\components\page\PageAttributeWidget as PAW;
@@ -9,10 +10,13 @@ TemplateAsset::register($this);
 
 <p>
 	<br><br><br><br><br><br><br><br><br><br><br><br>
-	
-	<h2>   Привет <?= $_GET['username'] ?>!  Это твой ЛК</h2>
 
-	<?php echo "  Isexec=".$_GET['isexec']."<br>"; ?>
+	<?php 
+		$identity = Yii::$app->user->identity;		
+	?>
+	<h2>   Привет <?= $identity->username ?>!  Это твой ЛК</h2>
+
+	<?php echo "  Isexec=".$identity->isexec."<br>"; ?>
     You may change the content of this page by modifying
     the file
     <?php echo "<br>"; ?> 
