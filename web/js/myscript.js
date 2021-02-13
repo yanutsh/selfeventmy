@@ -91,7 +91,7 @@ $(document).ready(function() {
 // показ пароля КОНЕЦ  
 
 
-    $('.chkbox').click(function(){
+  $('.chkbox').click(function(){
         //alert("Check");
       var val=$(this).val();
       if ($(this).is(':checked')){    
@@ -100,7 +100,7 @@ $(document).ready(function() {
       } else {
         $('#wt'+val+ ' input:checkbox').prop('checked', false);
       }
-    });  
+  });  
 
 
     

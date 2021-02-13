@@ -18,6 +18,7 @@ function confirm_code($len=6){
 	return $str;		
 }
 
+// отправка email
 function send_email($email,$text){	
 	// отправка смс на email с текстом  $text
 	$email_from = \Yii::$app->params['adminEmail'];
@@ -35,6 +36,7 @@ function send_email($email,$text){
 	    return;	 
 }
 
+// отправка смс
 function send_sms($phone,$text){	
 	// отправка смс на телефон $phone с текстом  $text
 	$login_sms = \Yii::$app->params['login_sms'];

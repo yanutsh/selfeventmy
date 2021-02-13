@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'adminEmail'      => 'mail@v-stepanov.ru',
+    //'adminEmail'      => 'mail@v-stepanov.ru',
+    'adminEmail'      => 'yanutsh@toppartner.ru',
     'serverEmail'     => 'noreply@se.k-store.ru'/* . $_SERVER['HOST_NAME'] /* . str_replace('www.', '', \Yii::$app->request->getHostInfo()) */,
     'upload_dir'      => '@webroot/uploads/',
     'image_dir'       => '@webroot/uploads/images/',

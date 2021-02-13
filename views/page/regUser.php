@@ -57,6 +57,11 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                         <div class="photo_text">Выберите или перетащите фотографию для профиля</div>
                     </div>
 
+                    <?php //echo "HTTP_HOST= ".$_SERVER['HTTP_HOST'];                   
+                    // Ввод и редактирование АВАТАРА
+                    require_once(dirname(dirname(dirname(__FILE__))).'/libs/avatar.php') 
+                    ?>
+
 
                     <div class="form_subtitle">Основная информация</div>
                     <?= $form->field($model, 'work_form_id')->dropdownList(

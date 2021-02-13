@@ -20,7 +20,7 @@ class RegForm extends Model
     //     return 'yii_user';
     // }
     //public  $id;
-    //public  $photo;
+    public  $avatar;
     public  $work_form_id;
     public  $username;
     public  $sex_id;

@@ -20,7 +20,7 @@ time, mark, audio, video {
   vertical-align: baseline; }
 
 body{
-  background:   #F3F3F3;
+  background: #F3F3F3;
 }
 
 html {
@@ -1103,155 +1103,156 @@ footer {
 
 /*===============================  wrapper__header ======================*/
 
-.logo > img {
-  width: 110px;
-  height: 52px;
-  margin-left: 15px;
-}
+  .logo > img {
+    width: 110px;
+    height: 52px;
+    margin-left: 15px;
+  }
 
-.el span.number{
-  font-family: "Roboto Condensed", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 20px;
-}
+  .el span.number{
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 20px;
+  }
 
-.el span.text{
-  font-family: "Roboto Condensed", sans-serif;
-  font-weight: 300;
-  font-style: normal;
-  font-size: 14px;
-}
+  .el span.text{
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 14px;
+  }
 
-.buttons a.enter,
-.buttons a.register{
-  display:  inline-block;
-  color:  #AE4A84;
-  font-family:  "Roboto Condensed", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 18px;
-  line-height: 45px;
-  text-align: center;
-  cursor: pointer;
-}
+  .buttons a.enter,
+  .buttons a.register{
+    display:  inline-block;
+    color:  #AE4A84;
+    font-family:  "Roboto Condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    cursor: pointer;
+  }
 
-.buttons a.enter{
-  margin-right:   24px;
-}
+  .buttons a.enter{
+    margin-right:   24px;
+  }
 
-.buttons a.register{
-  margin-right: 15px; 
-}  
+  .buttons a.register{
+    margin-right: 15px; 
+  }  
 
-.buttons a.enter{
-  width: 90px;
-  height: 45px;
-  background-color: #fff;
-  border-radius: 10px; 
-  color:  #AE4A84; 
-}
+  .buttons a.enter{
+    width: 90px;
+    height: 45px;
+    background-color: #fff;
+    border-radius: 10px; 
+    color:  #AE4A84; 
+  }
 
-.buttons a.enter.active,
-.buttons a.register.active{
-   background-color: #AE4A84;
-   color:  #fff; 
-}
+  .buttons a.enter.active,
+  .buttons a.register.active{
+     background-color: #AE4A84;
+     color:  #fff; 
+  }
 
-.buttons a.register {  
-  width: 184px;
-  height: 45px;
-  background-color: #fff;
-  border-radius: 10px; 
-  color:  #AE4A84;  
-}
+  .buttons a.register {  
+    width: 184px;
+    height: 45px;
+    background-color: #fff;
+    border-radius: 10px; 
+    color:  #AE4A84;  
+  }
 
-.buttons a.enter:hover,
-.buttons a.enter:focus,
-.buttons a.register:hover,
-.buttons a.register:focus  {
-  background-color: #AE4A84;
-  color:  #fff;
-}
-
+  .buttons a.enter:hover,
+  .buttons a.enter:focus,
+  .buttons a.register:hover,
+  .buttons a.register:focus  {
+    background-color: #AE4A84;
+    color:  #fff;
+  }
+/*===============================  wrapper__header Конец======================*/
 
 /*===============================  Section-1 ======================*/
-section.section-1{
-  height:   661px;
-  background: url("/web/uploads/images/header_bg.png") no-repeat center;
-  margin-bottom: 63px;
-}
+  section.section-1{
+    height:   661px;
+    background: url("/web/uploads/images/header_bg.png") no-repeat center;
+    margin-bottom: 63px;
+  }
 
-.section-1 .header{
-  width:  480px;
-  padding-top: 162px;
-  margin-bottom: 60px;  
-}
+  .section-1 .header{
+    width:  480px;
+    padding-top: 162px;
+    margin-bottom: 60px;  
+  }
 
-.section-1 .search{
-  position: relative;
-  width: 100%;
-}
+  .section-1 .search{
+    position: relative;
+    width: 100%;
+  }
 
-.search input{
-  width:  613px;
-  height:  53px;
-  border:   1px solid rgba(174, 74, 132, 0.2);
-  border-radius: 10px;
-  background:   rgba(255,255,255,0.5);
-  padding-left: 64px; 
-  font-family:  "Roboto Condensed", sans-serif;
-  font-weight: normal;
-  font-style: normal;
-  font-size: 18px; 
-  margin-bottom: 40px;  
-}
+  .search input{
+    width:  613px;
+    height:  53px;
+    border:   1px solid rgba(174, 74, 132, 0.2);
+    border-radius: 10px;
+    background:   rgba(255,255,255,0.5);
+    padding-left: 64px; 
+    font-family:  "Roboto Condensed", sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 18px; 
+    margin-bottom: 40px;  
+  }
 
-a.search__link{
-  position: relative;
-  left:  -184px;
-  display:  inline-block;
-  width: 184px;
-  height:   53px;
-  background:   #AE4A84;
-  border-radius: 10px;
-  line-height: 53px;
-  text-align: center;
-  color:  #fff;
-  font-family:  "Roboto Condensed", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 22px; 
-}
+  a.search__link{
+    position: relative;
+    left:  -184px;
+    display:  inline-block;
+    width: 184px;
+    height:   53px;
+    background:   #AE4A84;
+    border-radius: 10px;
+    line-height: 53px;
+    text-align: center;
+    color:  #fff;
+    font-family:  "Roboto Condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 22px; 
+  }
 
-.search__img{
-  display: inline-block;  
-  position: absolute;
-  left: 25px;
-  top: 15px;
-  width: 24px;
-  height: 24px;
-  background: url(/web/uploads/images/shape.png) left center no-repeat ;
-}
+  .search__img{
+    display: inline-block;  
+    position: absolute;
+    left: 25px;
+    top: 15px;
+    width: 24px;
+    height: 24px;
+    background: url(/web/uploads/images/shape.png) left center no-repeat ;
+  }
 
-.section-1__subtitle{
-  font-size:  18px;
-  line-height:  21px;
-  font-weight:  normal; 
-  color:  #424242;
-}
+  .section-1__subtitle{
+    font-size:  18px;
+    line-height:  21px;
+    font-weight:  normal; 
+    color:  #424242;
+  }
 
-.section-1 p a span {
-  color: #AE4A84; 
-  text-decoration: underline;
-}
+  .section-1 p a span {
+    color: #AE4A84; 
+    text-decoration: underline;
+  }
 
-.avert-place{
-  width:  100%;
-  height:   189px;
-  border:   1px solid #000;
-  margin-bottom: 60px;  
-}
+  .avert-place{
+    width:  100%;
+    height:   189px;
+    border:   1px solid #000;
+    margin-bottom: 60px;  
+  }
+/*===============================  Section-1 Конец======================*/  
 
 /*================================= Категории ============================*/
 
@@ -1733,146 +1734,148 @@ a.search__link{
   }  
 /*==================== Страница регистрации Заказчика КОНЕЦ==================*/
 
+
 /*==================== Страница подтверждения данных =======================*/
-.confirm_title{
-  text-align: center;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: bold;
-  padding-top: 48px;
-  margin-bottom: 32px;
-}
-.choose_send,
-.choose_code{
-  font-size: 18px;
-  line-height: 21px;
-  color: #424242;
-  margin-bottom: 8px;
-}
+  .confirm_title{
+    text-align: center;
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: bold;
+    padding-top: 48px;
+    margin-bottom: 32px;
+  }
+  .choose_send,
+  .choose_code{
+    font-size: 18px;
+    line-height: 21px;
+    color: #424242;
+    margin-bottom: 8px;
+  }
 
-.choose_code{
-  opacity:  0.5;
-}
+  .choose_code{
+    opacity:  0.5;
+  }
 
-#w1 .register__user[disabled='disabled']{
-  opacity: 0.5;
-}
+  #w1 .register__user[disabled='disabled']{
+    opacity: 0.5;
+  }
 /*==================== Страница подтверждения данных Конец=======================*/
 
 /*==================== Страница Успешного подтверждения  =======================*/
 
-.confirm_img{
-  display: block;;
-  margin: 0 auto;
-  margin-bottom: 24px;
-}
+  .confirm_img{
+    display: block;;
+    margin: 0 auto;
+    margin-bottom: 24px;
+  }
 
-.main_text{
-  font-size: 18px;
-  line-height: 21px;
-  text-align: center;
+  .main_text{
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
 
-}
+  }
 
-a.register__user{
-  display: block;
-  text-align: center;
-  line-height: 40px;
-  text-decoration: none;
-  margin-bottom: 50px;
-}
+  a.register__user{
+    display: block;
+    text-align: center;
+    line-height: 40px;
+    text-decoration: none;
+    margin-bottom: 50px;
+  }
 
-a.register__user:hover{
-  color: #fff;
-  background-color: #8D4870;
-}
+  a.register__user:hover{
+    color: #fff;
+    background-color: #8D4870;
+  }
 
-.regcust__confirm .form-group{
-  padding-bottom: 2px;
-}
+  .regcust__confirm .form-group{
+    padding-bottom: 2px;
+  }
 
-.regcust__confirm a:visited{
-  color: #fff;
-}
+  .regcust__confirm a:visited{
+    color: #fff;
+  }
+/*==================== Страница Успешного подтверждения  Конец=======================*/  
 
 /********************** Модальное окно Login *********************/
-.modal_header__login{
-  font-size: 26px;
-  font-weight: bold;
-  text-align: center;
-}
+  .modal_header__login{
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+  }
 
-.modal__body__form{
-  width: 343px;
-  margin: 0 auto;
-}
+  .modal__body__form{
+    width: 343px;
+    margin: 0 auto;
+  }
 
-.modal__body__form input{
-  widows: 100%;
-  background: #f3f3f3;
-}  
+  .modal__body__form input{
+    widows: 100%;
+    background: #f3f3f3;
+  }  
 
-button.enter.active.login{
-  width: 100%;
-  border-radius: 10px;
-  border: none;
-  display:  inline-block;
-  background-color: #AE4A84;
-  color: #fff;
-  font-family:  "Roboto Condensed", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 18px;
-  line-height: 45px;
-  text-align: center;
-  cursor: pointer;
-}
+  button.enter.active.login{
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    display:  inline-block;
+    background-color: #AE4A84;
+    color: #fff;
+    font-family:  "Roboto Condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    cursor: pointer;
+  }
 
-.register.register__login{
-  width: 100%!important;
-  margin-bottom: 32px;
-  text-align: center;
-}  
+  .register.register__login{
+    width: 100%!important;
+    margin-bottom: 32px;
+    text-align: center;
+  }  
 
-a.password-reset {
-  display: inline-block;
-  margin-bottom: 20px;
-  float: right;
-  color: #AE4A84;
-  text-decoration: none;
-}
+  a.password-reset {
+    display: inline-block;
+    margin-bottom: 20px;
+    float: right;
+    color: #AE4A84;
+    text-decoration: none;
+  }
 
-#login-form .personal_check__text{
-  padding-left: 30px;
-}
+  #login-form .personal_check__text{
+    padding-left: 30px;
+  }
 
-#login-form .personal_check__text::before{
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  border-style: solid;
-  border-radius: 3px;
-  border-color: #ae4a84;
-  border-width: 3px;
-  background: #fff;
-  /* box-shadow: inset 0 2px 3px rgb(0 0 0 / 20%); */
-  transition: .2s;
-}
+  #login-form .personal_check__text::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-style: solid;
+    border-radius: 3px;
+    border-color: #ae4a84;
+    border-width: 3px;
+    background: #fff;
+    /* box-shadow: inset 0 2px 3px rgb(0 0 0 / 20%); */
+    transition: .2s;
+  }
 
-#login-form .personal_check__text::after{
-  content: '';
-  display: none;
-}
+  #login-form .personal_check__text::after{
+    content: '';
+    display: none;
+  }
 
-.checkbox__login img{
-  margin: 0; 
-}
+  .checkbox__login img{
+    margin: 0; 
+  }
 
-.checkbox__login .block-image{
-  left: 4px;
-  top: 4px;
-}
-
+  .checkbox__login .block-image{
+    left: 4px;
+    top: 4px;
+  }
+/********************** Модальное окно Login  Конец*********************/

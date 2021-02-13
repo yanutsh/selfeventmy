@@ -72,7 +72,7 @@ class PageController extends Controller
      */
     public function actionIndex()
     {
-   		debug('Page/Index');
+   		 debug('Page/Index');
     }
 
 
@@ -483,7 +483,19 @@ class PageController extends Controller
     {
       // // запоминаем пользователя - Исполнитель или Заказчик
       // if (isset($_GET['isexec']))  $_SESSION['isexec'] = $_GET['isexec'];      
+     
+      if (Yii::$app->request->isAjax) {
+        if(isset($_FILES[0]['name']) && !empty($_FILES[0]['name'])) 
+          {
+            //print_r($_FILES);
+            require_once('../libs/upload_tmp_photo.php');  
             
+           } 
+        //debug($model);
+             
+        //return 'Загрузили аватар';
+      }
+
       $model = new RegForm();                
 
       if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()) && $model->signup())
@@ -520,7 +532,8 @@ class PageController extends Controller
                         
           $user->setPassword($model->password);
           $user->generateAuthKey();
-          //$user->generateEmailVerificationToken();     
+          //$user->generateEmailVerificationToken();
+          if (isset($_SESSION['avatar'])) $user->avatar =  $_SESSION['avatar'];   
           
           //debug($user);     
           if ($user->save()){ // && $this->sendEmail($user);
@@ -542,6 +555,16 @@ class PageController extends Controller
           'model' => $model, 
       ]);
     }
+
+    public function actionEditavatar()
+    {
+      //return '123.jpg';
+      require_once('../libs/editor.php');
+      $res=editor();  // получаем новое имя аватара
+      // записать в БД после регистрации
+      return $res;
+      
+    }  
 
 
 }
