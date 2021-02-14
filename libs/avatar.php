@@ -1,31 +1,34 @@
 <?php 
 	require_once('user_photo.php') ?>
 <!-- Ввод и редактирование аватара -->
-	<div class="b-change_avatar">Выберите файл для аватара.</div>
+	<!-- <div class="b-change_avatar">Выберите файл для аватара.</div> -->
 
 	<!-- <form action="functions/save_profile_customer.php" class="p-form" method="post" enctype="multipart/form-data"> -->
 
-		<div class="change_avatar">
-		    <p>Кликните на фото для смены аватара</p>
+		<div class="change_avatar">		    
 			
 			<div class="preview_avatar">
 		    	<img id="preview_avatar" src="<?= user_photo($user_data[0]['avatar']) ?>" alt="Аватар" title="Выберите файл для аватара.">
+		    	 <p>Кликните и выберите фотографию для профиля</p>
 		    	<div class="form-group">
 		         <!--  <label for="avatar"></label> -->	        	
 		            <input type="file" name="avatar[]" class="form-control add-avatar"  id="avatar" onchange="ShowAvatar(this.files);"  multiple />
 		        </div>	
 		        
 		    </div>
+		   
 
 		    <div class="wrapper wrapper__avatar" id="wrapper">
 				<main class="main">
 					<div class="main__content">
 						<div class="avatar">
-							<div class="polzunok"></div>
+							
 							<img id="image" class="image">
 							<canvas id="canvas" class="canvas">
 								Your browser does not support JS or HTML5!
 							</canvas>
+							<div class="polzunok"></div>
+							
 						</div>
 						
 						<div class="cut-btn">

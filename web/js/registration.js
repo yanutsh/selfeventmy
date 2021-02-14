@@ -11,7 +11,9 @@ $(document).ready(function() {
       //alert("b-change_avatar---");
     $('.change_avatar').css('display','block');
     $('.preview_avatar').css('display','block');
-    $('.wrapper').css('display','none');
+    $('.wrapper.wrapper__avatar').css('display','table');
+
+    //$('.wrapper').css('display','none');
   });
 
   // управление ползунком аватара
@@ -21,7 +23,8 @@ $(document).ready(function() {
         value: 50,
         max: 100,
         min: 20,
-        orientation: "vertical" 
+        // orientation: "vertical" 
+        orientation: "horizontal", 
   });
     
 });

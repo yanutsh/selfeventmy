@@ -52,12 +52,9 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
 
                     <?//= $form->field($model, 'photo') ?>
                     <div class="form_subtitle">Фотография</div>
-                    <div class="user-photo">
-                        <img src="/web/uploads/images/upload_icon.svg" alt="Загрузите фото">
-                        <div class="photo_text">Выберите или перетащите фотографию для профиля</div>
-                    </div>
-
-                    <?php //echo "HTTP_HOST= ".$_SERVER['HTTP_HOST'];                   
+                    
+                    <?php 
+                    //echo "HTTP_HOST= ".$_SERVER['HTTP_HOST'];                   
                     // Ввод и редактирование АВАТАРА
                     require_once(dirname(dirname(dirname(__FILE__))).'/libs/avatar.php') 
                     ?>

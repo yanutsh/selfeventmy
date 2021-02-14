@@ -2,17 +2,12 @@
 function editor(){
 
 	session_start();
-	//ini_set('opcache.enable','0'); // отключение кеша
-
-	// require_once("functions/database.php");	
-	// $link=db_connect();
+	
 	//echo ('$_SESSION -tmp_avatar='.$_SESSION['tmp_avatar'])
 	
-	$filename = "C://ospanel/domains/selfeventmy.loc/web/uploads/images/users/".$_SESSION['tmp_avatar']; 
-	//$filename = $_SESSION['tmp_avatar']; 
-
-	//return "filename=".$filename;  // Без пути к файлу
-
+	//$filename = "C://ospanel/domains/selfeventmy.loc/web/uploads/images/users/".$_SESSION['tmp_avatar']; 
+	$filename = $_SERVER['DOCUMENT_ROOT'].'/web/uploads/images/users/'.$_SESSION['tmp_avatar']; 
+	
 	$imageFormatArray = explode('.', $filename);
 	$newImageFormat= $imageFormatArray[array_key_last($imageFormatArray)];
 	//return "newImageFormat=".$newImageFormat;

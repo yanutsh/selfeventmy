@@ -282,7 +282,7 @@ function Save(old_name)
         
         if (msg != "" ) // возвращает имя файла с расширением
 			 {	
-			 	alert("msg="+msg);
+			 	//alert("msg="+msg);
 				$('#preview_avatar').attr('src','web/uploads/images/users/'+ msg);		      
 
 				$('div.preview_avatar').css('display','block');
