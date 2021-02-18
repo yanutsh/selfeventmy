@@ -119,7 +119,7 @@ AppAsset::register($this);
                                                 </div>
 
                                                 <!-- <div> -->
-                                                   <a href="page/request-password-reset" class = 'password-reset'>Забыли пароль?
+                                                   <a href="/page/request-password-reset-token" class = 'password-reset'>Забыли пароль?
                                                    </a>            
                                                 <!-- </div> -->
 
@@ -324,7 +324,7 @@ AppAsset::register($this);
 
 
         <!-- Кнопка возврата наверх -->
-        <div id="top"><span class="image"><?= Html::img(Yii::$app->params['image_dir_url'] . 'top.png') ?></span>
+        <div id="top"><span class="image__top"><?= Html::img(Yii::$app->params['image_dir_url'] . 'top.png') ?></span>
         </div>
 
 

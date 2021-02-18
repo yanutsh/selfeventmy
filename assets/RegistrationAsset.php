@@ -22,5 +22,7 @@ class RegistrationAsset extends AssetBundle {
         'js/slick.min.js',      
     ];
     public $depends = [
-    ];   
+    ];
+
+    //public $jsOptions = ['position' => \yii\web\View::POS_HEAD];   
 }

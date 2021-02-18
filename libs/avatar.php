@@ -8,7 +8,9 @@
 		<div class="change_avatar">		    
 			
 			<div class="preview_avatar">
-		    	<img id="preview_avatar" src="<?= user_photo($user_data[0]['avatar']) ?>" alt="Аватар" title="Выберите файл для аватара.">
+				<?php //debug (user_photo($_SESSION['avatar'])) ?>
+
+		    	<img id="preview_avatar" src="<?= user_photo($_SESSION['avatar']) ?>" alt="Аватар" title="Выберите файл для аватара.">
 		    	 <p>Кликните и выберите фотографию для профиля</p>
 		    	<div class="form-group">
 		         <!--  <label for="avatar"></label> -->	        	
@@ -56,3 +58,4 @@
 			
 	<!-- конец поля ввода параметров рамки - скрываю -->
    <!-- </form> -->
+   

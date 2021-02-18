@@ -2,26 +2,6 @@
 
 $(document).ready(function() {
     
-    //console.log ("ssend_code-ready="+ssend_code);
-
-    // управление css кнопок на странице Подтверждения данных  
-  if(typeof(ssend_code) != "undefined" && ssend_code !== null) {  
-    if (ssend_code=='ok' || ssend_code=='confirm_error' ){   
-    // если код подтверждения отправлен или подтвержден с ошибкой
-      $('#send_code').attr('disabled','disabled');
-      $('#send_code').css('opacity','0.5');
-      $("select[name='phone_email']").attr('readonly','readonly');      
-      $('.choose_send').css('opacity','0.5');
-
-      $('#confirm_code').removeAttr('disabled');
-      $('#confirm_code').css('opacity','1');
-      $("input[name='code']").removeAttr('disabled'); 
-      $('label.choose_code').css('opacity','1');
-      //ssend_code=null;
-    }
-
-  }   
-
 // управление видом кнопок Вход и Регистрация	
 	$('.buttons a.register').on('click', function() {
         //alert("Кликнули");
@@ -35,24 +15,9 @@ $(document).ready(function() {
         $('.buttons a.register').removeClass('active');
     })
 // управление видом кнопок Вход и Регистрация Конец
-    $('#send_code').on('click', function() {
-        //alert("нажали кнопку Выслать код");
-      $('#send_code').submit();   
-      $('#send_code').attr('disabled','disabled');
-      $('#send_code').css('opacity','0.5');
-      $("select[name='phone_email']").attr('readonly','readonly');      
-      $('.choose_send').css('opacity','0.5');
-
-      $('#confirm_code').removeAttr('disabled');
-      $('#confirm_code').css('opacity','1');
-      $("input[name='code']").removeAttr('disabled'); 
-      $('label.choose_code').css('opacity','1');
-  
-    })    
-// управление видом кнопок на странице Подтверждения данных
 
 
-// управление видом кнопок на странице Подтверждения данных Конец
+
 
 // ввод файла        
     // $("#input-44").fileinput({
@@ -88,7 +53,20 @@ $(document).ready(function() {
     }
     return false;
   });
-// показ пароля КОНЕЦ  
+// показ пароля КОНЕЦ 
+
+// показ Кода подтверждениея    
+  $('body').on('click', '.password-control3', function(){      
+    if ($('#code').attr('type') == 'password'){
+      $(this).addClass('view');
+      $('#code').attr('type', 'text');
+    } else {
+      $(this).removeClass('view');
+      $('#code').attr('type', 'password');
+    }
+    return false;
+  }); 
+// показ Кода подтверждениея КОНЕЦ   
 
 
   $('.chkbox').click(function(){

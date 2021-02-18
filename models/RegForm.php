@@ -107,7 +107,7 @@ class RegForm extends Model
         ];
     }
 
-     public function signup()
+     public function check_validate()
     {
         if (!$this->validate()) {
             return null;

@@ -22,6 +22,7 @@ class ConfirmDataController extends Controller {
             if ($_POST['phone_email']) {   // Поле ввода телефон/почта заполнено        	
             
             	// Генерируем код подтверждения  Отправляем код по почте или смс
+               
             	$confirm_code = confirm_code(6);
             	// запоминаем хешированный пароль в сессии
             	$_SESSION['confirm_code'] =hash('md5', $confirm_code);
@@ -34,10 +35,11 @@ class ConfirmDataController extends Controller {
             		// отправляем код по почте
                         $email = $_POST['phone_email'];
                         $text = 'Введите этот код - '.$confirm_code.' в форму подтверждения';
-                        send_email($email,$text);                		
-					  
+                        send_email($email,$text);  				  
     	            	
-    	            	return; 
+    	            	//return;
+                        return $this->render('send-code');
+                         
                     // отправляем код по почте Конец       
             		            	
             	}else {										// подтверждение на телефон
@@ -53,8 +55,10 @@ class ConfirmDataController extends Controller {
                     //     Yii::$app->session->setFlash('send_code', 'Сгенерирован код='.$confirm_code. ' СМС отправлено'); 
                     // else 
                     //     Yii::$app->session->setFlash('send_code', 'Сгенерирован код='.$confirm_code. ' СМС НЕ отправлено'); 
-
-            		return;
+                    
+                    //return;
+                    return $this->render('send-code'); 
+                    
             	}	
             }          
             
@@ -97,7 +101,7 @@ class ConfirmDataController extends Controller {
 		}   
     }
 
-     public function actionConfirmCode() {
+    public function actionConfirmCode() {
 
      	//echo "Рендерим успешное подтверждение";
      	return $this->render('confirm-code', ['what_confirm' => $_GET['what_confirm']]);

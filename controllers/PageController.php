@@ -19,6 +19,8 @@ use app\models\RegForm;
 use app\models\SignupForm;
 use app\models\LoginForm;
 use app\models\User;
+use app\models\PasswordResetRequestForm;
+use app\models\ResetPasswordForm;
 use yii\base\Response;
 
 /**
@@ -281,100 +283,41 @@ class PageController extends Controller
         }
     }
 
-    // public function actionAdmin()
-    // {
-    //     $login = new LoginForm();
-
-
-    //     if($login->load(Yii::$app->request->post()))
-    //     {
-    //    //  $identity = User::findIdentity($login->id);
-
-    //         $login->login();
-    //     }
-
-    //     if(Yii::$app->user->isGuest || !Yii::$app->user->identity->login || Yii::$app->user->identity->login != 'admin')
-    //     {
-    //         $this->layout = 'login';
-
-    //         return $this->render('../site/login', [
-    //                     'model' => $login
-    //         ]);
-    //     }
-    //     else
-    //     {
-    //         $this->layout = 'admin';
-
-    //         return $this->render('../site/admin', [
-    //                     'model' => $login,
-    //         ]);
-    //     }
-    // }
-
-    public function actionPasswordReset($token)
+    public function actionResetPassword()
     {
        // $this->layout = 'none';
 
-        try
-        {
-            $model = new \app\models\ResetPasswordForm($token);
-        } catch(InvalidParamException $e)
-        {
-            throw new BadRequestHttpException($e->getMessage());
-        }
+        // try
+        // {
+        //     $model = new \app\models\ResetPasswordForm($token);
+        // } catch(InvalidParamException $e)
+        // {
+        //     throw new BadRequestHttpException($e->getMessage());
+        // }
 
-        if($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword())
+        $model = new \app\models\ResetPasswordForm();
+        if (Yii::$app->request->isPjax) 
         {
-            Yii::$app->getSession()->setFlash('success', 'Спасибо! Пароль успешно изменён.');
+          //debug("Пришел Pjax");
+          if($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword())
+          {
+            //debug("Пароль изменен и записан");
+              Yii::$app->getSession()->setFlash('success', 'Спасибо! Пароль успешно изменён.');
 
-            return $this->redirect(['page/frontend', 'id' => Yii::$app->params['loginPageId']]);
-        }
-
-        return $this->render('password-reset', [
+              //return $this->redirect(['/page/login']);
+          }else {
+              Yii::$app->getSession()->setFlash('error', 'Ошибка ! Пароль изменить не удалось.');
+          }
+          return $this->render('resetPassword', [
+                    'model' => $model,]);
+        }  
+            
+        return $this->render('resetPassword', [
                     'model' => $model,
         ]);
     }
 
-    /* public function actionSitemap()
-      {
-      $settings                         = Settings::find()->where(['id' => 1])->one();
-      $this->view->params['settings']   = $settings;
-      $navigation                       = NavigationMain::find()->orderBy(['order' => SORT_ASC])->all();
-      $this->view->params['navigation'] = $navigation;
-
-      $page = Page::findOne(18);
-
-      if ($page)
-      {
-      $templateName = $page->template;
-      if (!$templateName)
-      $templateName = 'template-simple';
-      $template     = '../template/' . $templateName;
-
-      $articles        = Article::find()->where(['status' => 1])->all();
-      $pages           = Page::find()->where(['status' => 1])->all();
-      $testCategories1 = TestCategory1::find()->all();
-      $testCategories2 = TestCategory2::find()->all();
-
-      return $this->render($template, [
-      'settings'        => $settings,
-      'page'            => $page,
-      'articles'        => $articles,
-      'testCategories1' => $testCategories1,
-      'testCategories2' => $testCategories2,
-      ]);
-      }
-      else
-      {
-      Yii::$app->response->setStatusCode(404);
-      return $this->render('../site/error', [
-      'name'    => 'Страница не найдена',
-      'message' => 'Статьяне найдена',
-      ]);
-      }
-      } */
-
-
+    
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -382,49 +325,7 @@ class PageController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Signs user up.
-     *
-     * @return mixed
-     */
-    public function actionSignup()
-    {
-      
-      // Регистрация нового юзера
-      
-      if (!Yii::$app->user->isGuest) {  // если юзер авторизован перенаправляем на главную?
-        echo "УЖЕ Залогинился - КУДА ИДЕМ?"; 
-        die;
-        return $this->goHome();
-      }
-
-        $model = new SignupForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) 
-        {
-         
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-
-             //echo "Регистрация прошла успешно"; 
-             
-             // Логинирование только что зарегистрированного пользователя
-              $model2 = new LoginForm();
-              $model2->username = $model->username;
-              $model2->password = $model->password;
-
-              //debug($model2);
-
-              if ($model2->login()) {  // если логинирование прошло
-                  //echo ("isGuest-".Yii::$app->user->isGuest);  die;
-                  //echo ("Юзер-".Yii::$app->user->identity->username);
-                  //die;
-                  return $this->goHome();
-              }              
-        }
-        // Логин не рошел  
-        return $this->render('signup', [
-            'model' => $model, ]);
-    }
+    
 
     /**
      * Logs in a user.
@@ -498,7 +399,7 @@ class PageController extends Controller
 
       $model = new RegForm();                
 
-      if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()) && $model->signup())
+      if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()) && $model->check_validate())
       {            
         // проверяем на заполнение согласий  
           $errors = Null;
@@ -564,7 +465,172 @@ class PageController extends Controller
       // записать в БД после регистрации
       return $res;
       
-    }  
+    } 
+
+    /* Вариант восстановления пароля по инструкциям в письме
+     * Requests password reset **********************************************.
+     *
+     * @return mixed
+     */
+    // public function actionRequestPasswordReset()
+    // {
+    //     $model = new PasswordResetRequestForm();
+    //     if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+    //         //debug('validate-ok');
+    //         if ($model->sendEmail()) {
+    //             Yii::$app->session->setFlash('success', 'Проверьте Ваш почтовый ящик - на него мы выслали инструкции для восстановления пароля.');
+
+    //             //return $this->goHome();
+    //             return $this->render('requestPasswordResetToken', [
+    //                         'model' => $model,
+    //                     ]);
+    //         } else {
+    //             Yii::$app->session->setFlash('error', 'Извините, указанный почтовый ящик не существует в БД, восстановление пароля невозможно');
+    //         }
+    //     }
+
+    //     return $this->render('requestPasswordResetToken', [
+    //         'model' => $model,
+    //     ]);
+    // }
+
+    // Восстановление пароля по коду подтверждения и его проверка
+    public function actionRequestPasswordResetToken() {
+
+      //print_r($_POST); 
+      $model = new PasswordResetRequestForm();               
+
+      if (Yii::$app->request->isPjax) 
+      {
+        if ($model->load(Yii::$app->request->post()) && $model->check_validate())
+        {                          
+          //debug($model,1);
+          $email=$model->email;
+          //debug($email);
+          if ($email) {   // Поле ввода телефон/почта заполнено          
+          
+            // Генерируем код подтверждения  Отправляем код по почте или смс
+             
+            $confirm_code = confirm_code(6);
+            // запоминаем хешированный пароль в сессии
+            $_SESSION['confirm_code'] =hash('md5', $confirm_code);
+
+            // Определяем что передали - тел или email
+            if (strpos($email, '@')>0) { // подтверждение на email
+              $what_confirm = 'email'; 
+              $_SESSION['what_confirm'] = 'Email';
+              // запоминаем в сессии для идентификации пользователя
+              $_SESSION['user_email'] = $email; 
+
+              // отправляем код по почте
+                      //$email = $_POST['email'];
+                      $text = 'Введите этот код - '.$confirm_code.' в форму подтверждения';
+                      send_email($email,$text);           
+                  //debug($email."  ".$confirm_code);
+                  //return;
+                  return $this->render('requestPasswordResetToken', compact('model'));
+                       
+                  // отправляем код по почте Конец       
+                            
+            }else {                   // подтверждение на телефон
+              $what_confirm = 'Телефон';
+                  $_SESSION['what_confirm'] = 'Телефон'; 
+
+              // отправляем код по смс
+
+              $phone = $_POST['email'];
+                  $text = 'Введите этот код - '.$confirm_code.' в форму подтверждения';
+                  $id_sms = send_sms($phone,$text);
+                  // if ($id_sms)
+                  //     Yii::$app->session->setFlash('send_code', 'Сгенерирован код='.$confirm_code. ' СМС отправлено'); 
+                  // else 
+                  //     Yii::$app->session->setFlash('send_code', 'Сгенерирован код='.$confirm_code. ' СМС НЕ отправлено'); 
+                  
+                  //return;
+                   return $this->render('requestPasswordResetToken');
+                  
+            } 
+          }
+          
+        } else 
+        {
+          //debug($_POST);
+          // сравниваем полученный код с отправленным
+          if ($_POST['code'] && hash('md5',$_POST['code'])== $_SESSION['confirm_code']) 
+            { //debug("Введенный КОД ПОДТВЕРЖДЕН"); 
+              // показываем страницу ввода нового ПАРОЛЯ
+              Yii::$app->getResponse()->redirect(
+                  ['page/reset-password',])->send();
+              return; 
+            }else {
+              //echo "Введенный код неверен. Введите правильный код";
+              Yii::$app->session->setFlash('error_code',"Введенный код неверен. Введите правильный код"); 
+              return $this->render('requestPasswordResetToken', compact('model'));  
+            }            
+
+          if ($errors) {  
+             Yii::$app->session->setFlash('errors', $errors);
+             return $this->render('requestPasswordResetToken', compact('model'));
+          } 
+        }
+      }  
+      return $this->render('requestPasswordResetToken', compact('model')); 
+           
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword__DEL()   //($token)
+    {
+        // try {
+        //     $model = new ResetPasswordForm($token);
+        // } catch (InvalidArgumentException $e) {
+        //     throw new BadRequestHttpException($e->getMessage());
+        // }
+
+        // if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+        //     Yii::$app->session->setFlash('success', 'New password saved.');
+
+        //     return $this->goHome();            
+        // }
+        $model = new ResetPasswordForm();
+        return $this->render('resetPassword', ['model' => $model,]);
+    }
+
+    // public function actionAdmin()
+    // {
+    //     $login = new LoginForm();
+
+
+    //     if($login->load(Yii::$app->request->post()))
+    //     {
+    //    //  $identity = User::findIdentity($login->id);
+
+    //         $login->login();
+    //     }
+
+    //     if(Yii::$app->user->isGuest || !Yii::$app->user->identity->login || Yii::$app->user->identity->login != 'admin')
+    //     {
+    //         $this->layout = 'login';
+
+    //         return $this->render('../site/login', [
+    //                     'model' => $login
+    //         ]);
+    //     }
+    //     else
+    //     {
+    //         $this->layout = 'admin';
+
+    //         return $this->render('../site/admin', [
+    //                     'model' => $login,
+    //         ]);
+    //     }
+    // } 
 
 
 }

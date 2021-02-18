@@ -53,11 +53,11 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                     <?//= $form->field($model, 'photo') ?>
                     <div class="form_subtitle">Фотография</div>
                     
+                    <!-- Ввод и редактирование АВАТАРА ============= -->
                     <?php 
-                    //echo "HTTP_HOST= ".$_SERVER['HTTP_HOST'];                   
-                    // Ввод и редактирование АВАТАРА
                     require_once(dirname(dirname(dirname(__FILE__))).'/libs/avatar.php') 
                     ?>
+                    <!-- Ввод и редактирование АВАТАРА  Конец ====== -->
 
 
                     <div class="form_subtitle">Основная информация</div>
@@ -151,9 +151,11 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                 <?php //Pjax::end(); ?>
 
             </div><!-- page-regCust -->
+           
             <?php Pjax::end(); ?>
             
         </div>
     
-</div> 
+</div>  
+
             

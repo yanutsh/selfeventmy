@@ -17,9 +17,9 @@ use yii\web\AssetBundle;
 class FontAsset extends AssetBundle
 {
 
-    public $sourcePath = '@app/assets';
-//    public $basePath   = '@webroot';
-//    public $baseUrl    = '@web';
+//    public $sourcePath = '@app/assets';
+    public $basePath   = '@webroot';
+    public $baseUrl    = '@web';
     public $css        = [
 //        '//fonts.googleapis.com/css?family=Roboto+Condensed:400,700&subset=cyrillic',
 //        '//fonts.googleapis.com/css?family=Roboto:400,700&subset=cyrillic',

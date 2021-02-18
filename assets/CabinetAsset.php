@@ -16,17 +16,16 @@ use yii\web\AssetBundle;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class TemplateAsset extends AssetBundle {
+class CabinetAsset extends AssetBundle {
 
     //public $sourcePath = '@app/assets';  // исходный вариант
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/style.css',
-        'css/templates/template-main.css'        
+        'css/lk-customer.css',        
     ];
     public $js = [
-        'js/script.js',
+        //'js/script.js',
         //'js/fonts.js',
     ];
     public $depends = [

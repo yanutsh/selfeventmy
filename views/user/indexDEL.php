@@ -9,11 +9,13 @@ TemplateAsset::register($this);
 <h1>user/index</h1>
 
 <p>
-	<br><br><br><br><br><br><br><br><br><br><br><br>
-
+	
 	<?php 
-		$identity = Yii::$app->user->identity;		
+		$identity = Yii::$app->user->identity;
+		//debug ($identity['avatar']);
+		$avatar = $identity['avatar'];		
 	?>
+	<img src="/web/uploads/images/users/<?= $avatar?>" alt="Аватар">
 	<h2>   Привет <?= $identity->username ?>!  Это твой ЛК</h2>
 
 	<?php echo "  Isexec=".$identity->isexec."<br>"; ?>
@@ -21,4 +23,6 @@ TemplateAsset::register($this);
     the file
     <?php echo "<br>"; ?> 
     <code><?= __FILE__; ?></code>.
+
+    
 </p>

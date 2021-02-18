@@ -1,0 +1,33 @@
+.count__caption,
+#countdown-1 {
+    display: inline-block;
+}
+
+.count__caption{
+	font-size: 12px;
+}
+
+.timeTo.timeTo-white div{
+    background: transparent;
+    border: none;
+    line-height: normal;
+}
+
+#countdown-1 ul{
+	top: 0!important;
+}
+
+.form-group.group__resend{
+	position: relative;
+}
+
+.resend{
+	display: none;
+	position: absolute;
+    top: 60px;
+    left: 70px;
+}
+
+.regcust .alert{
+    margin-bottom: 0;
+}

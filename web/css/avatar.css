@@ -31,8 +31,8 @@
         z-index: 100;
         top: 0;
         left: 0;
-        width: 200px;
-        height: 200px;
+        width: 343px;
+        height: 160px;
 
         cursor: pointer;
         margin: 0 auto;
@@ -192,3 +192,7 @@
 
 /*Конец Для редактирования аватара*/
 /*================================ АватарКонец ====================================*/
+
+#top span.image{
+    border: none;
+} 

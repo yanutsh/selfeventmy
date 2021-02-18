@@ -1,4 +1,3 @@
-@charset "UTF-8";
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -18,10 +17,6 @@ time, mark, audio, video {
   font: inherit;
   font-size: 100%;
   vertical-align: baseline; }
-
-body{
-  background: #F3F3F3;
-}
 
 html {
   line-height: 1; }
@@ -160,7 +155,7 @@ body {
     padding: 25px; }
     .popup-form .form-content .product-info .image {
       display: inline-block;
-      vertical-align: top;nter
+      vertical-align: top;
       *vertical-align: auto;
       *zoom: 1;
       *display: inline;
@@ -359,18 +354,10 @@ body {
   outline: none; }
 
 .wrapper {
-  
   width: 100%;
-  max-width: 1070px; /* 1000px;*/
-  padding:  0 15px;
+  max-width: 1000px;
   margin: 0 auto;
   position: relative; }
-  .wrapper__header{
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-  }
 
 header {
   position: relative; }
@@ -398,15 +385,9 @@ header {
         color: #ffffff;
         text-decoration: none; }
   header .line-bottom {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    background-color: #fff;
-    z-index: 1000;
-    opacity: 0.9;
     padding: 10px 0;
-    *position: relative;
-    *border-bottom: 1px solid #DFDCDC; }
+    position: relative;
+    border-bottom: 1px solid #DFDCDC; }
     header .line-bottom .logo {
       display: inline-block;
       vertical-align: middle;
@@ -416,21 +397,17 @@ header {
       padding-right: 15px;
       cursor: pointer; }
     header .line-bottom .slogan {
-      width: 167px;
-      font-size: 14px; /*15px;*/
+      font-size: 15px;
       color: #9C8480;
       text-transform: uppercase;
-      line-height: 16.41px;  /*1.3;*/
-      font-style: normal;
-      font-family: 'Roboto Condensed';
-      font-weight: 300;
-      /*padding: 8px 15px;*/
+      line-height: 1.3;
+      padding: 8px 15px;
       display: inline-block;
       vertical-align: middle;
       *vertical-align: auto;
       *zoom: 1;
       *display: inline;
-      *border-left: 1px solid #FFB895; }
+      border-left: 1px solid #FFB895; }
     header .line-bottom .bullet {
       display: inline-block;
       vertical-align: middle;
@@ -452,18 +429,17 @@ header {
           -moz-border-radius: 50%;
           -webkit-border-radius: 50%;
           border-radius: 50%;
-          width: 14px;
-          height: 14px;
+          width: 25px;
+          height: 25px;
           display: inline-block;
-          *vertical-align: middle;
+          vertical-align: middle;
           *vertical-align: auto;
           *zoom: 1;
           *display: inline;
-          margin-right: 5px; 
-          margin-top: 5px; }
+          margin-right: 5px; }
         header .line-bottom .bullet .el span {
           display: inline-block;
-          vertical-align: top; /*middle;*/
+          vertical-align: middle;
           *vertical-align: auto;
           *zoom: 1;
           *display: inline; }
@@ -518,8 +494,8 @@ header {
   [class='page']:not(.page-text) {
     min-height: 700px; } }
 footer {
-  *background: url("/uploads/images/fbc.png");
-  *background-size: cover;
+  background: url("/uploads/images/fbc.png");
+  background-size: cover;
   padding-bottom: 50px;
   clear: both; }
   footer .line-top {
@@ -580,36 +556,31 @@ footer {
       *zoom: 1;
       *display: inline;
       width: 600px; }
-      footer .soc a {
+      footer .bottom .left .soc a {
         display: inline-block;
         vertical-align: middle;
         *vertical-align: auto;
         *zoom: 1;
         *display: inline;
-        width: 30px;
-        height: 30px;
-        *margin-right: 24px;
-        margin: 11px 0;
+        width: 60px;
+        height: 60px;
+        margin-right: 24px;
         border: 1px solid #74A3C7;
         -moz-border-radius: 50%;
         -webkit-border-radius: 50%;
         border-radius: 50%;
         text-align: center; }
-        footer .soc a.instagram {
-          background: url("/uploads/images/003-instagram.png") no-repeat center center; }
-        footer .soc a.facebook {
-          background: url("/uploads/images/004-facebook.png") no-repeat center center; }
-        footer .soc a.twitter {
-          background: url("/uploads/images/005-twitter.png") no-repeat center center; }  
-        footer .soc a.vkontakte {
-          background: url("/uploads/images/001-vk.png") no-repeat center center; }
-        footer .soc a.youtube {
-          background: url("/uploads/images/002-youtube.png") no-repeat center center; }
-        footer .soc a.whatsapp {
-          background: url("/uploads/images/006-whatsapp.png") no-repeat center center; }
-        /*footer .soc a.googleplus {
-          background: url("/uploads/images/soc-gp.png") no-repeat center center; }*/
-        footer .soc a:hover {
+        footer .bottom .left .soc a.facebook {
+          background: url("/uploads/images/soc-fb.png") no-repeat center center; }
+        footer .bottom .left .soc a.vkontakte {
+          background: url("/uploads/images/soc-vk.png") no-repeat center center; }
+        footer .bottom .left .soc a.youtube {
+          background: url("/uploads/images/soc-yt.png") no-repeat center center; }
+        footer .bottom .left .soc a.twitter {
+          background: url("/uploads/images/soc-tw.png") no-repeat center center; }
+        footer .bottom .left .soc a.googleplus {
+          background: url("/uploads/images/soc-gp.png") no-repeat center center; }
+        footer .bottom .left .soc a:hover {
           background-color: #74A3C7; }
     footer .bottom .right {
       display: inline-block;
@@ -908,974 +879,7 @@ footer {
   .main-foz div[data-pjax-container] {
     display: inline; }
 
-.template-main .section-1 .header {
-  font-size: 42px;
-  line-height: 49px;
-  font-family: "Roboto Condensed", sans-serif;
-  font-weight: bold;
-  *padding: 60px 0;
-  text-align: left; }
-.template-main .section-1 .button-line {
-  padding-bottom: 40px;
-  text-align: center; }
-  .template-main .section-1 .button-line .element {
-    display: inline-block;
-    vertical-align: top;
-    *vertical-align: auto;
-    *zoom: 1;
-    *display: inline;
-    margin: 0 50px; }
-    .template-main .section-1 .button-line .element .comment {
-      display: inline-block;
-      vertical-align: top;
-      *vertical-align: auto;
-      *zoom: 1;
-      *display: inline;
-      padding-top: 15px;
-      font-size: 15px; }
-.template-main .section-1 .avert-place {
-  border: 2px solid #000000;
-  height: 190px;
-  margin: 40px 0; }
-.template-main .section-1 .block-header {
-  text-align: center;
-  padding: 60px 0 20px;
-  font-size: 25px;
-  font-family: "Roboto Condensed", sans-serif;
-  font-weight: bold;
-  text-transform: uppercase; }
-.template-main .section-1 .category-list {
-  padding: 40px 0;
-  text-align: center; }
-  .template-main .section-1 .category-list li {
-    display: inline-block;
-    vertical-align: top;
-    *vertical-align: auto;
-    *zoom: 1;
-    *display: inline;
-    width: 330px;
-    text-align: left;
-    margin: 10px 0; }
-    .template-main .section-1 .category-list li:before {
-      content: '';
-      background: #FFB895;
-      -moz-border-radius: 50%;
-      -webkit-border-radius: 50%;
-      border-radius: 50%;
-      width: 25px;
-      height: 25px;
-      display: inline-block;
-      vertical-align: middle;
-      *vertical-align: auto;
-      *zoom: 1;
-      *display: inline;
-      margin-right: 5px; }
-    .template-main .section-1 .category-list li:nth-child(3n+3) {
-      width: 180px; }
-    .template-main .section-1 .category-list li span {
-      display: inline-block;
-      vertical-align: middle;
-      *vertical-align: auto;
-      *zoom: 1;
-      *display: inline; }
-      .template-main .section-1 .category-list li span a {
-        font-size: 23px;
-        color: #666666;
-        font-family: "Roboto Condensed", sans-serif;
-        text-decoration: none; }
-.template-main .section-1 .all-categories {
-  text-align: center; }
-.template-main .section-1 .slider-top100 {
-  margin: 20px 0; }
-  .template-main .section-1 .slider-top100 .carousel {
-    width: 95%;
-    margin: 0 auto; }
-  .template-main .section-1 .slider-top100 .slides li {
-    width: 130px;
-    position: relative; }
-    .template-main .section-1 .slider-top100 .slides li .image {
-      display: inline-block;
-      vertical-align: top;
-      *vertical-align: auto;
-      *zoom: 1;
-      *display: inline;
-      border: 2px solid #32A13C;
-      -moz-border-radius: 50%;
-      -webkit-border-radius: 50%;
-      border-radius: 50%;
-      padding: 2px;
-      width: 113px;
-      height: 113px;
-      text-align: center;
-      overflow: hidden; }
-    .template-main .section-1 .slider-top100 .slides li .checked {
-      background: #32A13C;
-      font-size: 9px;
-      color: #ffffff;
-      font-weight: bold;
-      position: absolute;
-      bottom: 5px;
-      right: 13px;
-      padding: 2px;
-      text-transform: uppercase; }
-    .template-main .section-1 .slider-top100 .slides li:after {
-      content: url("/uploads/images/check-confirm.png");
-      position: absolute;
-      bottom: 20px;
-      right: 25px; }
-  .template-main .section-1 .slider-top100 .flex-direction-nav .flex-prev {
-    left: -30px; }
-    .template-main .section-1 .slider-top100 .flex-direction-nav .flex-prev:before {
-      font-family: 'FontAwesome';
-      display: inline-block;
-      text-decoration: none;
-      line-height: 1;
-      content: ""; }
-  .template-main .section-1 .slider-top100 .flex-direction-nav .flex-next {
-    right: -30px; }
-    .template-main .section-1 .slider-top100 .flex-direction-nav .flex-next:before {
-      font-family: 'FontAwesome';
-      display: inline-block;
-      text-decoration: none;
-      line-height: 1;
-      content: ""; }
-  .template-main .section-1 .slider-top100 .flex-direction-nav a {
-    color: #B3B3B3;
-    opacity: 1; }
-.template-main .section-1 .all-artists {
-  text-align: center;
-  padding: 20px 0; }
-.template-main .section-2 {
-  background: #FFF;  /*#F2F2F3; */}
-  .template-main .section-2 .header {
-    font-size: 32px;
-    font-family: "Roboto Condensed", sans-serif;
-    font-weight: bold;
-    padding: 16px 0;
-    *text-transform: uppercase;
-    text-align: left; }
-  .template-main .section-2 .list-request {
-    padding: 20px 0; }
-    .template-main .section-2 .list-request .element {
-      margin-bottom: 20px; }
-      .template-main .section-2 .list-request .element .image {
-        display: inline-block;
-        vertical-align: top;
-        *vertical-align: auto;
-        *zoom: 1;
-        *display: inline;
-        width: 120px; }
-      .template-main .section-2 .list-request .element .b {
-        display: inline-block;
-        vertical-align: top;
-        *vertical-align: auto;
-        *zoom: 1;
-        *display: inline;
-        max-width: 870px; }
-        .template-main .section-2 .list-request .element .b .name {
-          padding-top: 5px;
-          /*font-size: 17px;
-          color: #AE4A84;*/
-          padding-bottom: 5px; }
-        .template-main .section-2 .list-request .element .b .time {
-          /*font-size: 13px;
-          color: #5B5B5B;
-          padding-bottom: 5px;*/ }
-        .template-main .section-2 .list-request .element .b .text {
-          padding: 10px 0;
-          *font-size: 17px; }
-  .template-main .section-2 .all-requests {
-    padding: 20px 0;
-    text-align: center; }
-.template-main .section-3 {
-  padding: 40px 0; }
-  .template-main .section-3 .header {
-    font-size: 25px;
-    font-family: "Roboto Condensed", sans-serif;
-    font-weight: bold;
-    padding: 30px 0;
-    text-transform: uppercase;
-    text-align: center; }
+.template-simple {
+  padding-bottom: 50px; }
 
-/*# sourceMappingURL=template-main.css.map */
-
-/*=============================== моя верстка =========================*/
-
-/*===============================  wrapper__header ======================*/
-
-  .logo > img {
-    width: 110px;
-    height: 52px;
-    margin-left: 15px;
-  }
-
-  .el span.number{
-    font-family: "Roboto Condensed", sans-serif;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 20px;
-  }
-
-  .el span.text{
-    font-family: "Roboto Condensed", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    font-size: 14px;
-  }
-
-  .buttons a.enter,
-  .buttons a.register{
-    display:  inline-block;
-    color:  #AE4A84;
-    font-family:  "Roboto Condensed", sans-serif;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 18px;
-    line-height: 45px;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  .buttons a.enter{
-    margin-right:   24px;
-  }
-
-  .buttons a.register{
-    margin-right: 15px; 
-  }  
-
-  .buttons a.enter{
-    width: 90px;
-    height: 45px;
-    background-color: #fff;
-    border-radius: 10px; 
-    color:  #AE4A84; 
-  }
-
-  .buttons a.enter.active,
-  .buttons a.register.active{
-     background-color: #AE4A84;
-     color:  #fff; 
-  }
-
-  .buttons a.register {  
-    width: 184px;
-    height: 45px;
-    background-color: #fff;
-    border-radius: 10px; 
-    color:  #AE4A84;  
-  }
-
-  .buttons a.enter:hover,
-  .buttons a.enter:focus,
-  .buttons a.register:hover,
-  .buttons a.register:focus  {
-    background-color: #AE4A84;
-    color:  #fff;
-  }
-/*===============================  wrapper__header Конец======================*/
-
-/*===============================  Section-1 ======================*/
-  section.section-1{
-    height:   661px;
-    background: url("/web/uploads/images/header_bg.png") no-repeat center;
-    margin-bottom: 63px;
-  }
-
-  .section-1 .header{
-    width:  480px;
-    padding-top: 162px;
-    margin-bottom: 60px;  
-  }
-
-  .section-1 .search{
-    position: relative;
-    width: 100%;
-  }
-
-  .search input{
-    width:  613px;
-    height:  53px;
-    border:   1px solid rgba(174, 74, 132, 0.2);
-    border-radius: 10px;
-    background:   rgba(255,255,255,0.5);
-    padding-left: 64px; 
-    font-family:  "Roboto Condensed", sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    font-size: 18px; 
-    margin-bottom: 40px;  
-  }
-
-  a.search__link{
-    position: relative;
-    left:  -184px;
-    display:  inline-block;
-    width: 184px;
-    height:   53px;
-    background:   #AE4A84;
-    border-radius: 10px;
-    line-height: 53px;
-    text-align: center;
-    color:  #fff;
-    font-family:  "Roboto Condensed", sans-serif;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 22px; 
-  }
-
-  .search__img{
-    display: inline-block;  
-    position: absolute;
-    left: 25px;
-    top: 15px;
-    width: 24px;
-    height: 24px;
-    background: url(/web/uploads/images/shape.png) left center no-repeat ;
-  }
-
-  .section-1__subtitle{
-    font-size:  18px;
-    line-height:  21px;
-    font-weight:  normal; 
-    color:  #424242;
-  }
-
-  .section-1 p a span {
-    color: #AE4A84; 
-    text-decoration: underline;
-  }
-
-  .avert-place{
-    width:  100%;
-    height:   189px;
-    border:   1px solid #000;
-    margin-bottom: 60px;  
-  }
-/*===============================  Section-1 Конец======================*/  
-
-/*================================= Категории ============================*/
-
-  .wrapper__title{
-    font-size:  36px;
-    font-weight:  bold; 
-    line-height: 42px;  
-    color:  #424242;
-    margin-bottom: 20px;  
-  }
-
-  .wrapper p{
-    font-size:  18px;
-    font-weight:  normal; 
-    line-height: 24px;  
-    color:  #828282;
-    margin-bottom: 40px;  
-  }
-
-  .categories{
-    width:  100%;
-    padding:  0 15px;
-    display:  flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 22px;  
-  }
-      .categories .item{
-        width:  125px;
-        height: 125px;
-        text-align: center;
-        line-height: 160px;
-        border:   1px solid #fff;
-        border-radius: 50%;
-        background: #fff;
-        box-shadow: 0px 2px 4px rgba(14, 86, 124, 0.1653);
-        margin:   0 10px;
-        margin-bottom: 23px;
-      }
-        .categories .item:hover img{
-          display:  none;
-        }
-        .categories .item p{
-          display: none;
-          padding-top: 50px;
-        }
-        .categories .item:hover p{
-          display: block;
-        }  
-
-  .all-categories{
-    text-align:   center;
-    margin-bottom: 60px;  
-  }
-/*================================= Категории КОНЕЦ============================*/
-
-/*========================= ТОП-100 исполнителей ========================*/
-  .block-header.wrapper__title{
-    text-align: center; 
-    margin-bottom: 28px;  
-  }
-
-  .slider-top100{
-    width: 90%;
-    margin: 0 auto;
-    margin-bottom: 62px;  
-  }
-    .slider-top100 .card{
-      width: 132px;
-      height: 188px;
-      border-radius: 10px; 
-      text-align: center;   
-    }
-      .slider-top100 .card:hover{
-        background: #AE4A84;
-        box-shadow: 0 4px 5px rgba(0,0,0,0.15);      
-      }
-
-      .slider-top100 .card:hover .card__proff{color:#fff;} 
-      .slider-top100 .card:hover .card__name{color:#fff;}
-      
-
-  .card a{
-    text-decoration: none;  
-    font-family:  "Roboto Condensed", sans-serif;
-  }
-
-  .card__name{
-    font-size:  21px;
-    font-weight:  bold;
-    line-height:  25px;
-    color:  #AE4A84;  
-  }
-
-  .card__proff{
-    font-size:  18px;
-    font-weight:  normal;
-    line-height:  21px;
-    color: #828282;
-  }
-
-
-    .slider-top100 img{
-      width: 116px;
-      margin-top: 8px;
-      margin-bottom: 6px; 
-    }
-
-
-  .flex-direction-nav .flex-next,
-  .flex-direction-nav .flex-prev{
-    opacity: 0.5!important;
-  }
-/*========================= ТОП-100 исполнителей КОНЕЦ========================*/
-
-
-/*============================= Последние заказы ==============================*/
-  .list-request .element{
-    max-width: 644px;
-    margin: 0 auto;
-    padding: 10px 24px;
-    box-shadow: 1px 1px 10px rgba(0,0,0,0.15);
-  }
-
-  .element .category span{
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 18px;
-  }
-
-  .element .name, 
-  .element .time,
-  .element .city, 
-  .element .time,
-  .element .text{
-    display: inline-block;
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 16px;
-    letter-spacing: -0.17px;    
-  }
-
-  .element .money {
-    text-align: right;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 18px;
-     letter-spacing: -0.17px;
-    
-  }
-   
-  .element .name, 
-  .element .city, 
-  .element .time{
-    color: #828282;
-    padding-top: 7px;
-  }
-
-  .element .text{
-    color: 424242;
-  }
-
-  .element .time{
-    float: right;
-  }
-/*============================= Последние заказы КОНЕЦ==============================*/  
-
-/*================== footer =====================*/
-  .section__footer{    
-    height: 255px;
-    background-color: #424242;
-    color: #fff;
-    font-size: 14px;
-    line-height: 28px;
-    font-weight: 300;
-    text-transform: uppercase;
-  }
-
-  .footer__flex {
-    position: relative;
-    max-width: 1000px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;margin: 0 auto;
-     
-  }  
-
-
-  .footer__flex__item {
-    display: inline-block;
-    width: 200px;
-    padding: 36px 10px;
-  }
-
-  .footer__flex__item.logo .slogan{
-    font-size: 10px;
-    line-height: 12px;
-  }
-
-  .soc{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-    .soc .item{
-      width: 30%;
-    }
-
-  .footer__flex .shops{
-    position: absolute;
-    top: 160px;
-    right: 0;
-  }
-
-  .footer__flex .shops a{
-    margin-left: 30px;
-  }
-/*====================== footer конец=====================---------*/
-
-
-/*==================== Модальные окна ===============================*/
-  .modal-backdrop{
-    z-index: 40!important;
-  }
-
-  .modal-dialog {
-    width: 436px !important;
-    height: 541px;
-    margin-top: 150px!important;
-    border-radius: 16px;
-    border: 1px solid rgba(0,0,0,0.12);
-    box-shadow: 2px 5px 10px rgba(0,0,0,0.1);
-  }
-
-  .modal_header{
-    font-size: 36px;
-    line-height: 42px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 26px;
-  }
-
-  .modal_text{
-    margin: 0 auto;
-    width: 298px;
-    font-size: 12px;
-    line-height: 14px;
-    font-weight: normal;
-    text-align: center;
-    color: #424242;
-    margin-bottom: 60px;
-  }
-
-  .who_you{
-    width: 85%;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-  }
-
-  .who_you__item{
-    width: 45%;
-    text-align: center;
-  }
-
-  .modal__b1,
-  .modal__b2 {
-    display: inline-block;
-    width: 84px;
-    height: 84px;
-    border-radius: 10px;
-    margin-bottom: 16px;
-  }
-
-  .modal__b1{
-    /*margin-left: 80px;*/
-    background: #F7B491;
-  }
-
-  .modal__b2{
-    /*margin-left: 104px;*/
-    background: #AE4A84;
-  }
-
-  .who_you__title{
-    font-size: 18px;
-    line-height: 21px;
-    font-weight: bold;
-    color: #2F2F2F;
-    margin-bottom: 12px;
-  }
-
-  .who_you__text{
-    font-size: 12px;
-    line-height: 14px;
-    font-weight: normal;
-    color: #2F2F2F;
-    margin-bottom: 32px;
-  }
-
-  .modal__body img{
-    display: block;
-    margin: 0 auto;
-    margin-top: 32px;
-    margin-bottom: 24px;
-  }
-
-  #w1 .modal-header{
-    padding: 0;
-    border: none;
-  }
-
-  #w1 button.close{
-    display: none;
-  }
-/*==================== Модальные окна конец===============================*/
-
-/*==================== Страница регистрации Заказчика =======================*/
-
-  .wrapper__regcust{
-    width: 1040px;
-    margin: 0 auto;
-    margin-top: 140px;
-    margin-bottom: 30px;
-    border-radius: 10px;
-    background: #fff;
-  }
-  .regcust{
-    margin: 0 auto;
-    width: 343px;
-  }
-  .form_title{
-    font-size: 42px;
-    line-height: 49px;
-    font-weight: bold;
-    text-align: center;
-    padding-top: 48px;
-    margin-bottom: 32px;
-  }
-
-  .form_subtitle{
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-
-  #w0 .control-label{
-    font-size: 18px;
-    line-height: 21px;
-    font-weight: normal;
-    margin-bottom: 8px;
-    color: #424242;
-  }
-
-  .user-photo{
-    width: 342px;
-    height: 160px;
-    margin: 0 auto;
-    border: 1px dashed #C4C4C4;
-    border-radius: 20px;
-    margin-bottom: 32px;
-  }
-
-  .user-photo img{
-    display: block;
-    width: 36px;
-    margin: 32px auto;
-  }
-
-  .photo_text{
-    width: 160px;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 12px;
-  }
-
-  .register__user{
-    background-color: #AE4A84;
-    border-radius: 8px; 
-    color:  #fff; 
-    width: 100%;
-    height: 40px;
-    font-size: 14px;
-    font-weight: 700;
-    background: #ae4a84;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05),
-                0 3px 8px rgba(0,0,0,0.04),
-                0 1px 9px rgba(0,0,0,0.08);
-    margin-top: 32px;            
-    margin-bottom: 48px;  
-  }
-
-  .pass__f1,
-  .pass__f2{
-    position: relative;
-  }
-
-  .password-control1, .password-control2, .password-control3 {
-      position: absolute;
-      top: 35px;
-      right: 10px;
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
-  }
-
-  .password-control1.view,
-  .password-control2.view,
-  .password-control3.view  {
-      background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;    
-  }
-
-  .personal_check__text{
-    font-size: 12.5px;
-    width: 100%;
-    line-height: 20px;
-  }
-
-  .personal_check__text::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 20px;
-      height: 20px;
-      border-style: solid;
-      border-radius: 3px;
-      border-color: #ae4a84;
-      border-width: 3px;
-      background: #fff;
-      /* box-shadow: inset 0 2px 3px rgb(0 0 0 / 20%); */
-      transition: .2s;
-  }
-
-  label.checkbox {
-      position: relative;
-      cursor: pointer;
-  }
-
-  .checkbox input[type=checkbox] {
-    position: absolute;
-    margin-left: -20px;
-  }
-
-  .checkbox input {/*
-      position: absolute;*/
-      z-index: -1;
-      opacity: 0;
-      margin: 4px 0 0 20px;    
-  }
-
-  .block-image {
-      opacity: 0;
-      right: 4px;
-      top: 2px;
-      position: absolute;
-      z-index: 10;
-      transition: .5s;
-      *cursor: pointer;
-  } 
-  .block-image img {
-      width: 12px;
-      height: auto;
-      max-width: 100%;
-      vertical-align: middle;
-      border: 0;
-  }
-
-  .checkbox input:checked + .block-image {
-      display: inline-block;
-      opacity: 1;
-      transition: .5s;
-  }  
-
-  .pass__f2{
-    margin-bottom: 32px;
-  }  
-/*==================== Страница регистрации Заказчика КОНЕЦ==================*/
-
-
-/*==================== Страница подтверждения данных =======================*/
-  .confirm_title{
-    text-align: center;
-    font-size: 24px;
-    line-height: 28px;
-    font-weight: bold;
-    padding-top: 48px;
-    margin-bottom: 32px;
-  }
-  .choose_send,
-  .choose_code{
-    font-size: 18px;
-    line-height: 21px;
-    color: #424242;
-    margin-bottom: 8px;
-  }
-
-  .choose_code{
-    opacity:  0.5;
-  }
-
-  #w1 .register__user[disabled='disabled']{
-    opacity: 0.5;
-  }
-/*==================== Страница подтверждения данных Конец=======================*/
-
-/*==================== Страница Успешного подтверждения  =======================*/
-
-  .confirm_img{
-    display: block;;
-    margin: 0 auto;
-    margin-bottom: 24px;
-  }
-
-  .main_text{
-    font-size: 18px;
-    line-height: 21px;
-    text-align: center;
-
-  }
-
-  a.register__user{
-    display: block;
-    text-align: center;
-    line-height: 40px;
-    text-decoration: none;
-    margin-bottom: 50px;
-  }
-
-  a.register__user:hover{
-    color: #fff;
-    background-color: #8D4870;
-  }
-
-  .regcust__confirm .form-group{
-    padding-bottom: 2px;
-  }
-
-  .regcust__confirm a:visited{
-    color: #fff;
-  }
-/*==================== Страница Успешного подтверждения  Конец=======================*/  
-
-/********************** Модальное окно Login *********************/
-  .modal_header__login{
-    font-size: 26px;
-    font-weight: bold;
-    text-align: center;
-  }
-
-  .modal__body__form{
-    width: 343px;
-    margin: 0 auto;
-  }
-
-  .modal__body__form input{
-    widows: 100%;
-    background: #f3f3f3;
-  }  
-
-  button.enter.active.login{
-    width: 100%;
-    border-radius: 10px;
-    border: none;
-    display:  inline-block;
-    background-color: #AE4A84;
-    color: #fff;
-    font-family:  "Roboto Condensed", sans-serif;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 18px;
-    line-height: 45px;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  .register.register__login{
-    width: 100%!important;
-    margin-bottom: 32px;
-    text-align: center;
-  }  
-
-  a.password-reset {
-    display: inline-block;
-    margin-bottom: 20px;
-    float: right;
-    color: #AE4A84;
-    text-decoration: none;
-  }
-
-  #login-form .personal_check__text{
-    padding-left: 30px;
-  }
-
-  #login-form .personal_check__text::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 20px;
-    border-style: solid;
-    border-radius: 3px;
-    border-color: #ae4a84;
-    border-width: 3px;
-    background: #fff;
-    /* box-shadow: inset 0 2px 3px rgb(0 0 0 / 20%); */
-    transition: .2s;
-  }
-
-  #login-form .personal_check__text::after{
-    content: '';
-    display: none;
-  }
-
-  .checkbox__login img{
-    margin: 0; 
-  }
-
-  .checkbox__login .block-image{
-    left: 4px;
-    top: 4px;
-  }
-/********************** Модальное окно Login  Конец*********************/
+/*# sourceMappingURL=template-simple.css.map */

@@ -2,7 +2,7 @@
 
 return [
     //'adminEmail'      => 'mail@v-stepanov.ru',
-    'adminEmail'      => 'yanutsh@toppartner.ru',
+    'adminEmail'      => 'selfevent@toppartner.ru',
     'serverEmail'     => 'noreply@se.k-store.ru'/* . $_SERVER['HOST_NAME'] /* . str_replace('www.', '', \Yii::$app->request->getHostInfo()) */,
     'upload_dir'      => '@webroot/uploads/',
     'image_dir'       => '@webroot/uploads/images/',
@@ -27,5 +27,6 @@ return [
     'sadr_sms'        => 'MrSelfevent',
 
     // сервис отправки email с кодом подтверждения
-    'email_subject'   => 'Код подтверждения',
+    'email_subject'   => 'MrSelfevent-Код подтверждения',
+    'timer' =>  30,     // таймер повторной отправки кода подтверждения, сек
 ];

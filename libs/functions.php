@@ -33,7 +33,7 @@ function send_email($email,$text){
 	    ->send();	
 
 	    Yii::$app->session->setFlash('send_code', $text. ' Письмо отправлено');
-	    return;	 
+	    //return true;	 
 }
 
 // отправка смс

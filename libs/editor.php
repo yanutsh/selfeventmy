@@ -83,9 +83,9 @@ function editor(){
 		$_SESSION['avatar'] =  $new_filename;	
 		
 	    // записываем обрезанный и повернутый файл 
-		$result1 = imagejpeg($output, "C://ospanel/domains/selfeventmy.loc/web/uploads/images/users/".$new_filename);
+		$result1 = imagejpeg($output, $_SERVER['DOCUMENT_ROOT'].'/web/uploads/images/users/'.$new_filename);
 		// записываем и во временный файл для отображения
-		$result = imagejpeg($output, "C://ospanel/domains/selfeventmy.loc/web/uploads/images/users/".$newImageFormat);
+		$result = imagejpeg($output, $_SERVER['DOCUMENT_ROOT'].'/web/uploads/images/users/'.$newImageFormat);
 
 		if($result)
 		{

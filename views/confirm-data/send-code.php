@@ -18,20 +18,17 @@ $this->title = $page->seo_title;
 $this->registerMetaTag(['name' => 'keywords', 'content' => $page->seo_keywords]);
 $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_description]);
 ?>
-<!-- признак отправки кода для avascript -->
-<script> //var ssend_code='no';</script>
-<!-- <div class="page-main template-main page"> -->
-<div class="page-regcust">    
 
+<script>var timer=<?= \Yii::$app->params['timer'] ?></script>
+
+<div class="page-regcust">
         <div class="wrapper__regcust">
-
             <?php  Pjax::begin();  ?>
-            
-
             <div class="regcust">
                 <div class="confirm_title">Подтверждение данных</div>
                 <div class="choose_send">Выберите способ получения кода для подтверждения - на телефон или почту</div>
 
+                
                 <!-- Форма выбора способа отправки кода подтверждения -->
                 <?php $form = ActiveForm::begin
                     ([
@@ -45,12 +42,22 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                         <option value="<?= $_GET['email']?>"><?= $_GET['email'] ?></option>
                     </select>
                     
-                    <div class="form-group">
-                        <?= Html::submitButton('Выслать код', ['class' => 'register__user', 'id' => 'send_code']) ?>
+                    <div class="form-group group__resend">
+                        <button type="submit" id="send_code" class="register__user">Выслать код</button>
+
+                        <div class="resend">
+                            <div class="count__caption">Повторно выслать через - </div>
+                            <div id="countdown-1"></div>
+                        </div>
+                        <!-- <p><button id="reset-1" type="button">Reset this timer</button></p>  -->                   
                     </div>
-                <?php ActiveForm::end(); ?>                
+
+                <?php ActiveForm::end(); ?>
+                
+
 
                 <!-- Форма отправки кода подтверждения -->
+               
                 <?php $form = ActiveForm::begin
                     ([
                     'options' => [
@@ -63,7 +70,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                             <label class="control-label choose_code" for="">Введите код</label>
                             <input type="password" name="code" id="code" class="form-control" aria-required="true" aria-invalid="true" disabled='disabled'/>
                         </div>    
-                        <a href="#!" class="password-control1"></a>
+                        <a href="#!" class="password-control3"></a>
                     </div> 
 
                     <!-- вывод flash - сообщения об отправке кода-->
@@ -101,4 +108,3 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
         </div>
     
 </div> 
-         
