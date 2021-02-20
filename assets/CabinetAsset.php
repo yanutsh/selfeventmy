@@ -22,31 +22,17 @@ class CabinetAsset extends AssetBundle {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/lk-customer.css',        
+        'css/bootstrap.min.css',
+        'css/cabinet.css',        
     ];
     public $js = [
-        //'js/script.js',
-        //'js/fonts.js',
+        'js/bootstrap.min.js',
+        'js/cabinet.js',        
     ];
     public $depends = [
         'yii\web\JqueryAsset',
         'app\assets\AppAsset',
 //        'rmrevin\yii\fontawesome\AssetBundle',
-    ];
-
-    public static function register($view) {
-        $bundle = parent::register($view);
-        $template = pathinfo($view->getViewFile(), PATHINFO_FILENAME);
-
-        //debug($template);
-
-        if (file_exists(\Yii::getAlias('@app/assets/css/templates/template-' . $template . '.css')))
-            $bundle->css[] = 'css/templates/template-' . $template . '.css';
-        if (file_exists(\Yii::getAlias('@app/assets/js/templates/template-' . $template . '.js')))
-            $bundle->js[] = 'js/templates/template-' . $template . '.js';
-
-        //debug($bundle);
-        return $bundle;
-    }
+    ];   
 
 }

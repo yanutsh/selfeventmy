@@ -26,28 +26,27 @@ class TemplateAsset extends AssetBundle {
         'css/templates/template-main.css'        
     ];
     public $js = [
-        'js/script.js',
+        //'js/script.js',
         //'js/fonts.js',
     ];
     public $depends = [
         'yii\web\JqueryAsset',
-        'app\assets\AppAsset',
-//        'rmrevin\yii\fontawesome\AssetBundle',
+        'app\assets\AppAsset',        
     ];
 
-    public static function register($view) {
-        $bundle = parent::register($view);
-        $template = pathinfo($view->getViewFile(), PATHINFO_FILENAME);
+    // public static function register($view) {
+    //     $bundle = parent::register($view);
+    //     $template = pathinfo($view->getViewFile(), PATHINFO_FILENAME);
 
-        //debug($template);
+    //     //debug($template);
 
-        if (file_exists(\Yii::getAlias('@app/assets/css/templates/template-' . $template . '.css')))
-            $bundle->css[] = 'css/templates/template-' . $template . '.css';
-        if (file_exists(\Yii::getAlias('@app/assets/js/templates/template-' . $template . '.js')))
-            $bundle->js[] = 'js/templates/template-' . $template . '.js';
+    //     if (file_exists(\Yii::getAlias('@app/assets/css/templates/template-' . $template . '.css')))
+    //         $bundle->css[] = 'css/templates/template-' . $template . '.css';
+    //     if (file_exists(\Yii::getAlias('@app/assets/js/templates/template-' . $template . '.js')))
+    //         $bundle->js[] = 'js/templates/template-' . $template . '.js';
 
-        //debug($bundle);
-        return $bundle;
-    }
+    //     //debug($bundle);
+    //     return $bundle;
+    // }
 
 }

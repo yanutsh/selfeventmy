@@ -6,11 +6,11 @@ use Yii;
 use yii\web\Controller;
 
 // Контроллер ЗАКАЗЧИКА 
-class CustomerController extends Controller {
+class CabinetController extends Controller {
 
 	public function actionIndex()	
     {
-    	$this->layout='lkCustomer';
+    	$this->layout='cabinet';
     	
     	if (isset($_SESSION['isexec']) && $_SESSION['isexec'] == 1)
    			return $this->render('index', ['user' => 'Исполнитель']); 

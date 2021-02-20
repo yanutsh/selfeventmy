@@ -1,0 +1,105 @@
+/*******************    Стили ЛК Заказчика  **************************/
+body{
+	font-family: "Roboto Condensed", sans-serif;
+	background-color: #999;
+}
+
+/*******************  Навигационная панель  **************************/
+.navbar.navbar-default {
+	margin-bottom: 0;
+	background-color: #fff;
+    border: none;
+}
+
+.navbar_img img{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+.navbar-default .navbar-nav > li > a{
+	font-size: 18px;
+	font-weight: normal;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover, 
+.navbar-default .navbar-nav > .open > a:focus { 
+	background: unset;
+	color: #AE4A84;
+	font-weight: bold;
+}
+
+.navbar-default .navbar-nav > li.active > a { 
+/*.navbar-default .navbar-nav > .active > a:hover, */
+/*.navbar-default .navbar-nav > .active > a:focus {*/
+	background: unset!important;
+	color: #AE4A84!important;
+	font-weight: bold;
+}
+
+.navbar-default .navbar-nav > li > a:hover{
+	color: #AE4A84;
+	font-weight: bold;
+} 
+
+.dropdown-menu > li > a {
+	font-size: 18px;
+	color: #AE4A84;
+	padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.dropdown-menu > li > a:hover, 
+.dropdown-menu > li > a:focus {
+	font-weight: bold;
+	color: #AE4A84;
+
+}	
+/*******************  Навигационная панель Конец  ********************/	
+
+
+.wrapper__lk{
+	margin-top: 140px;
+}
+
+/*******************  Левая панель  **********************************/
+.lk__left,
+.lk__main{
+	background: #fff;
+	border-radius: 10px;
+	height: 200px;
+}
+
+.filtr{
+	width: 85%;
+    margin: 0 auto;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.lk__left a.register.active{
+	display: block;
+	margin: 0 auto;
+	background-color: #AE4A84;
+    border-radius: 10px; 
+   
+    width: 184px;
+    height: 45px;    
+    color:  #fff;     
+    
+    font-weight: 700;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    cursor: pointer;    
+}
+
+.filtr .title {
+	padding-top: 30px;
+	font-size: 24px;
+	font-weight: bold;
+}  
+
+/*******************  Левая панель  Конец *********************************/ 

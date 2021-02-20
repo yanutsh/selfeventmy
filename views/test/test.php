@@ -1,14 +1,14 @@
 
 <?php 
-use yii\bootstrap\Modal; // для модального окна
-use yii\helpers\Url;
-use app\assets\FontAsset;
-use app\assets\AppAsset; 
+//use yii\bootstrap\Modal; // для модального окна
+// use yii\helpers\Url;
+// use app\assets\FontAsset;
+// use app\assets\AppAsset; 
 
-use app\assets\TemplateAsset;
-use app\components\page\PageAttributeWidget as PAW;
+// use app\assets\TemplateAsset;
+// use app\components\page\PageAttributeWidget as PAW;
 
-TemplateAsset::register($this);
+//TemplateAsset::register($this);
 ?>
  <p>
     <br><br><br><br><br><br><br><br><br><br><br><br>

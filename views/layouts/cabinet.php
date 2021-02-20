@@ -5,6 +5,8 @@
 use yii\helpers\Html;
 //use app\assets\FontAsset;
 use app\assets\AppAsset;
+use app\assets\FontAsset;
+use app\assets\CabinetAsset;
 //use yii\bootstrap\Modal; // для модального окна
 use yii\bootstrap\ActiveForm;
 //use porcelanosa\magnificPopup\MagnificPopup;
@@ -12,11 +14,18 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url; 
 //use app\models\LoginForm;
 use yii\widgets\Pjax;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
 
-//FontAsset::register($this);
-//AppAsset::register($this);
+FontAsset::register($this);
+AppAsset::register($this);
+CabinetAsset::register($this);
 
+$identity = Yii::$app->user->identity;
+//debug ($identity['avatar']);
+$avatar = $identity['avatar']; 
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
@@ -62,10 +71,45 @@ use yii\widgets\Pjax;
                             <?= nl2br(Yii::$app->settings->get('slogan')) ?>
                         </div>
 
-                        <div class="bullet">
-                            <div class="el"><span class="number">1 254 </span><br><span class="text">Исполнителей онлайн</span></div>
-                            <div class="el"><span class="number">100 </span><br><span class="text">Праздников за неделю</span></div>
-                        </div>                      
+                        <!-- Меню -->
+                        <div>
+                            <nav class="navbar navbar-default">
+                                <div class="container-fluid">
+                                    <!-- Brand and toggle get grouped for better mobile display -->
+                                    <div class="navbar-header">
+                                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                      </button>                                  
+                                    </div>
+
+                                    <!-- Collect the nav links, forms, and other content for toggling -->
+                                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                        <ul class="nav navbar-nav">
+                                            <li class="active"><a href="#">Заказы <span class="sr-only">(current)</span></a></li>
+                                            <li><a href="#">Чат</a></li>
+                                            <li><a href="#">Исполнители</a></li>
+                                            <li class="dropdown">
+                                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Анастасия <span class="caret"></span></a>
+                                              <ul class="dropdown-menu">
+                                                <li><a href="#">Баланс: 180 руб.</a></li>
+                                                <li><a href="#">Помощь</a></li>
+                                                <li><a href="#">Настройки</a></li>
+                                                <li><a href="#">Абонементы</a></li>     
+                                              </ul>
+                                            </li>
+                                        </ul>                                
+                                      
+                                    </div><!-- /.navbar-collapse -->
+                                </div><!-- /.container-fluid -->
+                            </nav> 
+                        </div>
+
+                        <div class="navbar_img">
+                            <img src="/web/uploads/images/users/20210214204731573.jpg<?//= $avatar ?>" alt="Аватар">
+                        </div>
 
                     </div>    
                 </div>   
