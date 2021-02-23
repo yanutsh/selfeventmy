@@ -83,6 +83,7 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                     <?= $form->field($model, 'birthday') -> widget(DatePicker::classname(), [
                             'name' => 'dp_3',
                             'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                            
                             'removeButton' => false,
                             //'readonly' => true,
                             'pluginOptions' => [

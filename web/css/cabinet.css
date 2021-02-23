@@ -64,42 +64,104 @@ body{
 }
 
 /*******************  Левая панель  **********************************/
-.lk__left,
-.lk__main{
-	background: #fff;
-	border-radius: 10px;
-	height: 200px;
+	.lk__left,
+	.lk__main{
+		background: #fff;
+		border-radius: 10px;
+		padding: 0 0 10px 0;	
+	}
+
+	.filtr{
+		width: 85%;
+	    margin: 0 auto;
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+
+	.lk__left a.register.active{
+		display: block;
+		margin: 0 auto;
+		background-color: #AE4A84;
+	    border-radius: 10px; 
+	   
+	    width: 184px;
+	    height: 45px;    
+	    color:  #fff;     
+	    
+	    font-weight: 700;
+	    font-style: normal;
+	    font-size: 18px;
+	    line-height: 45px;
+	    text-align: center;
+	    cursor: pointer;    
+	}
+
+	.filtr .title {
+		padding-top: 30px;
+		font-size: 24px;
+		font-weight: bold;
+	} 
+
+	.input__block{
+		position: relative;
+		margin-bottom: 15px;
+	}
+	.input__block .glyphicon-ruble {
+		position: absolute;
+		top: 40px;
+	    right: 20px;    
+	    font-size: 12px; 
+	} 
+
+	.active__button{
+		height: 45px;
+	    line-height: 45px;
+	    text-align: center;
+	    margin: 0 auto;   
+	}
+	    
+/*******************  Левая панель  Конец ******* *********************/ 
+
+/*******************  Правая панель   *********************************/ 
+.order_item{
+	width: 644px;
+	box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+	border-radius: 5px;
+	margin: 10px auto;
+	padding: 12px 24px;
 }
 
-.filtr{
-	width: 85%;
-    margin: 0 auto;
-	padding-top: 30px;
-	padding-bottom: 30px;
-}
-
-.lk__left a.register.active{
-	display: block;
-	margin: 0 auto;
-	background-color: #AE4A84;
-    border-radius: 10px; 
-   
-    width: 184px;
-    height: 45px;    
-    color:  #fff;     
-    
-    font-weight: 700;
-    font-style: normal;
-    font-size: 18px;
-    line-height: 45px;
-    text-align: center;
-    cursor: pointer;    
-}
-
-.filtr .title {
-	padding-top: 30px;
-	font-size: 24px;
+.order_category,
+.order_budget {
+	font-size: 18px;
 	font-weight: bold;
-}  
+	margin-bottom: 8px;
+}
 
-/*******************  Левая панель  Конец *********************************/ 
+.order_details{
+	font-size: 12px;
+	line-height: 14px;
+	text-align: left;
+	margin-bottom: 8px;
+}
+
+.order_budget{
+	display: block;
+    width: 100%;
+    text-align: right;
+}
+
+.order_city {
+	float: left;
+}
+
+.order_added {
+	float: right;
+}
+
+.order_down{
+	display: flex;
+	justify-content: space-between;
+}
+
+/*******************  Правая  панель  Конец *****************************/ 

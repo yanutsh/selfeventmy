@@ -1,17 +1,17 @@
 
 <?php 
 //use yii\bootstrap\Modal; // для модального окна
-// use yii\helpers\Url;
-// use app\assets\FontAsset;
-// use app\assets\AppAsset; 
+use yii\helpers\Url;
+use app\assets\FontAsset;
+use app\assets\AppAsset; 
 
-// use app\assets\TemplateAsset;
-// use app\components\page\PageAttributeWidget as PAW;
+use app\assets\TemplateAsset;
+use app\components\page\PageAttributeWidget as PAW;
 
-//TemplateAsset::register($this);
+TemplateAsset::register($this);
 ?>
  <p>
-    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br>
     <h1>Test/Index</h1>
  <p>   
 
@@ -31,9 +31,9 @@
 
 <!-- тест отправки смс сообщения -->
         <?php
-        $var = file_get_contents ('http://gateway.api.sc/get/?user='.$login.'&pwd='.$password.'&name_deliver='.$title.'&sadr='.$sadr.'&dadr='.$phone.'&text='.$data);
+        //$var = file_get_contents ('http://gateway.api.sc/get/?user='.$login.'&pwd='.$password.'&name_deliver='.$title.'&sadr='.$sadr.'&dadr='.$phone.'&text='.$data);
 
-        echo $var;
+        //echo $var;
 
         ?>
 <!-- тест отправки смс сообщения Конец-->
@@ -41,15 +41,15 @@
 
 
 
-<!-- <p>
-    <br><br><br><br><br><br><br><br><br><br><br><br>
+<p>
+    <br><br><br><br><br><br>
     <h1>Test/Index</h1>
    
     You may change the content of this page by modifying
     the file
     <?php //echo "<br>"; ?> 
     <code><?= __FILE__; ?></code>.
-</p> -->
+</p>
 
 
      
