@@ -352,7 +352,7 @@ class PageController extends Controller
 
              //debug($identity);
              Yii::$app->getResponse()->redirect(
-                  ['/user/index',
+                  ['/cabinet/index',
                    'username' => $identity->username,
                    'isexec'  => $identity->isexec,
                   ])->send();

@@ -11,7 +11,7 @@ $(document).ready(function() {
     // При изменении любого эл-та фильтра - отправляем данные фильтра 
     // на просчет чичла заказов
     $('#filter-form').change(function(event) {    
-    	alert ('Change');
+    	//alert ('Change');
         //event.preventDefault();
         // Получаем объект формы
         var $testform = $(this);
@@ -26,10 +26,10 @@ $(document).ready(function() {
         }).done(function(data) {
         		if (data.error == null) {
                     // Если ответ сервера успешно получен
-                    //console.dir(data);
+                    console.dir(data);
                     $('#filter-form .register__user span').text(data.data);
                     //$("#output").text(data.data);
-                    $("#orders_list_header").html(data.data)
+                    $("#orders_list").html(data.orders);
 
                 } else {
                     // Если при обработке данных на сервере произошла ошибка

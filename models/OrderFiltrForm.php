@@ -12,11 +12,15 @@ use app\models\User;
 //class RegForm extends \yii\db\ActiveRecord
 class OrderFiltrForm extends Model
 {
+    public  $city;              // Город задания
     public  $category_id;       // Категория услуг
-    public  $date_from;         // Дата от         )
+    public  $date_from;         // Дата от       
     public  $date_to;           // Дата до
-    public  $budget_from ;    // Бюджет от
-    public  $budget_to; // Бюджет до
+    public  $budget_from ;      // Бюджет от
+    public  $budget_to;         // Бюджет до
+    public  $payment_form;      // Форма оплаты
+    public  $work_form;         // Форма рпботы
+
     
     /**
      * {@inheritdoc}
@@ -42,12 +46,14 @@ class OrderFiltrForm extends Model
     public function attributeLabels()
     {
         return [
-            'category_id' => 'Услуги',
-            'date_from' => 'Дата от...',
-            'date_to' => 'Дата до...', 
-            'budget_from' => 'Бюджет от...',
-            'budget_to' => 'Бюджет до...',
-
+            'city'          => 'Город',
+            'category_id'   => 'Услуги',
+            'date_from'     => 'Дата от...',
+            'date_to'       => 'Дата до...', 
+            'budget_from'   => 'Бюджет от...',
+            'budget_to'     => 'Бюджет до...',
+            'payment_form'  => 'Форма оплаты',
+            'work_form'     => 'Форма работы',
         ];
     }
 

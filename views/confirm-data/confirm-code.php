@@ -30,7 +30,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                 
                 <?php //echo "  Isexec=".$_SESSION['isexec']."<br>"; ?>
 
-                <a href="<?= Url::to(['/user/index'])?>" class='register__user'>Продолжить</a>
+                <a href="<?= Url::to(['/cabinet/index'])?>" class='register__user'>Продолжить</a>
             </div>  
         </div>
     </div>

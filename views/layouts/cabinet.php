@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use app\assets\AppAsset;
 use app\assets\FontAsset;
 use app\assets\CabinetAsset;
+//use app\assets\TemplateAsset;
 //use yii\bootstrap\Modal; // для модального окна
 use yii\bootstrap\ActiveForm;
 //use porcelanosa\magnificPopup\MagnificPopup;
@@ -17,13 +18,16 @@ use yii\widgets\Pjax;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 
+//TemplateAsset::register($this);
 FontAsset::register($this);
 AppAsset::register($this);
 CabinetAsset::register($this);
 
 $identity = Yii::$app->user->identity;
 //debug ($identity['avatar']);
-$avatar = $identity['avatar']; 
+$username = $identity['username'];
+$avatar = $identity['avatar'];
+
 ?>
 
 <?php $this->beginPage() ?>
@@ -92,7 +96,7 @@ $avatar = $identity['avatar'];
                                             <li><a href="#">Чат</a></li>
                                             <li><a href="#">Исполнители</a></li>
                                             <li class="dropdown">
-                                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Анастасия <span class="caret"></span></a>
+                                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= $username ?> <span class="caret"></span></a>
                                               <ul class="dropdown-menu">
                                                 <li><a href="#">Баланс: 180 руб.</a></li>
                                                 <li><a href="#">Помощь</a></li>
@@ -108,16 +112,23 @@ $avatar = $identity['avatar'];
                         </div>
 
                         <div class="navbar_img">
-                            <img src="/web/uploads/images/users/20210214204731573.jpg<?//= $avatar ?>" alt="Аватар">
+                            <img src="/web/uploads/images/users/<?= $avatar?>" alt="Аватар">
                         </div>
 
                     </div>    
                 </div>   
             </div>            
         </header>
-
+        <?php 
+            $model=$this->params['model'] ;
+            $category=$this->params['category'] ;
+            $work_form=$this->params['work_form'];
+            $payment_form=$this->params['payment_form'];
+            $count=$this->params['count'];
+        ?>
+          
         <?= $content ?>
-        
+                                
         <footer>
         <section class="section__footer">
             <div class="wrapper">
@@ -191,26 +202,7 @@ $avatar = $identity['avatar'];
         </section>    
         </footer>
 
-        <div class="mfp-hide main-foz" id="foz">
-            <?=
-            app\components\form\FormRenderWidget::widget([
-                'fieldSet'      => [
-                    'name',
-                    'phone',
-                    'politics',
-                ],
-                'formModel'     => app\models\FeedbackForm::class,
-                'submitOptions' => [
-                    'content' => 'Узнать стоимость',
-                ],
-                'labelOptions'  => [
-                    'politics' => 'Согласен с политикой конфиденциальности',
-                ],
-                'header'        => 'Узнайте точную стоимость установки и обслуживания систем мониторинга',
-            ])
-            ?>
-        </div>
-        
+               
         <!-- Кнопка возврата наверх -->
         <div id="top"><span class="image__top"><?= Html::img(Yii::$app->params['image_dir_url'] . 'top.png') ?></span>
         </div>

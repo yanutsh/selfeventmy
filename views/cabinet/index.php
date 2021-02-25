@@ -90,57 +90,34 @@ TemplateAsset::register($this);
 			                    	<?= $form->field($model, 'budget_to') ?>
 			                   		 <span class="glyphicon glyphicon-ruble" aria-hidden="true"></span>
 			                    </div>
+
+			                    <?= $form->field($model, 'payment_form')->dropDownList (ArrayHelper::map($payment_form, 'id', 'payment_name'),['prompt'=>'Все формы оплаты']) ?>
+
+			                    <?= $form->field($model, 'work_form')->dropDownList (ArrayHelper::map($work_form, 'id', 'work_form_name'),['prompt'=>'Все формы работы']) ?>
 			                    	
 			                    <div class="form-group"> 
-			                    	<div class='register__user active__button'>Показать заказы - <span><?= $count ?></span> шт.</div>
+			                    	<div class='register__user active__button'>Показано заказов - <span><?= $count ?></span> шт.</div>
                     			</div>
 			                    <?php ActiveForm::end(); ?>
 			                    <!-- Ответ сервера будем выводить сюда -->
-								<p id="output"></p>
+								<!-- <p id="output"></p> -->
 
 			    			</div>
-			    		</div>
+			    		 </div>
 			    	</div>
 
 			    	<div class="col-md-8">
 			    		<div class="lk__main">
 
 			    			<p>Список отфильтрованных заказов:</p>
-			    			<p id='orders_list_header'></p>
+			    			<!-- <p id='orders_list_header'></p> -->
 			    			
 			    			<div id="orders_list" class="orders_list">
-			    				<div class="order_item">
-				    				<div class="order_status">Исполнитель выбран</div>
-				    				<div class="order_category">Ведущий</div>
-				    				<div class="order_details">Описание заказа</div>
-				    				<div class="order_budget">10000 <span class="rubl">₽</span></div>
-				    				<div class="order_down">
-				    					<div class="order_city">Москва</div>
-				    					<div class="order_added">20 минут назад</div>
-				    				</div>	
-				    			</div>
+			    				<?php
+			    					//debug($orders_list); 
 
-				    			<div class="order_item">
-				    				<div class="order_status">Исполнитель выбран</div>
-				    				<div class="order_category">Ведущий</div>
-				    				<div class="order_details">Описание заказа</div>
-				    				<div class="order_budget">10000</div>	
-				    				<div class="order_down">
-				    					<div class="order_city">Москва</div>
-				    					<div class="order_added">20 минут назад</div>
-				    				</div>
-				    			</div>	
-
-				    			<div class="order_item">
-				    				<div class="order_status">Исполнитель выбран</div>
-				    				<div class="order_category">Ведущий</div>
-				    				<div class="order_details">Описание заказа</div>
-				    				<div class="order_budget">10000 </div>	
-				    				<div class="order_down">
-				    					<div class="order_city">Москва</div>
-				    					<div class="order_added">20 минут назад</div>
-				    				</div>
-				    			</div>		
+			    					echo $this->render('@app/views/partials/orderslist.php', compact('orders_list'));
+			    				?>	
 			    			</div>
 
 			    		<div>			    			

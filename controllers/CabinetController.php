@@ -6,6 +6,8 @@ use Yii;
 use yii\web\Controller;
 use app\models\OrderFiltrForm;
 use app\models\Category;
+use app\models\WorkForm;
+use app\models\PaymentForm;
 use app\models\Order;
 
 require_once('../libs/convert_date_ru_en.php');
@@ -28,6 +30,7 @@ class CabinetController extends Controller {
       // Если пришёл AJAX запрос
       if (Yii::$app->request->isAjax) { 
         // Устанавливаем формат ответа JSON
+        //debug('Еесть Ajax');
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $data = Yii::$app->request->post();
         // Получаем данные модели из запроса
@@ -35,35 +38,29 @@ class CabinetController extends Controller {
             //Если фильтр загрузился - определяем кол. заказов удовлетворяющих фильтру
             //debug($model);
 
-            $count = (new \yii\db\Query())
-                ->select(['id'])
-                ->from('yii_orders')
+            // фильтрация и определение количества заказов
+            // $orders_list = (new \yii\db\Query())
+            //     ->select(['id'])
+            //     ->from('yii_orders')
+          $orders_list = Order::find()
                 ->filterWhere(['AND', 
                     ['=','category_id', $model->category_id],
                     ['between', 'added_time', convert_date_ru_en($model->date_from), convert_date_ru_en($model->date_to)],
                     ['>=', 'order_budget', $model->budget_from], 
                     ['<=', 'order_budget', $model->budget_to]
                               ])
-                ->count();
+                ->with('category','statusOrder')
+                ->asArray()->all();  //count();
 
-            // $count = Order::find()
-            //           ->where(['category_id' => $model->category_id,
-            //                     //['between', 'added_time', $model->date_from, $model->date_to],
-            //                     ['between', 'order_budget', $model->budget_from, $model->budget_to],
-            //                   ])
-            //           ->count();
+            $count= count($orders_list); 
+            //debug($count) ;            
 
+            $this->layout='contentonly';
             return [
                 "data" => $count,
+                "orders" => $this->render('@app/views/partials/orderslist.php', compact('orders_list')), //$html_list, 
                 "error" => null
-            ];          
-
-            // return [
-            //     //"data" => "<b>Успешн</b>", //$model,
-            //     //"data" => "Успешно посчитали", //$model,
-            //     "data" => "category=".$model->category_id." Date_from=".$model->date_from." Date_to=".$model->date_to." Budget_from=".$model->budget_from." Budget_to=".$model->budget_to." count=".$count,
-            //     "error" => null
-            // ];
+            ];  
 
         } else {
             // Если нет, отправляем ответ с сообщением об ошибке
@@ -73,34 +70,35 @@ class CabinetController extends Controller {
             ];
         }
       } else {
-        // Если это не AJAX запрос, отправляем ответ с выводом количества заказов ДО фильтрации
-        $count = (new \yii\db\Query())
-                ->select(['id'])
-                ->from('yii_orders')
-                ->filterWhere(['AND', 
-                          ['=','category_id', $model->category_id],
-                          //['between', 'added_time', strtotime($model->date_from), strtotime($model->date_to)],
-                          ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
-                          ['between', 'order_budget', $model->budget_from, $model->budget_to]
-                        ])
-                ->count();
-                
-                // echo(' model->date_from='.strtotime($model->date_from)."<br>");
-                // echo(' Время в БД======='.strtotime('2021-02-10 11:38:15')."<br>");
-                // echo(' model->date_to=  '.strtotime($model->date_to));
-                //debug($count);
+        
+        $orders_list = Order::find()
+                  ->filterWhere(['AND', 
+                    ['=','category_id', $model->category_id],
+                    ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
+                    ['>=', 'order_budget', $model->budget_from], 
+                    ['<=', 'order_budget', $model->budget_to]
+                              ])
+                ->with('category','statusOrder')
+                ->asArray()->all();  //count();
 
+        $count= count($orders_list); 
+           
+        //debug( $orders_list);
+        
         $category = Category::find() ->orderBy('name')->all();
-        return $this->render('index', compact('model', 'category','count')); 
+        $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
+        $payment_form= PaymentForm::find() ->orderBy('payment_name')->all();
+        $this->view->params['model'] = $model;
+        $this->view->params['category'] = $category;
+        $this->view->params['work_form'] = $work_form;
+        $this->view->params['payment_form'] = $payment_form;
+        $this->view->params['count'] = $count;
+        //$this->view->params['orders_list'] = $orders_list;
+
+        return $this->render('index', compact('orders_list','model', 'category', 'work_form', 'payment_form','count')); 
       } 
 
-      //debug ($category);
-      //debug ($model);
-
-      //$category = Category::find() ->orderBy('name')->all();
-      //return $this->render('index', compact('model', 'category')); 
-         
-    	
+          	
     	// if (isset($_SESSION['isexec']) && $_SESSION['isexec'] == 1)
    		// 	return $this->render('index', ['user' => 'Исполнитель']); 
    		//elseif (isset($_SESSION['isexec']) && $_SESSION['isexec'] == 0)
