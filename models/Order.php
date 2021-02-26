@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\OrderStatus;
 
 /**
  * This is the model class for table "yii_orders".
@@ -26,7 +27,7 @@ class Order extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'yii_orders';
+        return 'yii_order';
     }
 
     /**
@@ -40,7 +41,7 @@ class Order extends \yii\db\ActiveRecord
             [['details'], 'string'],
             [['added_time'], 'safe'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['status_order_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusOrder::className(), 'targetAttribute' => ['status_order_id' => 'id']],
+            [['status_order_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrderStatus::className(), 'targetAttribute' => ['status_order_id' => 'id']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
@@ -76,9 +77,9 @@ class Order extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getStatusOrder()
+    public function getOrderStatus()
     {
-        return $this->hasOne(StatusOrder::className(), ['id' => 'status_order_id']);
+        return $this->hasOne(OrderStatus::className(), ['id' => 'status_order_id']);
     }
 
     /**

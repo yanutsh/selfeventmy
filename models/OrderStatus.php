@@ -12,14 +12,14 @@ use Yii;
  *
  * @property Orders[] $orders
  */
-class StatusOrder extends \yii\db\ActiveRecord
+class OrderStatus extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'yii_status_order';
+        return 'yii_order_status';
     }
 
     /**

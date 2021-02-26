@@ -33,9 +33,11 @@ TemplateAsset::register($this);
 			    				<a type='button' href="<?php echo Url::to(['customer/create-order', 'isexec' => '1']);?>" class='register active'>Создать заказ</a>
 
 			    				<?//= debug($category); ?>
-			    			
-			    				<div class="title">Фильтр</div>
-			    				
+			    				<div class="filtr__header">
+				    				<div class="title">Фильтр</div>
+				    				<a href="/cabinet" id="reset" alt="">Сбросить</a>
+			    				</div>
+
 			    				<?php $form = ActiveForm::begin([
 			    					'id' => 'filter-form',
 				                    //'options' => [
@@ -94,6 +96,8 @@ TemplateAsset::register($this);
 			                    <?= $form->field($model, 'payment_form')->dropDownList (ArrayHelper::map($payment_form, 'id', 'payment_name'),['prompt'=>'Все формы оплаты']) ?>
 
 			                    <?= $form->field($model, 'work_form')->dropDownList (ArrayHelper::map($work_form, 'id', 'work_form_name'),['prompt'=>'Все формы работы']) ?>
+
+			                    <?= $form->field($model, 'order_status_id')->dropDownList (ArrayHelper::map($order_status, 'id', 'name'),['prompt'=>'Любой статус заказа']) ?>
 			                    	
 			                    <div class="form-group"> 
 			                    	<div class='register__user active__button'>Показано заказов - <span><?= $count ?></span> шт.</div>

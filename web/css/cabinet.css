@@ -72,6 +72,17 @@ body{
 		margin-bottom: 20px;	
 	}
 
+	.filtr__header{
+		position: relative;
+	}
+
+	#reset{
+		position: absolute;
+		bottom: 5px;
+		right: 0;
+		/*margin-left: 50px;*/
+	} 
+
 	.filtr{
 		width: 85%;
 	    margin: 0 auto;
@@ -97,11 +108,13 @@ body{
 	}
 
 	.filtr .title {
+		display: inline-block;
 		padding-top: 30px;
 		font-size: 24px;
 		font-weight: bold;
-	} 
+	}
 
+	
 	.input__block{
 		position: relative;
 		margin-bottom: 15px;

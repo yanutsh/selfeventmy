@@ -22,7 +22,7 @@ foreach( $orders_list as $ol){ ?>
             if ($ol['status_order_id']==2) echo 'color_green';
             elseif ($ol['status_order_id']==4) echo 'color_red';
                                  ?>
-        "><?= $ol['statusOrder']['name'] ?></div>
+        "><?= $ol['orderStatus']['name'] ?></div>
         <div class="order_category"><?= $ol['category']['name'] ?></div>
         <div class="order_details"><?= $ol['details'] ?> </div>
         <div class="order_budget"><?php echo $ol['order_budget'] ?> <span class="rubl">₽</span>
