@@ -136,58 +136,76 @@ body{
 /*******************  Левая панель  Конец ******* *********************/ 
 
 /*******************  Правая панель   *********************************/ 
-.lk__main p{
-	padding: 30px;
-	margin: 0;
-}
+	.lk__main p{
+		padding: 30px;
+		margin: 0;
+	}
 
-.order_item{
-	max-width: 644px;
-	box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
-	border-radius: 5px;
-	margin: 10px auto;
-	padding: 12px 24px;
-}
+	.order_item{
+		max-width: 644px;
+		box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+		border-radius: 5px;
+		margin: 10px auto;
+		padding: 12px 24px;
+	}
 
-.order_category,
-.order_budget {
-	font-size: 18px;
-	font-weight: bold;
-	margin-bottom: 8px;
-}
+	.order_category,
+	.order_budget {
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 8px;
+	}
 
-.order_details{
-	font-size: 12px;
-	line-height: 14px;
-	text-align: left;
-	margin-bottom: 8px;
-}
+	.order_details{
+		font-size: 12px;
+		line-height: 14px;
+		text-align: left;
+		margin-bottom: 8px;
+	}
 
-.order_budget{
-	display: block;
-    width: 100%;
-    text-align: right;
-}
+	.order_budget{
+		display: block;
+	    width: 100%;
+	    text-align: right;
+	}
 
-.order_city {
-	float: left;
-}
+	.order_city {
+		float: left;
+	}
 
-.order_added {
-	float: right;
-}
+	.order_added {
+		float: right;
+	}
 
-.order_down{
-	display: flex;
-	justify-content: space-between;
-}
+	.order_down{
+		display: flex;
+		justify-content: space-between;
+	}
 
-.color_green{
- 	color: green;
-}
+	.color_green{
+	 	color: green;
+	}
 
-.color_red{
- 	color: red;
-}
+	.color_red{
+	 	color: red;
+	}
 
 /*******************  Правая  панель  Конец *****************************/ 
+
+/*******************  Страница добавления заказа  ***********************/
+.page__addorder{
+	height: 800px;
+}
+
+.wrapper__addorder{
+	position: relative;
+	top: 140px;
+	width: 732px;
+    margin: 0 auto;    
+    margin-bottom: 30px;
+    border-radius: 10px;
+    background: #fff;
+    padding-bottom: 30px;
+}
+
+/*******************  Страница добавления заказа Конец ***********************/

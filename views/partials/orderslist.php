@@ -23,12 +23,22 @@ foreach( $orders_list as $ol){ ?>
             elseif ($ol['status_order_id']==4) echo 'color_red';
                                  ?>
         "><?= $ol['orderStatus']['name'] ?></div>
-        <div class="order_category"><?= $ol['category']['name'] ?></div>
+        <div class="order_category">
+            <?php 
+            $category_names = "";
+            foreach ($ol['categories'] as $cat){
+                if ( $category_names=="" ) $category_names = $cat['name']; 
+                else $category_names .= ", ".$cat['name'];                
+            } 
+            echo $category_names;
+            ?>
+                
+        </div>
         <div class="order_details"><?= $ol['details'] ?> </div>
         <div class="order_budget"><?php echo $ol['order_budget'] ?> <span class="rubl">₽</span>
         </div>
         <div class="order_down">
-            <div class="order_city">Москва</div>
+            <div class="order_city"><?= $ol['orderCity']['name'] ?></div>
             <div class="order_added"><?= showDate(strtotime($ol['added_time']))?></div>
         </div>
     </div>      

@@ -12,6 +12,7 @@ $(document).ready(function() {
     // сброс фильтра заказов и вывод всех заказов
     $('#reset').click(function(event) {    
         //alert ('Reset');
+        $(this).closest('form')[0].reset();
         event.preventDefault();
         // Получаем объект формы
         //var $testform = $(this);

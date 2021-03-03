@@ -12,7 +12,7 @@ use app\models\User;
 //class RegForm extends \yii\db\ActiveRecord
 class OrderFiltrForm extends Model
 {
-    public  $city;              // Город задания
+    public  $city_id;           // Городния
     public  $category_id;       // Категория услуг
     public  $date_from;         // Дата от       
     public  $date_to;           // Дата до
@@ -30,7 +30,7 @@ class OrderFiltrForm extends Model
     {
         return [                
             // ['category_id', 'default', 'value' => '1'],            
-            [['category_id', 'date_from', 'date_to', 'order_status_id'], 'safe'], 
+            [['category_id', 'date_from', 'date_to', 'order_status_id', 'city_id'], 'safe'], 
 
            //[['date_from', 'date_to'], 'date'],
            // ['date_from', 'default', 'value' => date('d.m.Y')],
@@ -47,7 +47,7 @@ class OrderFiltrForm extends Model
     public function attributeLabels()
     {
         return [
-            'city'          => 'Город',
+            'city_id'       => 'Город',
             'category_id'   => 'Услуги',
             'date_from'     => 'Дата от...',
             'date_to'       => 'Дата до...', 

@@ -158,7 +158,8 @@ $config = [
                 ],
             ],
         ]
-    ],    
+    ],
+    
     'params'        => $params,
 ];
 

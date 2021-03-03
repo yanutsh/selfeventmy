@@ -18,6 +18,11 @@ time, mark, audio, video {
   font-size: 100%;
   vertical-align: baseline; }
 
+*::before,
+*::after {
+  box-sizing: border-box;
+}  
+
 html {
   line-height: 1; }
 

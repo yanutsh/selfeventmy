@@ -30,7 +30,7 @@ TemplateAsset::register($this);
 			    	<div class="col-md-4">
 			    		<div class="lk__left">
 			    			<div class="filtr">
-			    				<a type='button' href="<?php echo Url::to(['customer/create-order', 'isexec' => '1']);?>" class='register active'>Создать заказ</a>
+			    				<a type='button' href="<?php echo Url::to(['cabinet/add-order', 'isexec' => '1']);?>" class='register active'>Создать заказ</a>
 
 			    				<?//= debug($category); ?>
 			    				<div class="filtr__header">
@@ -49,6 +49,8 @@ TemplateAsset::register($this);
 				                ]); ?>
 
 				                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
+
+				                <?= $form->field($model, 'city_id')->dropDownList (ArrayHelper::map($city, 'id', 'name'),['prompt'=>'Все города']) ?>
 				                
 				                <div class="input__block">
 					                <label class='control-label'>Дата от</label>
