@@ -26,7 +26,7 @@ foreach( $orders_list as $ol){ ?>
         <div class="order_category">
             <?php 
             $category_names = "";
-            foreach ($ol['categories'] as $cat){
+            foreach ($ol['category'] as $cat){
                 if ( $category_names=="" ) $category_names = $cat['name']; 
                 else $category_names .= ", ".$cat['name'];                
             } 
@@ -35,7 +35,7 @@ foreach( $orders_list as $ol){ ?>
                 
         </div>
         <div class="order_details"><?= $ol['details'] ?> </div>
-        <div class="order_budget"><?php echo $ol['order_budget'] ?> <span class="rubl">₽</span>
+        <div class="order_budget"><?php echo $ol['budget_from'] ?> <span class="rubl">₽</span>
         </div>
         <div class="order_down">
             <div class="order_city"><?= $ol['orderCity']['name'] ?></div>

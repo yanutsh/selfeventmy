@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '8fb450014b60504135745dbcf31711e057c83d44',
+    'reference' => '14a611ed8a47f4a9b00b09e1a545836a6f0dec34',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -327,6 +327,15 @@
       ),
       'reference' => 'dd80cff630d583e980641420fcf7044ee2df33de',
     ),
+    'kartik-v/yii2-field-range' => 
+    array (
+      'pretty_version' => 'v1.3.5',
+      'version' => '1.3.5.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8a18edb343b3beb96ddc86e4a06aee28be160787',
+    ),
     'kartik-v/yii2-grid' => 
     array (
       'pretty_version' => 'v3.3.5',
@@ -335,6 +344,15 @@
       array (
       ),
       'reference' => 'e4ba0c68ecb864e1a158f16cc73a5e73a6cdf7c7',
+    ),
+    'kartik-v/yii2-helpers' => 
+    array (
+      'pretty_version' => 'v1.3.9',
+      'version' => '1.3.9.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '0bec7a97bf9d0293d96be5c496fe9654c4dec94b',
     ),
     'kartik-v/yii2-krajee-base' => 
     array (
@@ -990,7 +1008,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '8fb450014b60504135745dbcf31711e057c83d44',
+      'reference' => '14a611ed8a47f4a9b00b09e1a545836a6f0dec34',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (

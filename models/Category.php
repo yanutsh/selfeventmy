@@ -45,11 +45,11 @@ class Category extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Subcategories]].
+     * Gets query for [[Subcategory]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getSubcategories()
+    public function getSubcategory()
     {
         return $this->hasMany(Subcategory::className(), ['category_id' => 'id']);
     }

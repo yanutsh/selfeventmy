@@ -1,7 +1,8 @@
 /*******************    Стили ЛК Заказчика  **************************/
 body{
+	position: absolute;
 	font-family: "Roboto Condensed", sans-serif!important;
-	background-color: #999!important;
+	background-color: #999!important;	
 }
 
 /*******************  Навигационная панель  **************************/
@@ -193,19 +194,227 @@ body{
 /*******************  Правая  панель  Конец *****************************/ 
 
 /*******************  Страница добавления заказа  ***********************/
-.page__addorder{
-	height: 800px;
+	.page__addorder{
+		/*height: 900px;*/
+	}
+
+	.step_one{
+		width: 343px;
+		margin: 0 auto;
+	}
+
+	.add_category{
+			font-weight: bold;
+			color: #AE4A84;
+			cursor: pointer;
+			margin-bottom: 15px;
+	}	
+
+	.form_addorder_title{
+		font-size: 28px;
+	    font-weight: 700;
+	    text-align: center;
+	    padding-top: 32px;
+	    padding-bottom: 24px;
+	}
+
+	.cabinet-addOrder{
+		/*width: 343px;*/
+		margin: 0 auto;
+	}
+
+	.wrapper__addorder{
+		/*position: relative;*/	
+		width: 732px;
+	    margin: 140px auto 30px;    
+	    /*margin-bottom: 30px;*/
+	    border-radius: 10px;
+	    background: #fff;
+	    padding-bottom: 30px;
 }
 
-.wrapper__addorder{
-	position: relative;
-	top: 140px;
-	width: 732px;
-    margin: 0 auto;    
-    margin-bottom: 30px;
-    border-radius: 10px;
-    background: #fff;
-    padding-bottom: 30px;
-}
+/*************************** Вторая страница ****************************/
+	.step_two{
+		display: none;	
+	    width: 568px;
+	    margin: 0 auto;
+	}
+
+	#addorderform-details{
+		resize: vertical;
+	}
+
+	.byudget {	
+		display: flex;
+	    flex-wrap: wrap;
+	    justify-content: space-between;	
+	}
+
+	.byudget .form-group{
+		width:calc( ( 100% - 40px ) / 2 );
+	}
+
+	.choose_elements {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	#addorderform-order_budget,
+	#addorderform-prepayment{
+		display: none;
+		/*width: 45%;*/
+	}
+
+	.item_choose{
+		width: 45%;
+	}
+
+	.input-group-addon {
+		background-color: #fff!important;
+	    border: none!important;
+	}
+
+	.input-group-addon.kv-field-separator::before{
+		content: 'до';
+		color: #000;
+		color: #000;    
+	    padding-left: 11px;
+	}
+
+	span.input-group-addon.kv-field-separator{
+		color: #fff;
+	}
+
+	.cont{
+		display: none;
+	}
+
+	.cont.active{
+		display: block;
+	}
+
+	#c0.cont{
+		display: block;
+	}
+
 
 /*******************  Страница добавления заказа Конец ***********************/
+
+/******************************  Выключатель  ********************************/
+	.toggle-button-cover{
+		position: relative;
+	}
+
+
+	.form-group.exactly{
+		/*width: 45%;		*/
+    	display: flex;
+    	justify-content: space-between;
+	}
+
+	.button-cover
+	{   
+	    width: 40px;
+	    height: 15px;
+	    padding: 5px;
+	    background-color: #fff;
+	    /*box-shadow: 0 3px 0 #e7efef;*/
+	}
+
+
+	.button-cover, .knobs, .layer
+	{
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    bottom: 0;
+	    left: 0;
+	  
+	}
+
+	.button.r
+	{
+	    position: relative;
+	    top: -4px;
+	    right: 50px;
+	    width: 40px;
+	    height: 14px;
+	    /*margin: -20px auto 0 auto;*/
+	    box-sizing: border-box;
+	    /*overflow: hidden;*/
+	}
+
+	.button.r, .button.r .layer
+	{
+	    border-radius: 100px;
+	    padding: 0;
+	}
+
+	.checkbox
+	{
+	    position: relative;
+	    top: -10px;
+	    left: -10px;
+	    width: 50px;
+	    height: 20px;
+	    /*padding: 0;
+	    margin: 0;*/
+	    opacity: 0;
+	    cursor: pointer;
+	    z-index: 3
+	}
+
+	.knobs
+	{
+	    z-index: 2;
+	}
+
+	.layer
+	{
+	    width: 100%;
+	    background-color: #ebf7fc;
+	    transition: 0.3s ease all;
+	    z-index: 1;
+	}
+
+	/* Button 1 */
+	#button-1 .knobs:before
+	{
+	    content: '';
+	    position: absolute;
+	    top: -3px;
+	    left: 0px;
+	    width: 20px;
+	    height: 20px;
+	    /*color: #fff;
+	    font-size: 10px;
+	    font-weight: bold;
+	    line-height: 1;
+	    text-align: center;
+	    padding: 9px 4px;*/
+	    background-color: #ae4a84;
+	    opacity: 0.38;
+	    border-radius: 50%;
+	    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+	}
+
+	#button-1 .checkbox:checked + .knobs:before
+	{
+	    content: '';
+	    left: 20px;
+	    background-color: #ae4a84;
+	    opacity: 1;
+
+	}
+
+	#button-1 .checkbox:checked ~ .layer
+	{
+	    background-color: #fcebeb;
+	}
+
+	#button-1 .knobs, #button-1 .knobs:before, #button-1 .layer
+	{
+	    transition: 0.3s ease all;
+	}
+/******************************  Выключатель Конец ********************************/	

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "yii_order".
@@ -45,7 +46,7 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'details', 'city_id', 'members', 'date_from'], 'required'],
+            [['who_need','user_id', 'city_id', 'date_from'], 'required'],
             [['user_id', 'status_order_id', 'city_id', 'members', 'order_budget', 'budget_from', 'budget_to', 'prepayment'], 'integer'],
             [['details', 'wishes'], 'string'],
             [['added_time', 'date_from', 'date_to'], 'safe'],
@@ -64,17 +65,17 @@ class Order extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'status_order_id' => 'Статус заказа',
-            'details' => 'Details',
+            'details' => 'Детали',
             'added_time' => 'Added Time',
             'who_need' => 'Кто нужен',
-            'city_id' => 'City ID',
+            'city_id' => 'Город',
             'members' => 'Число участников',
-            'date_from' => 'Date From',
-            'date_to' => 'Date To',
+            'date_from' => 'Дата с',
+            'date_to' => 'Дата до',
             'wishes' => 'Пожелания',
-            'order_budget' => 'Order Budget',
-            'budget_from' => 'Budget From',
-            'budget_to' => 'Budget To',
+            'order_budget' => 'Бюджет',
+            'budget_from' => 'Бюджет от',
+            'budget_to' => 'Бюджет до',
             'prepayment' => 'Предоплата',
         ];
     }
@@ -104,7 +105,7 @@ class Order extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderCategories()
+    public function getOrderCategory()
     {
         return $this->hasMany(OrderCategory::className(), ['order_id' => 'id']);
     }
@@ -114,7 +115,7 @@ class Order extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCategories()
+    public function getCategory()
     {
         return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('yii_order_category', ['order_id' => 'id']);
     }
@@ -133,4 +134,27 @@ class Order extends \yii\db\ActiveRecord
     {
         return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
+
+
+   public function saveOrder($fields) {
+        //debug($fields,0);
+        $order=new Order();
+
+        $order->user_id = Yii::$app->user->id;
+        $order->who_need = Html::encode($fields['who_need']);
+        $order->city_id = $fields['city_id'];
+        $order->members = $fields['members'];
+        $order->date_from = convert_date_ru_en($fields['date_from']);
+       // $order->date_to = convert_date_ru_en($fields['date_to']);
+        $order->details= Html::encode($fields['details']);
+        $order->wishes = Html::encode($fields['wishes']);
+        $order->budget_from = $fields['budget_from'];
+        $order->budget_to = $fields['budget_to'];
+        $order->order_budget = $fields['order_budget'];
+        $order->prepayment = $fields['prepayment'];
+
+        if ($order->save()) return $order->id;    //debug ("Записано");
+        else return false;                        //debug(" НЕ записано");
+   }
+
 }
