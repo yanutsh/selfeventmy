@@ -27,6 +27,7 @@ use yii\web\IdentityInterface;
  * @property int $updated_at
  * @property string|null $verification_token
  *
+ * @property Order[] $orders
  * @property WorkForm $workForm
  * @property Sex $sex
  */
@@ -41,6 +42,29 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return 'yii_user';
     }
+
+     /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            //['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],            
+        ];
+    }
+
+    /**
+     * Gets query for [[Orders]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrders()
+    {
+        return $this->hasMany(Order::className(), ['user_id' => 'id']);
+    }
+
     /** Связь с таблицей WorkForm
      * Gets query for [[WorkForm]].
      *
@@ -68,17 +92,7 @@ class User extends ActiveRecord implements IdentityInterface
     //     ];
     // }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            //['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],            
-        ];
-    }
+   
 
     /**
      * {@inheritdoc}

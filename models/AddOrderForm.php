@@ -35,7 +35,7 @@ class AddOrderForm extends Model
     public function rules()
     {
         return [
-            [['who_need', 'city_id', 'date_from'], 'required'],
+            [['who_need', 'city_id', 'date_from', 'budget_to'], 'required'],
             [['user_id', 'status_order_id', 'city_id', 'category_id','members', 'order_budget', 'budget_from', 'budget_to', 'prepayment'], 'integer'],
             [['details', 'wishes'], 'string'],
             [['city_id', 'category_id','subcategory_id','added_time', 'date_from', 'date_to'], 'safe'],
@@ -57,15 +57,15 @@ class AddOrderForm extends Model
             'status_order_id' => 'Статус заказа',
             'details' => 'Описание события',
             'added_time' => 'Added Time',
-            'who_need' => 'Кто нужен',
-            'city_id' => 'Город',
+            'who_need' => 'Кто нужен *',
+            'city_id' => 'Город *',
             'members' => 'Количество участников',
             'date_from' => 'Date From',
             'date_to' => 'Date To',
             'wishes' => 'Пожелания',
             'order_budget' => 'Фиксированный бюджет',
             'budget_from' => 'Бюджет, от',
-            'budget_to' => 'Бюджет, до',
+            'budget_to' => 'Бюджет, до *',
             'prepayment' => 'Предоплата',
         ];
     }

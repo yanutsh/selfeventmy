@@ -27,8 +27,8 @@ use yii\helpers\Html;
  * @property User $user
  * @property OrderStatus $statusOrder
  * @property OrderCategory[] $orderCategories
- * @property Category[] $categories
  * @property OrderPhoto[] $orderPhotos
+ * @property Category[] $categories
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -88,6 +88,11 @@ class Order extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getWorkForm()
+    {
+        return $this->hasOne(WorkForm::className(), ['id' => 'work_form_id'])->viaTable('yii_user', ['id' => 'user_id']);
     }
 
     /**

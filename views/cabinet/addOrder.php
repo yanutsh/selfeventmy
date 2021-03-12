@@ -9,8 +9,8 @@ use app\assets\RegistrationAsset;
 use app\components\page\PageAttributeWidget as PAW;
 use app\models\WorkForm;
 use app\models\Sex;
-use app\models\category;
-use app\models\city;
+use app\models\Category;
+use app\models\City;
 use kartik\date\DatePicker;
 use yii\widgets\Pjax;
 
@@ -44,8 +44,57 @@ $city = City::find() ->orderBy('name')->all();
 
                 <div class="step_one">
                     <?php //debug($subcategory,0); ?>
-                    
-                    <?= $form->field($model, 'who_need'); ?>
+
+                    <div class="flex_block">
+                        <?= $form->field($model, 'who_need'); ?>
+                        <?= $form->field($model, 'city_id')->dropDownList (ArrayHelper::map($city, 'id', 'name'),['prompt'=>'Выберите город', 'class' =>'form-control js-chosen']) ?>
+                    </div>    
+                    <div class="flex_block">
+                        <?= $form->field($model, 'budget_from') ?>
+                        <?= $form->field($model, 'budget_to') ?>
+                    </div>
+
+                    <div class="choose_elements">
+                        
+                        <div class="item_choose">
+                            <div class="form-group exactly">
+                                <div>
+                                    <label class="control-label">Указать точную сумму</label>
+                                </div>        
+                                <div class="toggle-button-cover"> 
+                                      <div class="button-cover">
+                                        <div class="button r" id="button-1">
+                                          <input type="checkbox" class="checkbox" id="sum_exactly">
+                                          <div class="knobs"></div>
+                                          <div class="layer"></div>
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+
+                            <?= $form->field($model, 'order_budget')->label(false) ?>
+                        </div>
+
+                        <div class="item_choose">    
+                            <div class="form-group exactly">
+                                <div>
+                                    <label class="control-label">Предоплата</label>
+                                </div>        
+                                <div class="toggle-button-cover"> 
+                                      <div class="button-cover">
+                                        <div class="button r" id="button-1">
+                                          <input type="checkbox" class="checkbox" id="predoplata">
+                                          <div class="knobs"></div>
+                                          <div class="layer"></div>
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+                            
+                            <?= $form->field($model, 'prepayment')->label(false) ?>
+                        </div>
+                    </div> 
+
                    
                     <!-- блок для клонирования категорий и подкатегорий -->
                     <div class="cont" id="c0">                        
@@ -75,89 +124,47 @@ $city = City::find() ->orderBy('name')->all();
                                 (ArrayHelper::map($subcategory[2], 'id', 'name'),['prompt'=>'Все подкатегории','id'=>'subcategory_2', 'value'=> $model->subcategory_id[2]]); ?>
                     </div>            
 
-                    <div type="button" class="add_category">Добавить категорию</div>
-
+                    <div type="button" class="add_category">Добавить категорию</div>                    
                     
-                    <?= $form->field($model, 'city_id')->dropDownList (ArrayHelper::map($city, 'id', 'name'),['prompt'=>'Все города']) ?>
-
                                        
-                    <?= $form->field($model, 'members') ?> 
                     
-                    <?php 
-                        echo '<label class="control-label">Даты мероприятия</label>';
-                        echo DatePicker::widget([
-                            'name' => 'AddOrderForm[date_from]',
-                            'value' => '01.02.2021',
-                            'type' => DatePicker::TYPE_RANGE,
-                            'name2' => 'AddOrderForm[date_to]',
-                            'value2' => '27.02.2021',
-                            'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'dd.mm.yyyy'
-                            ]
-                        ]);
-                     ?>
                      <div class="form-group">
                         <button id='continue' class = 'register__user'>Продолжить</button>
                     </div>
                 </div>
 
                 <div class="step_two">
+
+                    <?= $form->field($model, 'members') ?> 
+                    
+                    <?php
+                        if (isset($model->date_from)) $date_from = $model->date_from;
+                        else $date_from = Yii::$app->params['event_date_from'];
+                        if (isset($model->date_to)) $date_to = $model->date_to;
+                        else $date_to = Yii::$app->params['event_date_to']; ?>
+
+                        <div class="form-group">
+                            <label class="control-label">Даты мероприятия</label>'
+                            <?php 
+                            echo DatePicker::widget([
+                                'name' => 'AddOrderForm[date_from]',
+                                'value' => $date_from,    //'01.02.2021',
+                                'type' => DatePicker::TYPE_RANGE,
+                                'name2' => 'AddOrderForm[date_to]',
+                                'value2' => $date_to,   //'27.02.2021',
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+                                    'format' => 'dd.mm.yyyy'
+                                ]
+                            ]);
+                            ?>
+                        </div>    
                               
                     <?= $form->field($model, 'details')->textArea(['placeholder'=>'Опишите мероприятие подробнее']) ?>
 
-                    <p>Фотографии</p>
-
                     <?= $form->field($model, 'wishes')->textArea(['placeholder'=>'Ваши пожелания к проведению мероприятия']) ?>
 
-                    <?//= $form->field($model, 'status_order_id') ?>
-                    
-                    <div class="byudget">
-                        <?= $form->field($model, 'budget_from') ?>
-                        <?= $form->field($model, 'budget_to') ?>
-                    </div>
-
-                    <div class="choose_elements">
-                    	
-                    	<div class="item_choose">
-		                    <div class="form-group exactly">
-		                        <div>
-		                            <label class="control-label">Указать точную сумму</label>
-		                        </div>        
-		                        <div class="toggle-button-cover"> 
-		                              <div class="button-cover">
-		                                <div class="button r" id="button-1">
-		                                  <input type="checkbox" class="checkbox" id="sum_exactly">
-		                                  <div class="knobs"></div>
-		                                  <div class="layer"></div>
-		                                </div>
-		                              </div>
-		                        </div>
-		                    </div>
-
-		                    <?= $form->field($model, 'order_budget')->label(false) ?>
-		                </div>
-
-		                <div class="item_choose">    
-		                    <div class="form-group exactly">
-		                        <div>
-		                            <label class="control-label">Предоплата</label>
-		                        </div>        
-		                        <div class="toggle-button-cover"> 
-		                              <div class="button-cover">
-		                                <div class="button r" id="button-1">
-		                                  <input type="checkbox" class="checkbox" id="predoplata">
-		                                  <div class="knobs"></div>
-		                                  <div class="layer"></div>
-		                                </div>
-		                              </div>
-		                        </div>
-		                    </div>
-		                    
-		                    <?= $form->field($model, 'prepayment')->label(false) ?>
-                    	</div>
-
-                    </div>                                  
+                    <p>Добавить Фотографии</p>   
                     
 
                     <!-- вывод flesh - сообщения об ошибках-->
@@ -217,7 +224,7 @@ $city = City::find() ->orderBy('name')->all();
 
                              // Установка признака нажатия на кнопку Submit - Записать заказ
                              $('#order_record').on('click', function(event){
-                                alert("Записать заказ");
+                                //alert("Записать заказ");
                                 console.log($('#start_record').val());
                                 $('#start_record').val('1');
                                 console.log($('#start_record').val());
@@ -243,7 +250,16 @@ $city = City::find() ->orderBy('name')->all();
                                     $('#addorderform-budget_to').val($('#addorderform-order_budget').val());
                                 }
 
-                            });    
+                            }); 
+
+                            // При изменении Бюджета От или До точное значениe cбрасывается
+                            $('#addorderform-budget_from').change(function(event) { 
+                                $('#addorderform-order_budget').val(null);
+                            }); 
+
+                            $('#addorderform-budget_to').change(function(event) { 
+                                $('#addorderform-order_budget').val(null);
+                            });   
 
                             
                              // Переключатель показа поля предоплаты)
@@ -260,12 +276,21 @@ $city = City::find() ->orderBy('name')->all();
 
                             // Действие по кнопке Продолжить
                             $('#continue').click(function(event) {
-                                alert("Продолжить");
+                                //alert("Продолжить");
                                 event.preventDefault();
                                 $('.step_one').css('display','none');
                                 $('.step_two').css('display','block');
                                 $('body,html').animate({scrollTop: 0}, 400);
                             }) 
+
+                            // для выпадающего списка Город
+                            $(document).ready(function(){
+                                $('.js-chosen').chosen({
+                                    width: '100%',
+                                    no_results_text: 'Совпадений не найдено',
+                                    placeholder_text_single: 'Выберите город'
+                                });
+                            });
                     JS;
                     //маркер конца строки, обязательно сразу, без пробелов и табуляции
                     $this->registerJs($script, yii\web\View::POS_READY);

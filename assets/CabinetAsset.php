@@ -23,11 +23,13 @@ class CabinetAsset extends AssetBundle {
     public $baseUrl = '@web';
     public $css = [
         'css/bootstrap.min.css',
-        'css/cabinet.css',        
+        'css/cabinet.css',
+        'css/chosen.min.css',        
     ];
     public $js = [
         'js/bootstrap.min.js',
-        'js/cabinet.js',        
+        'js/cabinet.js',
+        'js/chosen.jquery.js',        
     ];
     public $depends = [
         'yii\web\JqueryAsset',

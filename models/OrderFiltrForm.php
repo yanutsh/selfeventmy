@@ -18,8 +18,8 @@ class OrderFiltrForm extends Model
     public  $date_to;           // Дата до
     public  $budget_from ;      // Бюджет от
     public  $budget_to;         // Бюджет до
-    public  $payment_form;      // Форма оплаты
-    public  $work_form;         // Форма рпботы
+    public  $prepayment;        // Форма оплаты
+    public  $work_form_id;      // Форма рпботы
     public  $order_status_id;   // Статус заказа
 
     
@@ -30,7 +30,7 @@ class OrderFiltrForm extends Model
     {
         return [                
             // ['category_id', 'default', 'value' => '1'],            
-            [['category_id', 'date_from', 'date_to', 'order_status_id', 'city_id'], 'safe'], 
+            [['category_id', 'date_from', 'date_to', 'order_status_id', 'prepayment', 'work_form_id', 'city_id'], 'safe'], 
 
            //[['date_from', 'date_to'], 'date'],
            // ['date_from', 'default', 'value' => date('d.m.Y')],
@@ -53,8 +53,8 @@ class OrderFiltrForm extends Model
             'date_to'       => 'Дата до...', 
             'budget_from'   => 'Бюджет от...',
             'budget_to'     => 'Бюджет до...',
-            'payment_form'  => 'Форма оплаты',
-            'work_form'     => 'Форма работы',
+            'prepayment'    => 'Форма оплаты',
+            'work_form_id'     => 'Форма работы',
             'order_status_id' => 'Статус заказа', 
         ];
     }

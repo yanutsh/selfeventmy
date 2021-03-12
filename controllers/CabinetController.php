@@ -51,24 +51,41 @@ class CabinetController extends Controller {
               ];
           } 
             
-            //debug($model->city_id);
+            //debug($model);
 
-            // фильтрация и определение количества заказов            
+            // фильтрация и определение количества заказов 
+            // астройки фильтра по предоплате
+            if ( $model->prepayment == 1)  {      // без предоплаты
+                $prep_compare = "=";
+                $prep_value = '0';
+            }elseif ( $model->prepayment == 2) {  // c предоплатoй
+                $prep_compare = ">=";
+                $prep_value = '100';
+            }else{
+                $prep_compare = ">=";             // любой вариант
+                $prep_value = '0';
+            } 
+
+            //debug ($model); 
+
             $orders_list = Order::find()
                   ->filterWhere(['AND',                       
                       ['between', 'added_time', $date_from, $date_to],
-                      ['>=', 'order_budget', $model->budget_from], 
-                      ['<=', 'order_budget', $model->budget_to],
+                      ['>=', 'budget_from', $model->budget_from], 
+                      ['<=', 'budget_from', $model->budget_to],
                       ['=','status_order_id', $model->order_status_id],
-                      ['=','city_id', $model->city_id]
+                      ['=','city_id', $model->city_id],
+                      [$prep_compare, 'prepayment', $prep_value],
+                                          
                                 ])                    
-                  ->with('category','orderStatus','orderCity')
+                  ->with('category','orderStatus','orderCity', 'workForm')
                   ->orderBy('added_time DESC')
                   ->asArray()->all();  //count();
 
               //debug ($orders_list);    
-
-              // Добавить фильтр по категориям
+               
+                  
+              // Фильтр по категориям
               if (!$model->category_id == "") {  // если значение фильтра установлено
                 foreach ($orders_list as $key=>$order) {
                   //echo "key=".$key;
@@ -82,7 +99,17 @@ class CabinetController extends Controller {
                   }
                   if (!$include_order) unset($orders_list[$key]); // удаляем заказ из списка
                 }
-              }      
+              }
+
+              // Фильтр по Формам работы
+              if (!$model->work_form_id == "") {  // если значение фильтра установлено
+                foreach ($orders_list as $key=>$order) {
+                  if (!($order['workForm']['id'] == $model->work_form_id)) {
+                     unset($orders_list[$key]); // удаляем заказ из списка               
+                  }                  
+                }                  
+              }
+                    
 
               $count= count($orders_list); 
               //debug($count) ;            

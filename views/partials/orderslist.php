@@ -35,7 +35,7 @@ foreach( $orders_list as $ol){ ?>
                 
         </div>
         <div class="order_details"><?= $ol['details'] ?> </div>
-        <div class="order_budget"><?php echo $ol['budget_from'] ?> <span class="rubl">₽</span>
+        <div class="order_budget"><?php echo $ol['budget_to'] ?> <span class="rubl">₽</span>
         </div>
         <div class="order_down">
             <div class="order_city"><?= $ol['orderCity']['name'] ?></div>
