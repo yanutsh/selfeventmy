@@ -266,7 +266,7 @@ body{
 
 /*************************** Вторая страница ****************************/
 	.step_two{
-		display: none;	
+		/*display: none;	*/
 	    width: 568px;
 	    margin: 0 auto;
 	}
@@ -331,6 +331,29 @@ body{
 
 	#c0.cont{
 		display: block;
+	}
+
+	.image-preview.image_large {
+	    display: flex;
+	    flex-wrap: wrap;
+	    justify-content: center; ;
+	    /*margin-bottom: 30px;*/
+	    align-items: center;
+	}
+
+	.photo_item {
+	    position: relative;
+	    /*width: calc( ( 100% - 50px ) / 3 );*/
+	    width: 160px;
+	    height: 160px;
+	    overflow: hidden;
+	    margin: 10px;
+	}
+
+	.image-preview.image_large img {
+	    width: 100%;
+	    height: auto;
+	    margin-top: 10px;
 	}
 
 

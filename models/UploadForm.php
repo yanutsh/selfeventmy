@@ -18,6 +18,7 @@ class UploadForm extends Model
         ];
     }
     
+    
     public function upload()
     {
         if ($this->validate()) { 

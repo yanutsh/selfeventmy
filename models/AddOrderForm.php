@@ -14,6 +14,7 @@ use yii\base\Model;
 class AddOrderForm extends Model
 {    
     
+    public $user_id;
     public $who_need;
     public $category_id; 
     public $subcategory_id; 
@@ -29,17 +30,20 @@ class AddOrderForm extends Model
     public $order_budget;
     public $prepayment;   
     public $orderPhoto;
+    public $imageFiles;
 
-    //public $statusOrder_id = 2;
+    public $status_order_id = 2;
 
     public function rules()
     {
         return [
             [['who_need', 'city_id', 'date_from', 'budget_to'], 'required'],
-            [['user_id', 'status_order_id', 'city_id', 'category_id','members', 'order_budget', 'budget_from', 'budget_to', 'prepayment'], 'integer'],
+            //[['user_id', 'status_order_id', 'city_id', 'category_id','members', 'order_budget', 'budget_from', 'budget_to', 'prepayment'], 'integer'],
+            [['user_id', 'status_order_id', 'city_id', 'members', 'order_budget', 'budget_from','budget_to', 'prepayment'], 'integer'],
             [['details', 'wishes'], 'string'],
-            [['city_id', 'category_id','subcategory_id','added_time', 'date_from', 'date_to'], 'safe'],
-            [['who_need'], 'string', 'max' => 255],           
+            [['city_id', 'category_id','subcategory_id','added_time', 'date_from', 'date_to', 'members'], 'safe'],
+            [['who_need'], 'string', 'max' => 255],
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 6],           
             
         ];
     }
@@ -67,7 +71,25 @@ class AddOrderForm extends Model
             'budget_from' => 'Бюджет, от',
             'budget_to' => 'Бюджет, до *',
             'prepayment' => 'Предоплата',
+            'imageFiles' => 'Фотографии'
         ];
+    }
+
+    public function upload()
+    {            
+        if ($this->validate()) { 
+            //debug($this->imageFiles);
+            $_SESSION['order_photo'] = array();
+            foreach ($this->imageFiles as $file) {
+                $newfilename=date('YmdHis').rand(100,1000) . '.' . $file->extension;
+                $file->saveAs('uploads/images/orders/' . $newfilename);
+                $_SESSION['order_photo'][] = $newfilename;
+            }
+
+            return true;
+        } else {            
+           return false;
+        }
     }
 
     

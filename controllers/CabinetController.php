@@ -12,8 +12,10 @@ use app\models\WorkForm;
 use app\models\PaymentForm;
 use app\models\Order;
 use app\models\OrderCategory;
+use app\models\OrderPhoto;
 use app\models\AddOrderForm;
 use app\models\OrderStatus;
+use yii\web\UploadedFile;
 
 require_once('../libs/convert_date_ru_en.php');
 require_once('../libs/convert_date_en_ru.php');
@@ -157,23 +159,37 @@ class CabinetController extends Controller {
           // Устанавливаем формат ответа JSON
           //debug('Еесть Ajax');
           //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+          
           $data = Yii::$app->request->post();
-          $model->load($data);
+          $model->load($data);          
                 
           if ($_POST['start_record']=="1") { // Есть Команда - записать заказ в БДем по 
             // Вытаскиваем из модели нужные данные и записываем по таблицам
               //debug($model);
             $order= new Order();
-            $new_id = $order->saveOrder($model);
-            if ($new_id) {
+            $new_order_id = $order->saveOrder($model);
+            if ($new_order_id) {
               //debug ("Заказ Записан в БД id=".$new_id);
 
               // записываем категории и подкатегории заказа
               $order_category = new OrderCategory();
-              $order_category->saveOrderCategory($model, $new_id); 
+              $order_category->saveOrderCategory($model, $new_order_id); 
 
+              // Загружаем на сервер фотки заказа и Записываем их в БД
+              $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+              //debug( $model->imageFiles);
+              //debug($model);
+              if (!empty( $model->imageFiles)){
+                if ($model->upload()) {
+                    //debug("Загрузили файлы"); // Записываем фотки в БД
+                  $order_photo = new OrderPhoto();
+                  $order_photo -> saveOrderPhoto($new_order_id); 
+                    
+                }//else debug("Не загрузили файлы");
+              }//else debug ("Нет файлов для загрузки");
+                  
               return $this->redirect(['/cabinet']);
-              // записываем фотки
+              
             }  
             else echo "заказ НЕ записан ";
 

@@ -39,6 +39,7 @@ $city = City::find() ->orderBy('name')->all();
                 <?php $form = ActiveForm::begin([
                     'options' => [
                         'data-pjax' => true,
+                        'enctype' => 'multipart/form-data',
                         ],
                 ]); ?>
 
@@ -164,7 +165,30 @@ $city = City::find() ->orderBy('name')->all();
 
                     <?= $form->field($model, 'wishes')->textArea(['placeholder'=>'Ваши пожелания к проведению мероприятия']) ?>
 
-                    <p>Добавить Фотографии</p>   
+                    <p>Добавить Фотографии</p>                     
+
+                   <?php  
+                   $max_photos_order=6; 
+                   // передаем признак добавления нового заказа в javascript
+                    echo   "<script> 
+                                var add_new_order=1;
+                            </script>";
+                    ?>
+
+                    <div class="b-add-item">
+                        <a href="#" class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.)
+                            
+                            <div class="form-group">
+                                  <label for="image"></label>
+                                  <input type="file" name="AddOrderForm[imageFiles][]" id="image" accept="image/*" 
+                                  onChange="readmultifiles(this.files,<?= $max_photos_order?>)" multiple/>
+
+                                   <?//= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>  
+                            </div>
+                        </a>
+                    </div>
+                    <div class="image-preview image_large">                              
+                    </div>
                     
 
                     <!-- вывод flesh - сообщения об ошибках-->
@@ -181,7 +205,7 @@ $city = City::find() ->orderBy('name')->all();
                     </div>
 
                     <?php
-                    $script = <<< JS
+$script = <<< JS
                         // Предотвращение отправки формы по ENTER
                         $("input").keydown(function(event){
                           if(event.keyCode == 13){                            
@@ -291,10 +315,11 @@ $city = City::find() ->orderBy('name')->all();
                                     placeholder_text_single: 'Выберите город'
                                 });
                             });
-                    JS;
-                    //маркер конца строки, обязательно сразу, без пробелов и табуляции
-                    $this->registerJs($script, yii\web\View::POS_READY);
-                    ?>
+
+JS;
+//маркер конца строки, обязательно сразу, без пробелов и табуляции
+$this->registerJs($script, yii\web\View::POS_READY);
+?>
                         
                     
                     <?php ActiveForm::end(); ?>
