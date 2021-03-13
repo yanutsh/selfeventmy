@@ -165,7 +165,7 @@ $city = City::find() ->orderBy('name')->all();
 
                     <?= $form->field($model, 'wishes')->textArea(['placeholder'=>'Ваши пожелания к проведению мероприятия']) ?>
 
-                    <p>Добавить Фотографии</p>                     
+                    <!-- <p>Добавить Фотографии</p>                      -->
 
                    <?php  
                    $max_photos_order=6; 
@@ -176,16 +176,18 @@ $city = City::find() ->orderBy('name')->all();
                     ?>
 
                     <div class="b-add-item">
-                        <a href="#" class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.)
+                        <!-- <a href="#!" class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.) -->
+                        <div  class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.)    
                             
-                            <div class="form-group">
-                                  <label for="image"></label>
+                            <!-- <div class="form-group"> -->
+                                  <!-- <label for="image">Добавить Фотографии</label> -->
                                   <input type="file" name="AddOrderForm[imageFiles][]" id="image" accept="image/*" 
                                   onChange="readmultifiles(this.files,<?= $max_photos_order?>)" multiple/>
 
                                    <?//= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>  
-                            </div>
-                        </a>
+                            <!-- </div> -->
+                        <!-- </a> -->
+                        </div>
                     </div>
                     <div class="image-preview image_large">                              
                     </div>
@@ -206,115 +208,128 @@ $city = City::find() ->orderBy('name')->all();
 
                     <?php
 $script = <<< JS
-                        // Предотвращение отправки формы по ENTER
-                        $("input").keydown(function(event){
-                          if(event.keyCode == 13){                            
-                              $( document.activeElement ).next().focus(); 
-                              event.preventDefault();          
-                              return false;
-                           }
-                        });
+// Предотвращение отправки формы по ENTER
+$("input").keydown(function(event){
+  if(event.keyCode == 13){                            
+      $( document.activeElement ).next().focus(); 
+      event.preventDefault();          
+      return false;
+   }
+});
 
-                        // Изменение категории услуги
-                        var rememb_category_id;
-                            $('select').on('click',function(event){
-                                //console.dir(event.target);
-                                var el = $( event.target );
-                                //console.dir(el);
-                                //category_id = $('.field-addorderform-category_id select').val();
-                                category_id = el.val();
-                                //category_id = el.parent().val();
-                                //console.log("Кликнули category_id="+category_id);
-                                if (!(rememb_category_id == category_id) && !(category_id == "")) {
-                                    rememb_category_id=category_id;            
-                                    //console.log("Обновляем category_id="+category_id);
-                                    $('#w0').submit();
-                                }
-                            });
+// При обновлении обязательных полей-обновляем форму
+    $('#addorderform-who_need').on('change',function(event){
+        $('#w0').submit();
+    })
+    $('#addorderform-city_id').on('change',function(event){
+        $('#w0').submit();
+    })
+    $('#addorderform-budget_to').on('change',function(event){
+        $('#w0').submit();
+    })    
+// При обновлении обязательных полей-обновляем форму Конец
+    
+// Изменение категории услуги
+    var rememb_category_id;
+    $('select').on('click',function(event){
+        //console.dir(event.target);
+        var el = $( event.target );
+        //console.dir(el);
+        //category_id = $('.field-addorderform-category_id select').val();
+        category_id = el.val();
+        //category_id = el.parent().val();
+        //console.log("Кликнули category_id="+category_id);
+        if (!(rememb_category_id == category_id) && !(category_id == "")) {
+            rememb_category_id=category_id;            
+            //console.log("Обновляем category_id="+category_id);
+            $('#w0').submit();
+        }
+    });
+// Изменение категории услуги Конец
 
-                            // Команда добавить категорию
-                            $('.add_category').on('click',function(event){
-                                //alert("Добавить категорию");
-                                $('div.cont').each(function (index, element) {
-                                    
-                                    //console.log('Индекс элемента div: ' + index + '; display элемента = ' + $(element).css('display'));
-                                    if ($(element).css('display')=='none') {
-                                        $(element).css('display','block');
-                                        $(element).attr('class','active');
-                                        return false;
-                                    }
-                                });        
-                             });
+// Команда добавить категорию
+    $('.add_category').on('click',function(event){
+        //alert("Добавить категорию");
+        $('div.cont').each(function (index, element) {
+            
+            //console.log('Индекс элемента div: ' + index + '; display элемента = ' + $(element).css('display'));
+            if ($(element).css('display')=='none') {
+                $(element).css('display','block');
+                $(element).attr('class','active');
+                return false;
+            }
+        });        
+     });
 
-                             // Установка признака нажатия на кнопку Submit - Записать заказ
-                             $('#order_record').on('click', function(event){
-                                //alert("Записать заказ");
-                                console.log($('#start_record').val());
-                                $('#start_record').val('1');
-                                console.log($('#start_record').val());
-                            })
+// Установка признака нажатия на кнопку Submit - Записать заказ
+     $('#order_record').on('click', function(event){
+        //alert("Записать заказ");
+        console.log($('#start_record').val());
+        $('#start_record').val('1');
+        console.log($('#start_record').val());
+    })
 
-                            // Переключатель показа поля точного бюджета)
-                            $('#sum_exactly').click(function(event) { 
-                                //alert ("Показать");
-                                if ($("#sum_exactly").prop("checked")) 
-                                    $('#addorderform-order_budget').show(1000); 
-                                else { 
-                                    $('#addorderform-order_budget').hide(1000);  
-                                    $('#addorderform-order_budget').val(null);
-                                }
-                                           
-                            }) 
+// Переключатель показа поля точного бюджета)
+    $('#sum_exactly').click(function(event) { 
+        //alert ("Показать");
+        if ($("#sum_exactly").prop("checked")) 
+            $('#addorderform-order_budget').show(1000); 
+        else { 
+            $('#addorderform-order_budget').hide(1000);  
+            $('#addorderform-order_budget').val(null);
+        }
+                   
+    }) 
 
-                            // Присвоение знач. Бюджета От и До при установке точного значения
-                            $('#addorderform-order_budget').change(function(event) { 
-                                if ($('#addorderform-order_budget').val()>0) {
-                                    //alert ("Сброс от и до");
-                                    $('#addorderform-budget_from').val($('#addorderform-order_budget').val());
-                                    $('#addorderform-budget_to').val($('#addorderform-order_budget').val());
-                                }
+// Присвоение знач. Бюджета От и До при установке точного значения
+    $('#addorderform-order_budget').change(function(event) { 
+        if ($('#addorderform-order_budget').val()>0) {
+            //alert ("Сброс от и до");
+            $('#addorderform-budget_from').val($('#addorderform-order_budget').val());
+            $('#addorderform-budget_to').val($('#addorderform-order_budget').val());
+        }
 
-                            }); 
+    }); 
 
-                            // При изменении Бюджета От или До точное значениe cбрасывается
-                            $('#addorderform-budget_from').change(function(event) { 
-                                $('#addorderform-order_budget').val(null);
-                            }); 
+// При изменении Бюджета От или До точное значениe cбрасывается
+    $('#addorderform-budget_from').change(function(event) { 
+        $('#addorderform-order_budget').val(null);
+    }); 
 
-                            $('#addorderform-budget_to').change(function(event) { 
-                                $('#addorderform-order_budget').val(null);
-                            });   
+    $('#addorderform-budget_to').change(function(event) { 
+        $('#addorderform-order_budget').val(null);
+    });   
 
-                            
-                             // Переключатель показа поля предоплаты)
-                            $('#predoplata').click(function(event) { 
-                                //alert ("Показать");
-                                if ($("#predoplata").prop("checked")) 
-                                    $('#addorderform-prepayment').show(1000);   
-                                else { 
-                                    $('#addorderform-prepayment ').hide(1000);
-                                    $('#addorderform-prepayment ').val(null);
-                                }
-                                           
-                            })
+    
+// Переключатель показа поля предоплаты)
+    $('#predoplata').click(function(event) { 
+        //alert ("Показать");
+        if ($("#predoplata").prop("checked")) 
+            $('#addorderform-prepayment').show(1000);   
+        else { 
+            $('#addorderform-prepayment ').hide(1000);
+            $('#addorderform-prepayment ').val(null);
+        }
+                   
+    })
 
-                            // Действие по кнопке Продолжить
-                            $('#continue').click(function(event) {
-                                //alert("Продолжить");
-                                event.preventDefault();
-                                $('.step_one').css('display','none');
-                                $('.step_two').css('display','block');
-                                $('body,html').animate({scrollTop: 0}, 400);
-                            }) 
+// Действие по кнопке Продолжить
+    $('#continue').click(function(event) {
+        //alert("Продолжить");
+        event.preventDefault();
+        $('.step_one').css('display','none');
+        $('.step_two').css('display','block');
+        $('body,html').animate({scrollTop: 0}, 400);
+    }) 
 
-                            // для выпадающего списка Город
-                            $(document).ready(function(){
-                                $('.js-chosen').chosen({
-                                    width: '100%',
-                                    no_results_text: 'Совпадений не найдено',
-                                    placeholder_text_single: 'Выберите город'
-                                });
-                            });
+// для выпадающего списка Город
+    $(document).ready(function(){
+        $('.js-chosen').chosen({
+            width: '100%',
+            no_results_text: 'Совпадений не найдено',
+            placeholder_text_single: 'Выберите город'
+        });
+    });
 
 JS;
 //маркер конца строки, обязательно сразу, без пробелов и табуляции

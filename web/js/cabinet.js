@@ -94,6 +94,8 @@ $('.navbar-nav li a').click(function(event) {
     $(event.target).parent().addClass('active');
  })
 
+
+// Показываем выбранные фотки
 function readmultifiles(files, max_photos) {
   // превью нескольких картинок при вводе файлов    
   // photo_qwt - сколько фоток уже есть

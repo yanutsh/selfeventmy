@@ -266,7 +266,7 @@ body{
 
 /*************************** Вторая страница ****************************/
 	.step_two{
-		/*display: none;	*/
+		display: none;	
 	    width: 568px;
 	    margin: 0 auto;
 	}
@@ -354,6 +354,51 @@ body{
 	    width: 100%;
 	    height: auto;
 	    margin-top: 10px;
+	}
+
+	div.add-photo {
+	    display: block;
+	    position: relative;
+	    background: url(/web/uploads/images/ic-photo.png) no-repeat;
+	    background-position: right +25px bottom +10px;
+	    background-size: 28px 28px;
+	    border-radius: 7px;
+	    height: 50px; /*150px;*/
+	    /*padding: 25px 15px;*/
+	    padding-left: 15px;
+	    font-family: 'Montserrat', sans-serif;
+	    font-size: 14px;
+	    line-height: 50px;
+	    font-weight: 400;
+	    color: #2c2f39;
+	    background-color: #f2f2f2;
+	    border: 1px solid #f2f2f2;
+	    border-radius: 6px;
+	    -webkit-box-shadow: none !important;
+	    box-shadow: none !important;
+	}
+
+	.add-photo input[type="file"]#image {
+	    position: absolute;
+	    opacity: 0;
+	    width: 100%;
+	}
+
+	input#image {
+	    cursor: pointer;
+	}
+
+	input[type="file"] {
+    /* position: absolute; */
+	    top: 0;
+	    left: 0;
+	    height: 50px;  /*150px;*/
+	    width: 100%;
+	    /* opacity: 0; */
+	    color: #2c2f39;
+	    background-color: #f2f2f2!important;
+	    /* border: 1px solid #f2f2f2!important; */
+	    border-radius: 6px;
 	}
 
 
