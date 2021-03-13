@@ -401,6 +401,10 @@ body{
 	    border-radius: 6px;
 	}
 
+	.pagination{
+		padding-left: 20px!important;
+	}
+
 
 /*******************  Страница добавления заказа Конец ***********************/
 

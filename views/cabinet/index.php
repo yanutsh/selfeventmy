@@ -120,9 +120,9 @@ TemplateAsset::register($this);
 			    			
 			    			<div id="orders_list" class="orders_list">
 			    				<?php
-			    					//debug($orders_list); 
+			    					//debug($orders_list); 			    				
 
-			    					echo $this->render('@app/views/partials/orderslist.php', compact('orders_list'));
+			    					echo $this->render('@app/views/partials/orderslist.php', compact('orders_lists', 'pages'));
 			    				?>	
 			    			</div>
 
