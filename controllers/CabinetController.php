@@ -12,11 +12,8 @@ use app\models\WorkForm;
 use app\models\PaymentForm;
 use app\models\Order;
 use app\models\OrderCategory;
-use app\models\OrderPhoto;
 use app\models\AddOrderForm;
 use app\models\OrderStatus;
-use yii\web\UploadedFile;
-use yii\data\Pagination; 
 
 require_once('../libs/convert_date_ru_en.php');
 require_once('../libs/convert_date_en_ru.php');
@@ -71,22 +68,33 @@ class CabinetController extends Controller {
 
             //debug ($model); 
 
-            $orders_list = Order::find()
-                  ->filterWhere(['AND',                       
-                      ['between', 'added_time', $date_from, $date_to],
-                      ['>=', 'budget_from', $model->budget_from], 
-                      ['<=', 'budget_from', $model->budget_to],
-                      ['=','status_order_id', $model->order_status_id],
-                      ['=','city_id', $model->city_id],
-                      [$prep_compare, 'prepayment', $prep_value],
-                                ])
-                  ->andWhere(['id' => OrderCategory::find()->select('order_id')->andWhere(['category_id'=> $model->category_id])])                                  
-                  ->with('category','orderStatus','orderCity', 'orderCategory', 'workForm')
-                  ->orderBy('added_time DESC')
-                  ->asArray()->all();  //count();
+            $query = Order::find()
+              ->filterWhere(['AND',                       
+                  ['between', 'added_time', $date_from, $date_to],
+                  ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
+                  ['<=', 'budget_from', $model->budget_to],
+                  ['=','status_order_id', $model->order_status_id],
+                  ['=','city_id', $model->city_id],
+                  [$prep_compare, 'prepayment', $prep_value],
+                                      
+                            ])
+               ->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');
 
-              //debug ($orders_list);                  
-             
+            if ($model->category_id)  
+                $query->andWhere(['id' => OrderCategory::find()->select('order_id')->andWhere(['category_id'=>  $model->category_id])]);                 
+              //->andWhere(['id' => OrderCategory::find()->select('order_id')->andWhere(['category_id'=>  $model->category_id])])                                  
+              //->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');                                 
+                        
+            // debug( $pages);
+            $orders_list = $query->orderBy('added_time DESC')->all();       
+            $count=$query->count(); // найдено заказов Всего
+            //debug( $count);
+            $category = Category::find() ->orderBy('name')->all();
+            $city = City::find() ->orderBy('name')->all();
+            
+            $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
+            $payment_form= PaymentForm::find() ->orderBy('payment_name')->all();
+            $order_status = OrderStatus::find() ->orderBy('name')->all();
 
               // Фильтр по Формам работы
               // if (!$model->work_form_id == "") {  // если значение фильтра установлено
@@ -98,10 +106,8 @@ class CabinetController extends Controller {
               // }
                     
 
-              $count= count($orders_list);
-              //debug($count) ; 
-              // Готовим пагинацию
-              $pages = new Pagination(['totalCount' => $count]);           
+              $count= count($orders_list); 
+              //debug($count) ;            
 
               $this->layout='contentonly';
               return [
@@ -113,35 +119,17 @@ class CabinetController extends Controller {
            
         } //else { //  первый раз открываем страницу - показываем все заказы
           
-        // $orders_list = Order::find()
-        //           ->filterWhere(['AND',                     
-        //             ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
-        //                       ])
-        //         ->with('category','orderStatus','orderCity')
-        //         ->orderBy('added_time DESC')
-        //         ->asArray()->all();  //count();
-
-        // $count= count($orders_list);
-
-        // вариант с пагинацией на главной без фильтрации
-        $query = Order::find()
+        $orders_list = Order::find()
                   ->filterWhere(['AND',                     
                     ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
                               ])
-                ->with('category','orderStatus','orderCity');
-        
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize'=>4]); 
-        $orders_lists= $query->offset($pages->offset)
+                ->with('category','orderStatus','orderCity')
                 ->orderBy('added_time DESC')
-                ->limit($pages->limit)
-                ->all();
-           
-        // echo "число записей=".$countQuery->count();
-        // echo "<br>offset=".$pages->offset;
-        // echo "<br>limit=".$pages->limit;
+                ->asArray()->all();  //count();
 
-        //debug( $orders_lists);
+        $count= count($orders_list); 
+           
+        //debug( $orders_list);
         
         $category = Category::find() ->orderBy('name')->all();
         $city = City::find() ->orderBy('name')->all();
@@ -150,7 +138,7 @@ class CabinetController extends Controller {
         $order_status = OrderStatus::find() ->orderBy('name')->all();
         //debug( $order_status);
 
-        return $this->render('index', compact('orders_lists','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count', 'pages'));              
+        return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count'));              
     }
 
 
@@ -164,37 +152,23 @@ class CabinetController extends Controller {
           // Устанавливаем формат ответа JSON
           //debug('Еесть Ajax');
           //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-          
           $data = Yii::$app->request->post();
-          $model->load($data);          
+          $model->load($data);
                 
           if ($_POST['start_record']=="1") { // Есть Команда - записать заказ в БДем по 
             // Вытаскиваем из модели нужные данные и записываем по таблицам
               //debug($model);
             $order= new Order();
-            $new_order_id = $order->saveOrder($model);
-            if ($new_order_id) {
+            $new_id = $order->saveOrder($model);
+            if ($new_id) {
               //debug ("Заказ Записан в БД id=".$new_id);
 
               // записываем категории и подкатегории заказа
               $order_category = new OrderCategory();
-              $order_category->saveOrderCategory($model, $new_order_id); 
+              $order_category->saveOrderCategory($model, $new_id); 
 
-              // Загружаем на сервер фотки заказа и Записываем их в БД
-              $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-              //debug( $model->imageFiles);
-              //debug($model);
-              if (!empty( $model->imageFiles)){
-                if ($model->upload()) {
-                    //debug("Загрузили файлы"); // Записываем фотки в БД
-                  $order_photo = new OrderPhoto();
-                  $order_photo -> saveOrderPhoto($new_order_id); 
-                    
-                }//else debug("Не загрузили файлы");
-              }//else debug ("Нет файлов для загрузки");
-                  
               return $this->redirect(['/cabinet']);
-              
+              // записываем фотки
             }  
             else echo "заказ НЕ записан ";
 
@@ -224,16 +198,33 @@ class CabinetController extends Controller {
         
         //debug ($subcategory);
         return $this->render('addOrder', compact('model','category','subcategory','city')); 
+
+        
+
     }    
 
-    // public function actionGetsubcategory() 
-    // {       
-    //   $subcategory = Subcategory::find() ->where(['category_id' => $_GET['category_id']])->orderBy('name')->asArray()->all();
-        
-    //     return $this->render('addOrder', compact('subcategory')); 
-    //     //return json_encode($subcategory);
-    //   //}
-    // } 
+    public function actionGetsubcategory() 
+    {       
+      //$model = new AddOrderForm();
+
+       // Если пришёл AJAX запрос
+      //if (Yii::$app->request->isPjax) { 
+        // Устанавливаем формат ответа JSON
+        //debug('Еесть Pjax');
+        //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //$data = Yii::$app->request->post();
+        //$model->load($data);
+
+        $subcategory = Subcategory::find() ->where(['category_id' => $_GET['category_id']])->orderBy('name')->asArray()->all();
+
+        // print_r($_GET);
+        // print_r($subcategory);
+        // debug(json_encode($subcategory));
+        // $category = Category::find() ->orderBy('name')->asArray()->all();
+        return $this->render('addOrder', compact('subcategory')); 
+        //return json_encode($subcategory);
+      //}
+    } 
 
 }
 

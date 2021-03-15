@@ -8,6 +8,7 @@ use app\assets\TemplateAsset;
 use app\assets\CabinetAsset;
 use kartik\date\DatePicker;
 use app\components\page\PageAttributeWidget as PAW;
+use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
@@ -26,7 +27,7 @@ TemplateAsset::register($this);
 	    	<div class="row">
 
 				<div class="wrapper__lk">
-			    	
+			    
 			    	<div class="col-md-4">
 			    		<div class="lk__left">
 			    			<div class="filtr">
@@ -37,12 +38,12 @@ TemplateAsset::register($this);
 				    				<div class="title">Фильтр</div>
 				    				<a href="/cabinet" id="reset" alt="">Сбросить</a>
 			    				</div>
-
+			    				<?php  //Pjax::begin(); ?>	
 			    				<?php $form = ActiveForm::begin([
 			    					'id' => 'filter-form',
-				                    //'options' => [
-				                    //   'data-pjax' => true,
-				                    //   ],
+				                    'options' => [
+				                    	'data-pjax' => true,
+				                     ],
 				                    'action' => '/cabinet/index',
 								    'method'=>'post',
 								    'enableAjaxValidation' => false,
@@ -105,6 +106,7 @@ TemplateAsset::register($this);
 			                    	<div class='register__user active__button'>Показано заказов - <span><?= $count ?></span> шт.</div>
                     			</div>
 			                    <?php ActiveForm::end(); ?>
+			                    <?php //Pjax::end(); ?>
 			                    <!-- Ответ сервера будем выводить сюда -->
 								<!-- <p id="output"></p> -->
 
@@ -119,15 +121,14 @@ TemplateAsset::register($this);
 			    			<!-- <p id='orders_list_header'></p> -->
 			    			
 			    			<div id="orders_list" class="orders_list">
-			    				<?php
-			    					//debug($orders_list); 			    				
-
-			    					echo $this->render('@app/views/partials/orderslist.php', compact('orders_lists', 'pages'));
-			    				?>	
+			    				<?php  	
+									echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages'));
+								?>	
 			    			</div>
-
+			    			
 			    		<div>			    			
-			    	</div>		
+			    	</div>	
+			   		
 		    	</div>
 
 	    	</div>

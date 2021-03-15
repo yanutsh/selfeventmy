@@ -9,25 +9,26 @@ use app\assets\CabinetAsset;
 use kartik\date\DatePicker;
 use app\components\page\PageAttributeWidget as PAW;
 use yii\widgets\LinkPager;
+use yii\widgets\Pjax;
+
 
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
 require_once('../libs/time_ago.php');
 ?>
-<?php 
-//debug($orders_lists);
-foreach ($orders_lists as $ol) 
-{    
-   // foreach( $orders_list as $ol)
-   // { ?>
+<?php //Pjax::begin(); ?>
+
+<?php
+foreach ($orders_list as $ol) 
+{ ?>
         <div class="order_item">
             <div class="order_status <?php
                 if ($ol['status_order_id']==2) echo 'color_green';
-                elseif ($ol['status_order_id']==4) echo 'color_red';
-                                     ?>
-            "><?= $ol['orderStatus']['name'] ?></div>
+                elseif ($ol['status_order_id']==4) echo 'color_red';?>">
+                <?= $ol['orderStatus']['name'] ?>
+            </div>
             <div class="order_category">
-                <?php 
+                 <?php 
                 $category_names = "";
                 foreach ($ol['category'] as $cat){
                     if ( $category_names=="" ) $category_names = $cat['name']; 
@@ -41,19 +42,20 @@ foreach ($orders_lists as $ol)
             <div class="order_budget"><?php echo $ol['budget_to'] ?> <span class="rubl">₽</span>
             </div>
             <div class="order_down">
-                <div class="order_city"><?= $ol['orderCity']['name'] ?></div>
-                <div class="order_added"><?= showDate(strtotime($ol['added_time']))?></div>
+                 <div class="order_city"><?= $ol['orderCity']['name'] ?></div>
+                 <div class="order_added"><?= showDate(strtotime($ol['added_time']))?></div>
             </div>
         </div>      
-    <?php
-   // };
+     <?php
+    
 }
 ?>
 <div class="paginat"> 
-    <?php     
-    // display pagination
-    echo LinkPager::widget([
-        'pagination' => $pages,
-    ]);
+    <?php 
+    //debug($model); 
+    //echo LinkPager::widget([
+    //     'pagination' => $pages, 
+    //]);    
     ?>    
-</div>    
+</div> 
+<?php //Pjax::end(); ?>   

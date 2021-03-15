@@ -52,15 +52,15 @@ $(document).ready(function() {
     	//alert ('Change');
         //event.preventDefault();
         // Получаем объект формы
-        var $testform = $(this);
+        var $form = $(this);
         // отправляем данные на сервер
         $.ajax({
             // Метод отправки данных (тип запроса)
-            type : $testform.attr('method'),
+            type : $form.attr('method'),
             // URL для отправки запроса
-            url : $testform.attr('action'),
+            url : $form.attr('action'),
             // Данные формы
-            data : $testform.serializeArray()
+            data : $form.serializeArray()
         }).done(function(data) {
         		if (data.error == null) {
                     // Если ответ сервера успешно получен
@@ -74,9 +74,9 @@ $(document).ready(function() {
                     console.log('data='+data.error);
                     //$("#output").text(data.error)
                 }
-        }).fail(function() {
+        }).fail(function(data) {
             // Если произошла ошибка при отправке запроса
-            console.log('error3='+data.error);
+            console.log('error3='+data);
             //$("#output").text("error3");
         })
         // Запрещаем прямую отправку данных из формы
