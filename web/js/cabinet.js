@@ -81,10 +81,36 @@ $(document).ready(function() {
         })
         // Запрещаем прямую отправку данных из формы
         return false;
-    })   
+    }) 
+
+    // для выпадающего списка Город
+    $(document).ready(function(){
+        $('.js-chosen').chosen({
+            width: '100%',
+            no_results_text: 'Совпадений не найдено',
+            placeholder_text_single: 'Выберите город',
+            placeholder_text_multiple: 'Любой город',
+        });
+    }); 
+
+    // имитация клика на поле город при клике по gliphicon
+    $('.glyphicon.glyphicon-chevron-down').on('click', function(){        
+        $('.chosen-choices').trigger('click');
+    }); 
+
+
+    // Slick слайдер - Указываем что будем выводить по 3 слайда на экран
+    $('.slider').slick({
+      //dots:true,
+      centerMode: true,
+      centerPadding: '10px',  
+      infinite: true,
+      slidesToShow: 3,
+      slidesToScroll: 1
+    });
    
 })
-
+ 
 // управление видом активного меню - остальные сброс в неактивные
 $('.navbar-nav li a').click(function(event) {
 
@@ -95,7 +121,7 @@ $('.navbar-nav li a').click(function(event) {
  })
 
 
-// Показываем выбранные фотки
+// Показываем загружаемые фотки
 function readmultifiles(files, max_photos) {
   // превью нескольких картинок при вводе файлов    
   // photo_qwt - сколько фоток уже есть

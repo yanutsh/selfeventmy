@@ -125,7 +125,7 @@ $city = City::find() ->orderBy('name')->all();
                                 (ArrayHelper::map($subcategory[2], 'id', 'name'),['prompt'=>'Все подкатегории','id'=>'subcategory_2', 'value'=> $model->subcategory_id[2]]); ?>
                     </div>            
 
-                    <div type="button" class="add_category">Добавить категорию</div>                    
+                    <div type="button" class="add_category">Ищу несколько исполнителей</div>                    
                     
                                        
                     

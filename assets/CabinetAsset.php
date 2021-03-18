@@ -24,12 +24,16 @@ class CabinetAsset extends AssetBundle {
     public $css = [
         'css/bootstrap.min.css',
         'css/cabinet.css',
-        'css/chosen.min.css',        
+        'css/chosen.min.css', 
+        'css/slick.css', 
+        'css/slick-theme.css',
+
     ];
     public $js = [
         'js/bootstrap.min.js',
         'js/cabinet.js',
-        'js/chosen.jquery.js',        
+        'js/chosen.jquery.js',
+        'js/slick.min.js',
     ];
     public $depends = [
         'yii\web\JqueryAsset',

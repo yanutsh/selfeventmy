@@ -92,7 +92,7 @@ $avatar = $identity['avatar'];
                                     <!-- Collect the nav links, forms, and other content for toggling -->
                                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                         <ul class="nav navbar-nav">
-                                            <li class="active"><a href="#">Заказы <span class="sr-only">(current)</span></a></li>
+                                            <li class="active"><a href="/cabinet/index">Заказы <span class="sr-only">(current)</span></a></li>
                                             <li><a href="#">Чат</a></li>
                                             <li><a href="#">Исполнители</a></li>
                                             <li class="dropdown">
@@ -100,7 +100,7 @@ $avatar = $identity['avatar'];
                                               <ul class="dropdown-menu">
                                                 <li><a href="#">Баланс: 180 руб.</a></li>
                                                 <li><a href="#">Помощь</a></li>
-                                                <li><a href="#">Настройки</a></li>
+                                                <li><a href="/cabinet/user-tuning">Настройки</a></li>
                                                 <li><a href="#">Абонементы</a></li>     
                                               </ul>
                                             </li>
@@ -119,13 +119,13 @@ $avatar = $identity['avatar'];
                 </div>   
             </div>            
         </header>
-        <?php 
+        <!-- <?php 
             $model=$this->params['model'] ;
             $category=$this->params['category'] ;
             $work_form=$this->params['work_form'];
             $payment_form=$this->params['payment_form'];
             $count=$this->params['count'];
-        ?>
+        ?> -->
           
         <?= $content ?>
                                 

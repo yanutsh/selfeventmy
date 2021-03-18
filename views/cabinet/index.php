@@ -18,7 +18,8 @@ TemplateAsset::register($this);
 	<?php 
 		$identity = Yii::$app->user->identity;
 		//debug ($identity['avatar']);
-		$avatar = $identity['avatar'];		
+		$avatar = $identity['avatar'];
+		//debug($identity['isexec']);		
 	?>
 	
 	<div class="container">
@@ -31,7 +32,11 @@ TemplateAsset::register($this);
 			    	<div class="col-md-4">
 			    		<div class="lk__left">
 			    			<div class="filtr">
-			    				<a type='button' href="<?php echo Url::to(['cabinet/add-order', 'isexec' => '1']);?>" class='register active'>Создать заказ</a>
+			    				<?php
+			    				// показываем кнопку только Заказчикам  
+			    				if ($identity['isexec'] == 0) { ?>
+			    					<a type='button' href="<?php echo Url::to(['cabinet/add-order', 'isexec' => '1']);?>" class='register active'>Создать заказ</a>
+			    				<?php } ?>
 
 			    				<?//= debug($category); ?>
 			    				<div class="filtr__header">
@@ -51,9 +56,17 @@ TemplateAsset::register($this);
 
 				                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
 
-				                <?= $form->field($model, 'city_id')->dropDownList (ArrayHelper::map($city, 'id', 'name'),['prompt'=>'Все города']) ?>
-				                
-				                <div class="input__block">
+				                <div class="input__block field-orderfiltrform-city_id">
+				                	<label class='control-label'>Город (города)</label>
+					                <select name="OrderFiltrForm[city_id][]" id="orderfiltrform-city_id" class="js-chosen" multiple="multiple">
+					                	<?php foreach($city as $c) {?>
+					                		<option value=<?= $c['id']?>><?= $c['name']?> </option>
+					                	<?php } ?>				                	
+					                </select>
+					                <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				                </div>
+
+				                <div class="form-group">
 					                <label class='control-label'>Дата от</label>
 					                <?php echo DatePicker::widget([                		
 									    'name' => 'OrderFiltrForm[date_from]',
@@ -117,10 +130,25 @@ TemplateAsset::register($this);
 			    	<div class="col-md-8">
 			    		<div class="lk__main">
 
-			    			<p>Список отфильтрованных заказов:</p>
+			    			  
 			    			<!-- <p id='orders_list_header'></p> -->
 			    			
 			    			<div id="orders_list" class="orders_list">
+
+			    				<div class="input-group order-search">
+			    				  <span class="glyphicon glyphicon-search" aria-hidden="true"></span>	
+								  <span class="input-group-addon search" id="basic-addon1"></span>
+								  <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+								</div>
+
+			    				<!-- <div class="input__block">
+				                    <div class="form-group">
+										
+										<input type="text" id="order-search" class="form-control" name="order-search" aria-invalid="false">
+
+										<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				                    </div>
+			                	</div>   -->
 			    				<?php  	
 									echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages'));
 								?>	

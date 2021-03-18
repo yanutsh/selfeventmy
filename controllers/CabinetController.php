@@ -17,6 +17,8 @@ use app\models\OrderStatus;
 
 require_once('../libs/convert_date_ru_en.php');
 require_once('../libs/convert_date_en_ru.php');
+require_once('../libs/convert_datetime_en_ru.php');
+require_once('../libs/rdate.php');
 
 // Контроллер ЗАКАЗЧИКА 
 class CabinetController extends Controller {  
@@ -74,7 +76,7 @@ class CabinetController extends Controller {
                   ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
                   ['<=', 'budget_from', $model->budget_to],
                   ['=','status_order_id', $model->order_status_id],
-                  ['=','city_id', $model->city_id],
+                  ['in','city_id', $model->city_id],
                   [$prep_compare, 'prepayment', $prep_value],
                                       
                             ])
@@ -197,34 +199,35 @@ class CabinetController extends Controller {
         $subcategory[2] = array();
         
         //debug ($subcategory);
-        return $this->render('addOrder', compact('model','category','subcategory','city')); 
-
-        
-
+        return $this->render('addOrder', compact('model','category','subcategory','city'));  
     }    
 
-    public function actionGetsubcategory() 
-    {       
-      //$model = new AddOrderForm();
+    public function actionOrderCard() {
 
-       // Если пришёл AJAX запрос
-      //if (Yii::$app->request->isPjax) { 
-        // Устанавливаем формат ответа JSON
-        //debug('Еесть Pjax');
-        //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        //$data = Yii::$app->request->post();
-        //$model->load($data);
+      // получить заказ из БД
+      $order = Order::find()
+              ->Where(['id'=> $_GET['id'] ])
+              ->with('category','orderStatus','orderCity', 'orderCategory', 'orderPhotos', 'workForm', 'user')
+              ->asArray()
+              ->one();
 
-        $subcategory = Subcategory::find() ->where(['category_id' => $_GET['category_id']])->orderBy('name')->asArray()->all();
+      //debug($order);
+      // вывести карточку заказа
+      return $this->render('orderCard', ['order' => $order]); 
+    }
 
-        // print_r($_GET);
-        // print_r($subcategory);
-        // debug(json_encode($subcategory));
-        // $category = Category::find() ->orderBy('name')->asArray()->all();
-        return $this->render('addOrder', compact('subcategory')); 
-        //return json_encode($subcategory);
-      //}
-    } 
+    // Настройка данных Текущего Юзера *******************************************************
+    public function actionUserTuning() {
+
+      // получить текущего Юзера
+      $identity = Yii::$app->user->identity;
+      $wfn = WorkForm::find()->select('work_form_name')->where(['id'=>$identity['work_form_id']])->asArray()->one();
+      $work_form_name=$wfn['work_form_name'];
+      //debug ($identity['avatar']);      
+      
+      // вывести страницу настроек
+      return $this->render('userTuning', compact('identity', 'work_form_name')); 
+    }
 
 }
 

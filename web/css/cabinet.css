@@ -69,8 +69,16 @@ body{
 	.lk__main{
 		background: #fff;
 		border-radius: 10px;
-		padding: 0 0 10px 0;
+		/*padding: 0 0 10px 0;*/
 		margin-bottom: 20px;	
+	}
+
+	.lk__left{
+		padding: 0 0 10px 0;
+	}
+
+	.lk__main{
+		padding: 35px 0 10px 0;
 	}
 
 	.filtr__header{
@@ -83,6 +91,10 @@ body{
 		right: 0;
 		/*margin-left: 50px;*/
 	} 
+
+	.glyphicon.glyphicon-calendar.kv-dp-icon{
+		left: 8px;
+	}
 
 	.filtr{
 		width: 85%;
@@ -115,23 +127,80 @@ body{
 		font-weight: bold;
 	}
 
-	
+	#orderfiltrform-city_id{
+		height: 0;
+	}
+
+	.chosen-container.chosen-container-multi{
+		display: block;
+	    width: 100%;
+	    /*height: 34px;*/
+	    /*padding: 6px 12px;*/
+	    font-size: 14px;
+	    line-height: 1.42857143;
+	    color: #555;
+	    background-color: #fff;
+	    background-image: none;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+	    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+	    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+	    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	}
+
+	.field-orderfiltrform-city_id .chosen-container-multi .chosen-choices{
+		border: 0;
+		background-color: transparent;
+		background-image: none;
+	}
+
+	.chosen-container-multi .chosen-choices li.search-field {
+		padding-left: 9px!important;		
+	}
+
+	.chosen-container-multi .chosen-choices li.search-field input[type=text].default{
+		font-family: 'Roboto Condensed'!important;
+		font-size: 14px;
+		font-weight: 400;
+		color: rgb(85,85,85)!important;
+		height: 30px;
+	}
+
 	.input__block{
 		position: relative;
 		margin-bottom: 15px;
 	}
-	.input__block .glyphicon-ruble {
+
+	.input__block .glyphicon-ruble,
+	.input__block .glyphicon-chevron-down {
 		position: absolute;
 		top: 40px;
-	    right: 20px;    
+	      
 	    font-size: 12px; 
-	} 
+	}
+
+	.input__block .glyphicon-chevron-down{
+		font-size: 15px;
+    	opacity: 0.7; 
+    	right: 5px; 
+    }
+
+    .input__block .glyphicon-ruble{
+    	right: 10px;
+    }	
 
 	.active__button{
 		height: 45px;
 	    line-height: 45px;
 	    text-align: center;
 	    margin: 0 auto;   
+	}
+
+	#orders_list a{
+		text-decoration: none;
+		color: #000;
 	}
 	    
 /*******************  Левая панель  Конец ******* *********************/ 
@@ -141,6 +210,30 @@ body{
 		padding: 30px;
 		margin: 0;
 	}
+
+	.input-group.order-search {
+		position: relative;
+		width: 644px;
+		margin: 0 auto;
+	}
+
+	.glyphicon.glyphicon-search {
+		position: absolute;
+		left: 12px;
+    	top: 12px;
+    }
+
+    span.input-group-addon.search {
+	    padding: 6px 18px;
+	    font-size: 14px;
+	    font-weight: 400;
+	    line-height: 1;
+	    color: #555;
+	    text-align: center;
+	    background-color: #eee!important;
+	    border: 1px solid #ccc!important;
+	    border-radius: 4px;
+	}	
 
 	.order_item{
 		max-width: 644px;
@@ -201,6 +294,10 @@ body{
 	.step_one{
 		width: 568px;
 		margin: 0 auto;
+	}
+
+	.chosen-container-single .chosen-single div b{
+		background: url('/web/uploads/images/down_icon12x12.png') no-repeat 0 10px!important;
 	}
 
 	.field-addorderform-who_need,
@@ -406,7 +503,293 @@ body{
 	}
 
 
-/*******************  Страница добавления заказа Конец ***********************/
+/*******************  Страница добавления заказа Конец ******************/
+
+/*******************  Карточка заказа  **********************************/
+	.wrapper__addorder__card{
+		padding: 0;
+		border-radius: 0;
+		background: transparent;
+	}
+
+	.b_header{
+		position: relative;
+		height: 130px;
+		background-color: #AE4A84;
+		border-radius: 10px;
+		color: #fff;
+		margin-bottom: 32px;
+	}
+
+	.b_header div{
+		display: inline-block;	
+	}
+
+	.b_right{
+		position: absolute;
+		right: 10px;
+	}
+
+	.b_avatar{
+		width: 92px;
+		height: 92px;
+		border-radius: 50%;
+		background-color: #424242;
+		border: 0.5px solid #fff; 
+		margin: 19px 24px; 
+	}
+
+	.b_avatar img{
+		width: 89px;
+		height: 90px;
+		border-radius: 50%;
+	}
+
+	.b_text{
+		position: relative;
+		top: 20px;
+	}
+
+	.b_text span.fio{
+		font-size: 18px;
+		line-height: 18px;
+	}
+
+	.b_text p.check{
+		font-size: 14px;
+		line-height: 14px;
+		color: #4cd964;
+		margin-top: 12px;
+		margin-bottom: 0;
+	}
+
+	.b_right {
+	    position: absolute;
+	    right: 24px;
+	    top: 30px;   
+	}
+
+	.b_right .order_num{
+		font-size: 18px;
+		line-height: 18px;
+		font-weight: bold;
+		text-align: right;
+	}
+
+	.b_right .letter{
+		line-height: 38px;
+	    padding-left: 26px;
+		width: 139px;
+		height: 40px;
+		background-color: #fff;
+		border-radius: 10px;
+		margin-top: 10px;
+	}
+
+	.b_right .letter img{
+		margin-right: 15px;
+	}
+
+	.b_right .letter span{
+		color: #AE4A84;
+	}
+
+	.letter div{
+		position: relative;
+	    top: 1px;
+	}
+
+	/**************************** Содержание заказа ***************************/
+	.order_content{
+		background-color: #fff;
+		border-radius: 10px;
+		padding: 0 35px 20px;
+	}
+
+	.order_content__title{
+		font-size: 28px;
+		font-weight: 700;
+		line-height: 32.81px;
+		color: #000;
+		text-align: center;
+		padding-top: 32px;
+    	padding-bottom: 8px;
+	}
+
+	.order_content__budget{
+		font-size: 22px;
+		font-weight: bold;
+		line-height: 26px;
+		text-align: center;
+		padding-bottom: 16px;
+	}
+
+	.order_content__declare{
+		font-size: 20px;
+		font-weight: bold;
+		line-height: 18px;
+		margin-bottom: 12px;
+	}
+
+	.order_content p{
+		margin-bottom: 12px;
+		color: #424242;
+	}
+
+	.slider img {
+		max-width: 200px;
+	}
+
+	.slick-prev:before, .slick-next:before {
+		color: #000!important;
+	}
+
+	.order_content__subtitle {
+		margin-top: 16px;
+		margin-bottom: 8px;	
+		font-size: 18px;
+		line-height: 18px;
+		font-weight: bold;	
+	}
+
+	.reiting {
+		margin-top: 16px;
+		margin-bottom: 8px;	
+	}	
+
+	.reiting div.blank { 
+		position: relative;
+	    top: 2px;
+	    left: 20px;
+	    display: inline-block;
+	    font-size: 14px;
+		line-height: 14px;
+		font-weight: normal;
+	}
+
+	.order_content .text{
+		font-size: 14px;
+		line-height: 18px;
+		font-weight: normal;
+	}
+
+	.order_content span.cancel{
+		text-decoration: line-through;	
+	}
+
+	.order_content span.blank{
+		margin-left: 20px;
+	}
+
+	.abonement.active{
+		width: 668px;
+		height: 65px;
+		margin: 24px auto;
+		border: 1px solid #AE4A84;
+		border-radius: 2px;
+		box-shadow: 0 0 1px rgba(0,0,0,0.15)
+	}
+
+	.abonement__text.active{
+		display: inline-block;
+		font-weight: bold;
+		color: #AE4A84;
+	}
+
+	.abonement > div{
+		line-height: 65px;
+		text-align: center;
+	}
+
+	.abonement img{
+		padding-left: 20px;
+	}
+
+	.abonement__text{
+		display: none;
+	}
+
+	.cry {
+		width: 200px;
+		margin: 0 auto;
+	}
+
+	.order_buttons {
+		text-align: center;
+		margin-top: 42px;
+	}
+
+	.order_buttons  a {
+		display: inline-block;
+		width: 244px;
+	    height: 48px;
+	    line-height: 48px;
+	   	font-size: 18px;
+	   	font-weight: bold;
+	}
+
+	.order_buttons a.register {
+		/*width: 184px;
+	    height: 45px;*/
+	    background-color: #f3f3f3;
+	    border-radius: 10px;
+	    color: #AE4A84;
+	    box-shadow: 0 3px 2px rgba(0,0,0,0.12);
+	}
+
+	.order_buttons a.register.active{
+		background-color: #AE4A84;
+		color: #fff;
+	}  
+
+	.order_buttons .register:last-child  {
+		margin-left: 49px;
+	}
+
+
+/*******************  Карточка заказа  Конец **********************************/
+
+/*******************  Настройки Юзера  ****************************************/
+	.b_header.b_header__tuning{
+		text-align: center;
+		padding-top: 10px;
+	}
+
+	.b_avatar.b_avatar__tuning{
+		width: 81px;
+		height: 81px;
+		margin: 0 auto;
+	}
+
+	.b_avatar__tuning img {
+		width: 80px;
+		height: 80px;			
+	}
+
+	.b_text.b_text__tuning{
+		display:  block;
+		margin: -8px auto;
+		font-weight: bold;
+	}
+
+	.order_content__tuning{
+		padding-top: 10px;
+	}
+
+	.order_content__subtitle {
+		position: relative;
+	}
+
+	.order_content__subtitle a{
+		position: absolute;
+		top: 26px;
+		right: 0;
+		color: #AE4A84;
+	}
+
+
+/*******************  Настройки Юзера  Конец **********************************/
+
 
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{
