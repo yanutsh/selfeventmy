@@ -65,6 +65,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Order::className(), ['user_id' => 'id']);
     }
 
+    public function getCategory()
+    {
+         return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('yii_exec_category', ['user_id' => 'id']);
+    }
+
     /** Связь с таблицей WorkForm
      * Gets query for [[WorkForm]].
      *

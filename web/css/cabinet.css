@@ -790,6 +790,75 @@ body{
 
 /*******************  Настройки Юзера  Конец **********************************/
 
+/*******************  Лента исполнителей ExecList *****************************/
+.top100{	
+	text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 24px 0;
+    color: #AE4A84
+}
+
+.order_item.execlist{
+	position: relative;
+	padding: 10px;
+}
+
+.order_item.execlist .b_avatar{
+	vertical-align: top;
+	margin: 0;
+}
+
+.order_item.execlist div {
+	display: inline-block;
+	/*position: relative;*/
+}
+
+.execlist p {
+	padding: 0;
+}
+
+.execlist .b_text{
+	top: 15px;
+	left: 10px;	
+}
+
+.execlist .b_text .fio {
+	font-size: 14px;
+	font-weight: normal;
+}	
+
+.execlist p.title{
+	font-size: 18px;
+	font-weight: bold;
+}	
+
+p.reiting_num {
+	font-size: 30px;
+	font-weight: bold;
+	color: #AE4A84;
+	text-align: center;
+}
+
+.execlist p.check{
+	margin-top: 6px;
+}
+
+.exec_details p {
+	font-size: 12px;
+	line-height: 14px;
+	color: #424242;
+	margin: 12px 0;
+}
+
+.execlist .price {
+	float: right;
+	font-size: 18px;
+	font-weight: bold;
+}
+/*******************  Лента исполнителей ExecList  Конец  ***********************/
+
+
 
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{

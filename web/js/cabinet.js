@@ -46,7 +46,7 @@ $(document).ready(function() {
         return false;
     })    
     	
-    // При изменении любого эл-та фильтра - отправляем данные фильтра 
+    // При изменении любого эл-та фильтра ЗАКАЗОВ- отправляем данные фильтра 
     // на просчет числа заказов
     $('#filter-form').change(function(event) {    
     	//alert ('Change');
@@ -68,6 +68,43 @@ $(document).ready(function() {
                     $('#filter-form .register__user span').text(data.data);
                     //$("#output").text(data.data);
                     $("#orders_list").html(data.orders);
+
+                } else {
+                    // Если при обработке данных на сервере произошла ошибка
+                    console.log('data='+data.error);
+                    //$("#output").text(data.error)
+                }
+        }).fail(function(data) {
+            // Если произошла ошибка при отправке запроса
+            console.log('error3='+data);
+            //$("#output").text("error3");
+        })
+        // Запрещаем прямую отправку данных из формы
+        return false;
+    }) 
+
+    // При изменении любого эл-та фильтра ИСПОЛНИТЕЛЕЙ- отправляем данные фильтра 
+    // на просчет числа заказов
+    $('#filter-form-exec').change(function(event) {    
+      //alert ('Change');
+        //event.preventDefault();
+        // Получаем объект формы
+        var $form = $(this);
+        // отправляем данные на сервер
+        $.ajax({
+            // Метод отправки данных (тип запроса)
+            type : $form.attr('method'),
+            // URL для отправки запроса
+            url : $form.attr('action'),
+            // Данные формы
+            data : $form.serializeArray()
+        }).done(function(data) {
+            if (data.error == null) {
+                    // Если ответ сервера успешно получен
+                    //console.dir(data);
+                    $('#filter-form-exec .register__user span').text(data.data);
+                    //$("#output").text(data.data);
+                    $("#exec_list").html(data.orders);
 
                 } else {
                     // Если при обработке данных на сервере произошла ошибка

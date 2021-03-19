@@ -94,7 +94,7 @@ $avatar = $identity['avatar'];
                                         <ul class="nav navbar-nav">
                                             <li class="active"><a href="/cabinet/index">Заказы <span class="sr-only">(current)</span></a></li>
                                             <li><a href="#">Чат</a></li>
-                                            <li><a href="#">Исполнители</a></li>
+                                            <li><a href="/cabinet/executive-list">Исполнители</a></li>
                                             <li class="dropdown">
                                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= $username ?> <span class="caret"></span></a>
                                               <ul class="dropdown-menu">
