@@ -22,7 +22,7 @@ require_once('../libs/time_ago.php');
 <?php
 foreach ($exec_list as $el) 
 { ?>
-    <a href="/cabinet/order-card?id=<?= $el['id'] ?>">
+    <a href="/cabinet/exec-card?id=<?= $el['id'] ?>">
         <!-- <div class="order_item"> -->
         <div class="order_item execlist">
             <!-- <div class="b_header"> -->

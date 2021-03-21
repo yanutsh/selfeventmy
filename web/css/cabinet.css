@@ -791,74 +791,252 @@ body{
 /*******************  Настройки Юзера  Конец **********************************/
 
 /*******************  Лента исполнителей ExecList *****************************/
-.top100{	
-	text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin: 24px 0;
-    color: #AE4A84
-}
+	.top100{	
+		text-align: center;
+	    font-size: 24px;
+	    font-weight: bold;
+	    margin: 24px 0;
+	    color: #AE4A84
+	}
 
-.order_item.execlist{
-	position: relative;
-	padding: 10px;
-}
+	.order_item.execlist{
+		position: relative;
+		padding: 10px;
+	}
 
-.order_item.execlist .b_avatar{
-	vertical-align: top;
-	margin: 0;
-}
+	.order_item.execlist .b_avatar{
+		vertical-align: top;
+		margin: 0;
+	}
 
-.order_item.execlist div {
-	display: inline-block;
-	/*position: relative;*/
-}
+	.order_item.execlist div {
+		display: inline-block;
+		/*position: relative;*/
+	}
 
-.execlist p {
-	padding: 0;
-}
+	.execlist p {
+		padding: 0;
+	}
 
-.execlist .b_text{
-	top: 15px;
-	left: 10px;	
-}
+	.execlist .b_text{
+		top: 15px;
+		left: 10px;	
+	}
 
-.execlist .b_text .fio {
-	font-size: 14px;
-	font-weight: normal;
-}	
+	.execlist .b_text .fio {
+		font-size: 14px;
+		font-weight: normal;
+	}	
 
-.execlist p.title{
-	font-size: 18px;
-	font-weight: bold;
-}	
+	.execlist p.title{
+		font-size: 18px;
+		font-weight: bold;
+	}	
 
-p.reiting_num {
-	font-size: 30px;
-	font-weight: bold;
-	color: #AE4A84;
-	text-align: center;
-}
+	p.reiting_num {
+		font-size: 30px;
+		font-weight: bold;
+		color: #AE4A84;
+		text-align: center;
+	}
 
-.execlist p.check{
-	margin-top: 6px;
-}
+	.execlist p.check{
+		margin-top: 6px;
+	}
 
-.exec_details p {
-	font-size: 12px;
-	line-height: 14px;
-	color: #424242;
-	margin: 12px 0;
-}
+	.exec_details p {
+		font-size: 12px;
+		line-height: 14px;
+		color: #424242;
+		margin: 12px 0;
+	}
 
-.execlist .price {
-	float: right;
-	font-size: 18px;
-	font-weight: bold;
-}
-/*******************  Лента исполнителей ExecList  Конец  ***********************/
+	.execlist .price {
+		float: right;
+		font-size: 18px;
+		font-weight: bold;
+	}
+/*******************  Лента исполнителей ExecList  Конец  ********************/
 
+/*******************   Карточка исполнителя **********************************/
+	.filtr.filtr_exec{
+		padding-top: 24px;
+	}
 
+	.b_avatar.b_avatar__exec{
+		width: 166px;
+		height: 166px;
+		margin: 0 auto;
+	}
+
+	.b_avatar.b_avatar__exec img{
+		width: 165px;
+		height: 165px;
+	}
+
+	.b_text.b_text__exec{
+		margin: 12px auto;
+		position: static;
+		text-align: center;
+		font-size: 18px;
+		font-weight: bold;
+		color: #AE4A84
+
+	}
+
+	.statistic{
+		display: flex;
+		justify-content: space-between;
+		margin-top: 32px;
+	}
+
+	.statistic .b_stat p{
+		margin-bottom: 6px;		
+	}
+
+	.st-item .b_stat .reiting_num{
+		font-size: 30px;
+		font-weight: bold;
+		color: #000;
+	}
+
+	.b_stat  p.reiting_num.first {
+		color: #AE4A84;
+	}
+
+	.b_stat .reiting_text{
+		font-size: 14px;
+		font-weight: normal;
+		color: #828282;
+		text-align: center;
+	}
+
+	p.top100{
+		font-size: 12px;
+		color: #AE4A84;
+		margin-bottom: 32px;
+	}
+
+	.filtr.filtr_exec .buttons a{
+		width: 100%;
+		font-size: 14px;
+		margin-bottom: 16px;
+	}
+
+	.filtr.filtr_exec .buttons .register{
+		background-color: #f3f3f3;
+	}
+
+	.filtr.filtr_exec .buttons .register.active{
+		background-color: #AE4A84;
+	}
+
+	.filtr.filtr_exec p{
+		margin-bottom: 16px;
+		font-size: 16px;
+		color: #2f2f2f;
+	}
+
+	.lk__main.lk__main__exec{
+		position: relative;
+		padding: 24px 74px 10px 74px;
+	}
+
+	.lk__main.lk__main__exec p{
+		padding: 0;
+	}
+
+	.lk__main__exec .title{
+		font-size: 24px;
+	    font-weight: bold;    
+	    color: #AE4A84
+	}
+
+	.lk__main__exec div{
+		/*display: inline-block;*/
+	}
+
+	.b-right{
+		position: absolute;
+	    right: 74px;
+	    top: 24px;
+	}
+
+	.b-right .letter div{
+		display: inline-block;
+	}
+
+	.lk__main__exec .b-right .letter{
+		position: relative;
+		line-height: 38px;
+	    padding-left: 26px;
+	    width: 139px;
+	    height: 40px;
+	    background-color: #AE4A84;
+	    border-radius: 10px;
+	    /*margin-top: 10px;*/
+	    color: #fff;
+	}
+
+	.lk__main__exec .letter div {
+	    color: #fff;
+	    position: relative;
+	    top: 2px;
+	    margin-left: 10px;
+	}
+
+	.lk__main__exec .letter img{
+		width: 30px;
+	}
+
+	.exec_prepayment{
+		margin: 16px 0;
+		font-size: 18px;
+		font-weight: bold;
+		color: #4cd964;
+	}
+
+	.lk__main__exec p.subtitle{
+		color: #2f2f2f;
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 12px;
+	}
+
+	.lk__main__exec p.text{
+		color: #2f2f2f;
+		font-size: 14px;
+		font-weight: normal;
+		margin-bottom: 20px;
+	}
+
+	.lk__main__exec p.text.subtitle_text{
+		margin-bottom: 0px;
+	}
+
+	p.text.subtitle_text:last-child {
+		margin-bottom: 20px;
+	}	
+
+	p.text_slow{
+		font-size: 12px;
+		color: #676767;
+	}
+
+	p.text_slow:last-child {
+		margin-bottom: 20px;
+	}
+
+	.portfolio-slider {
+		margin-bottom: 10px;
+		/*display: block;*/
+	} 
+
+	.portfolio-slider img {
+    	max-width: 150px;
+	}
+
+/*******************   Карточка исполнителя  Конец**********************************/
 
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{

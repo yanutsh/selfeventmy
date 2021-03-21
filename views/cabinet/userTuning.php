@@ -46,21 +46,21 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
             
 
         <div class="order_content__subtitle">Абонементы
-            <a href="/cabinet/abonements">
+            <a href="#!">
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>        
         <div class="text">Приобретите или посмотрите информацию о <br>действующих абонементах</div>
 
         <div class="order_content__subtitle">Настройки уведомлений
-            <a href="/cabinet/abonements">
+            <a href="#!">
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>
         <div class="text">Настройки пуш-уведомлений и информация о <br>рассылках</div>
 
         <div class="order_content__subtitle">Информация о профиле
-            <a href="/cabinet/abonements">
+            <a href="#!">
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>
@@ -69,7 +69,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
             
          
         <div class="order_buttons">
-            <a href="" class="register active">Выйти из профиля</a>            
+            <a href="/page/logout" class="register active">Выйти из профиля</a>            
         </div> 
         
 

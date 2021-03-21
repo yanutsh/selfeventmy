@@ -49,7 +49,7 @@ $(document).ready(function() {
     // При изменении любого эл-та фильтра ЗАКАЗОВ- отправляем данные фильтра 
     // на просчет числа заказов
     $('#filter-form').change(function(event) {    
-    	//alert ('Change');
+    	  //alert ('Change filter-form');
         //event.preventDefault();
         // Получаем объект формы
         var $form = $(this);
@@ -86,7 +86,7 @@ $(document).ready(function() {
     // При изменении любого эл-та фильтра ИСПОЛНИТЕЛЕЙ- отправляем данные фильтра 
     // на просчет числа заказов
     $('#filter-form-exec').change(function(event) {    
-      //alert ('Change');
+      //alert ('Change filter-form-exec');
         //event.preventDefault();
         // Получаем объект формы
         var $form = $(this);
@@ -136,12 +136,22 @@ $(document).ready(function() {
     }); 
 
 
-    // Slick слайдер - Указываем что будем выводить по 3 слайда на экран
+    // Слайдер Заказов - Указываем что будем выводить по 3 слайда на экран
     $('.slider').slick({
       //dots:true,
       centerMode: true,
       centerPadding: '10px',  
       infinite: true,
+      slidesToShow: 3,
+      slidesToScroll: 1
+    });
+
+    // Cлайдер Портфолио исполнителя- Указываем что будем выводить по 3 слайда на экран
+    $('.portfolio-slider').slick({
+      //dots:true,
+      centerMode: false,
+      centerPadding: '10px',  
+      infinite: false,
       slidesToShow: 3,
       slidesToScroll: 1
     });

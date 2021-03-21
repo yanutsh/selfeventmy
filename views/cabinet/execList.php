@@ -58,7 +58,7 @@ TemplateAsset::register($this);
 
 				                <div class="input__block field-orderfiltrform-city_id">
 				                	<label class='control-label'>Город (города)</label>
-					                <select name="OrderFiltrForm[city_id][]" id="orderfiltrform-city_id" class="js-chosen" multiple="multiple">
+					                <select name="ExecFiltrForm[city_id][]" id="orderfiltrform-city_id" class="js-chosen" multiple="multiple">
 					                	<?php foreach($city as $c) {?>
 					                		<option value=<?= $c['id']?>><?= $c['name']?> </option>
 					                	<?php } ?>				                	
@@ -116,7 +116,7 @@ TemplateAsset::register($this);
 			                    <?//= $form->field($model, 'order_status_id')->dropDownList (ArrayHelper::map($order_status, 'id', 'name'),['prompt'=>'Любой статус заказа']) ?>
 			                    	
 			                    <div class="form-group"> 
-			                    	<div class='register__user active__button'>Показано заказов - <span><?= $count ?></span> шт.</div>
+			                    	<div class='register__user active__button'>Показано исполнителей - <span><?= $count ?></span> шт.</div>
                     			</div>
 			                    <?php ActiveForm::end(); ?>
 			                    <?php //Pjax::end(); ?>

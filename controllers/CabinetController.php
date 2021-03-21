@@ -28,7 +28,7 @@ class CabinetController extends Controller {
     
     public $layout = 'cabinet';    // общий шаблон для всех видов контроллера
 
-  	// ЛК - фильтр и список Заказов
+  	// ЛК - фильтр и список Заказов  ***********************************************
     public function actionIndex()	
     {
       	//$this->layout='cabinet';
@@ -82,14 +82,15 @@ class CabinetController extends Controller {
                   ['in','city_id', $model->city_id],
                   [$prep_compare, 'prepayment', $prep_value],
                                       
-                            ])
-               ->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');
+                            ]);
+               //->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');
 
             if ($model->category_id)  
                 $query->andWhere(['id' => OrderCategory::find()->select('order_id')->andWhere(['category_id'=>  $model->category_id])]);                 
-              //->andWhere(['id' => OrderCategory::find()->select('order_id')->andWhere(['category_id'=>  $model->category_id])])                                  
-              //->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');                                 
-                        
+                                        
+            if ($model->work_form_id)  
+                $query->andWhere(['user_id' => User::find()->select('id')->andWhere(['work_form_id'=>  $model->work_form_id])]);   
+
             // debug( $pages);
             $orders_list = $query->orderBy('added_time DESC')->all();       
             $count=$query->count(); // найдено заказов Всего
@@ -146,9 +147,8 @@ class CabinetController extends Controller {
         return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count'));              
     }
 
-    // ЛК - фильтр и список Исполнителей
-    public function actionExecutiveList() 
-    {
+    // ЛК - фильтр и список Исполнителей ********************************************
+    public function actionExecutiveList() {
         $model = new ExecFiltrForm();
         
         // Если пришёл AJAX запрос
@@ -196,7 +196,8 @@ class CabinetController extends Controller {
                   //['between', 'added_time', $date_from, $date_to],
                   ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
                   ['<=', 'budget_from', $model->budget_to],
-                  ['in','city_id', $model->city_id],
+                  ['work_form_id' => $model->work_form_id],
+                 // ['in','city_id', $model->city_id],
                  // [$prep_compare, 'prepayment', $prep_value],
                                       
                             ]);
@@ -205,9 +206,6 @@ class CabinetController extends Controller {
             if ($model->category_id)  
                 $query->andWhere(['id' => ExecCategory::find()->select('user_id')->andWhere(['category_id'=>  $model->category_id])]);                 
               
-              //->andWhere(['id' => OrderCategory::find()->select('order_id')->andWhere(['category_id'=>  $model->category_id])])                                  
-              //->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');                                 
-                        
             // debug( $pages);
             $exec_list = $query->all();       
             $count=$query->count(); // найдено заказов Всего
@@ -262,9 +260,8 @@ class CabinetController extends Controller {
         return $this->render('execList', compact('exec_list','model', 'category', 'city', 'work_form', 'payment_form', 'count'));              
     }
 
-    // Добавление нового заказа
-    public function actionAddOrder() 
-    { 
+    // Добавление нового заказа  *****************************************************
+    public function actionAddOrder()  { 
         $model = new AddOrderForm();
 
          // Если пришёл PJAX запрос
@@ -319,7 +316,8 @@ class CabinetController extends Controller {
         //debug ($subcategory);
         return $this->render('addOrder', compact('model','category','subcategory','city'));  
     }    
-
+    
+    // вывести карточку заказа  ******************************************************
     public function actionOrderCard() {
 
       // получить заказ из БД
@@ -332,6 +330,28 @@ class CabinetController extends Controller {
       //debug($order);
       // вывести карточку заказа
       return $this->render('orderCard', ['order' => $order]); 
+    }
+
+    // вывести карточку Исполнителя  ***********************************************
+    public function actionExecCard() {
+
+      // получить данные Исполнителя из БД
+      $exec = User::find()
+              ->Where(['id'=> $_GET['id']])
+              ->with('category', 'workForm')
+              ->asArray()
+              ->one();
+
+      //debug($exec);
+      // для получения картинок слайдера        
+      $order = Order::find()
+              ->Where(['id'=> 50 ])
+              ->with('category','orderStatus','orderCity', 'orderCategory', 'orderPhotos', 'workForm', 'user')
+              ->asArray()
+              ->one();
+
+      // вывести карточку заказа
+      return $this->render('execCard', ['exec' => $exec, 'order' => $order]); 
     }
 
     // Настройка данных Текущего Юзера *******************************************************
