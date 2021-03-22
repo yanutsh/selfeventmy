@@ -49,7 +49,7 @@ $(document).ready(function() {
     // При изменении любого эл-та фильтра ЗАКАЗОВ- отправляем данные фильтра 
     // на просчет числа заказов
     $('#filter-form').change(function(event) {    
-    	  //alert ('Change filter-form');
+    	//alert ('Change filter-form');
         //event.preventDefault();
         // Получаем объект формы
         var $form = $(this);
@@ -121,14 +121,14 @@ $(document).ready(function() {
     }) 
 
     // для выпадающего списка Город
-    $(document).ready(function(){
-        $('.js-chosen').chosen({
-            width: '100%',
-            no_results_text: 'Совпадений не найдено',
-            placeholder_text_single: 'Выберите город',
-            placeholder_text_multiple: 'Любой город',
-        });
-    }); 
+    //$(document).ready(function(){
+    $('.js-chosen').chosen({
+        width: '100%',
+        no_results_text: 'Совпадений не найдено',
+        placeholder_text_single: 'Выберите город',
+        placeholder_text_multiple: 'Любой город',
+    });
+    //}); 
 
     // имитация клика на поле город при клике по gliphicon
     $('.glyphicon.glyphicon-chevron-down').on('click', function(){        
@@ -155,17 +155,20 @@ $(document).ready(function() {
       slidesToShow: 3,
       slidesToScroll: 1
     });
+
+
+    // управление видом активного меню - остальные сброс в неактивные
+    // $('.navbar-nav li a').click(function(event) {
+    //     alert("Меню");
+    //     $('.navbar-nav li a').each(function(){
+    //         $(this).parent().removeClass('active');
+    //     });
+    //     $(event.target).parent().addClass('active');
+    // })
    
 })
  
-// управление видом активного меню - остальные сброс в неактивные
-$('.navbar-nav li a').click(function(event) {
 
-	$('.navbar-nav li a').each(function(){
-        $(this).parent().removeClass('active');
-    });
-    $(event.target).parent().addClass('active');
- })
 
 
 // Показываем загружаемые фотки

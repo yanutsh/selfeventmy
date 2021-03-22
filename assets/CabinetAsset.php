@@ -22,7 +22,6 @@ class CabinetAsset extends AssetBundle {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/bootstrap.min.css',
         'css/cabinet.css',
         'css/chosen.min.css', 
         'css/slick.css', 
@@ -30,13 +29,12 @@ class CabinetAsset extends AssetBundle {
 
     ];
     public $js = [
-        'js/bootstrap.min.js',
+        //'js/bootstrap.3.4.min.js',
         'js/cabinet.js',
         'js/chosen.jquery.js',
         'js/slick.min.js',
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
         'app\assets\AppAsset',
 //        'rmrevin\yii\fontawesome\AssetBundle',
     ];   

@@ -16,9 +16,6 @@ $(document).ready(function() {
     })
 // управление видом кнопок Вход и Регистрация Конец
 
-
-
-
 // ввод файла        
     // $("#input-44").fileinput({
     // 	uploadUrl:  'loadimg/uploadimg',
@@ -70,7 +67,7 @@ $(document).ready(function() {
 
 
   $('.chkbox').click(function(){
-        //alert("Check");
+      //alert("Check");
       var val=$(this).val();
       if ($(this).is(':checked')){    
         // alert('Value='+val);

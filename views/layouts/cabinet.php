@@ -17,6 +17,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+//use yii\widgets\Menu;
 
 //TemplateAsset::register($this);
 FontAsset::register($this);
@@ -50,72 +51,75 @@ $avatar = $identity['avatar'];
         <header>
             <div class="line-bottom">
                 <div class="wrapper">
-                    <div class="wrapper__header">
+                   
+                    <?php
+                    NavBar::begin([
+                        //'brandLabel' => Yii::$app->name,
+                        'brandUrl' => Yii::$app->homeUrl,
+                        'options' => [
+                            'class' => '',  //'navbar-inverse navbar-fixed-top',
+                        ],
+                    ]);                        
+                    ?>
 
-                        <div class="logo"><?
-                            if(is_file(Yii::getAlias('@webroot' . Yii::$app->settings->get('logo'))))
-                            {
-                                ?>
-                                <?
-                                if(Yii::$app->request->url == Yii::$app->homeUrl)
+                    <div class="wrapper__header">    
+                        <div class="header_item">
+                            <div class="logo"><?
+                                if(is_file(Yii::getAlias('@webroot' . Yii::$app->settings->get('logo'))))
                                 {
                                     ?>
-                                    <?= Html::img(Yii::$app->imageresize->getUrl('@webroot' . Yii::$app->settings->get('logo'), 166, 77, 'inset')) ?>
                                     <?
-                                }
-                                else
-                                {
-                                    ?>
-                                    <?= Html::a(Html::img(Yii::$app->imageresize->getUrl('@webroot' . Yii::$app->settings->get('logo'), 166, 77, 'inset')), Yii::$app->homeUrl) ?>
-                                <? } ?>      
-                            <? } ?>                            	
+                                    if(Yii::$app->request->url == Yii::$app->homeUrl)
+                                    {
+                                        ?>
+                                        <?= Html::img(Yii::$app->imageresize->getUrl('@webroot' . Yii::$app->settings->get('logo'), 166, 77, 'inset')) ?>
+                                        <?
+                                    }
+                                    else
+                                    {
+                                        ?>
+                                        <?= Html::a(Html::img(Yii::$app->imageresize->getUrl('@webroot' . Yii::$app->settings->get('logo'), 166, 77, 'inset')), Yii::$app->homeUrl) ?>
+                                    <? } ?>      
+                                <? } ?>                            	
+                            </div>
                         </div>
 
-                        <div class="slogan">
-                            <?= nl2br(Yii::$app->settings->get('slogan')) ?>
+                        <div class="header_item">
+                            <div class="slogan">
+                                <?= nl2br(Yii::$app->settings->get('slogan')) ?>
+                            </div>
                         </div>
+                        
+                        <div class="header_item">
+                            <?php 
+                            echo Nav::widget([
+                            //echo Menu::widget([                                
+                                'items' => [
+                                    ['label' => 'Заказы', 'url' => ['/cabinet/index']],
+                                    ['label' => 'Чат', 'url' => ['/']],                         
+                                    ['label' => 'Исполнители', 'url' => ['/cabinet/executive-list']],
+                                    ['label' => $username, 'items' => [
+                                        ['label' => 'Баланс', 'url' =>'#!'],
+                                        ['label' => 'Помощь', 'url' =>'#!'],
+                                        ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'],
+                                        ['label' => 'Абонементы', 'url' => '#!'],         
+                                    ]],
+                                ],
+                               'options' => ['class' => 'navbar-nav navbar-right'],
 
-                        <!-- Меню -->
-                        <div>
-                            <nav class="navbar navbar-default">
-                                <div class="container-fluid">
-                                    <!-- Brand and toggle get grouped for better mobile display -->
-                                    <div class="navbar-header">
-                                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                                        <span class="sr-only">Toggle navigation</span>
-                                        <span class="icon-bar"></span>
-                                        <span class="icon-bar"></span>
-                                        <span class="icon-bar"></span>
-                                      </button>                                  
-                                    </div>
+                            ]);
+                            //NavBar::end();
+                             ?>                            
+                        </div>    <!-- </div>  -->
 
-                                    <!-- Collect the nav links, forms, and other content for toggling -->
-                                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                                        <ul class="nav navbar-nav">
-                                            <li class="active"><a href="/cabinet/index">Заказы <span class="sr-only">(current)</span></a></li>
-                                            <li><a href="#">Чат</a></li>
-                                            <li><a href="/cabinet/executive-list">Исполнители</a></li>
-                                            <li class="dropdown">
-                                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= $username ?> <span class="caret"></span></a>
-                                              <ul class="dropdown-menu">
-                                                <li><a href="#">Баланс: 180 руб.</a></li>
-                                                <li><a href="#">Помощь</a></li>
-                                                <li><a href="/cabinet/user-tuning">Настройки</a></li>
-                                                <li><a href="#">Абонементы</a></li>     
-                                              </ul>
-                                            </li>
-                                        </ul>                                
-                                      
-                                    </div><!-- /.navbar-collapse -->
-                                </div><!-- /.container-fluid -->
-                            </nav> 
+                        <div class="header_item">
+                            <div class="navbar_img">
+                                <img src="/web/uploads/images/users/<?= $avatar?>" alt="Аватар">
+                            </div>
                         </div>
-
-                        <div class="navbar_img">
-                            <img src="/web/uploads/images/users/<?= $avatar?>" alt="Аватар">
-                        </div>
-
-                    </div>    
+                    </div>
+                    
+                    <?php NavBar::end();?>    
                 </div>   
             </div>            
         </header>

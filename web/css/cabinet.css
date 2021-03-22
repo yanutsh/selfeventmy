@@ -56,7 +56,25 @@ body{
 		font-weight: bold;
 		color: #AE4A84;
 
+	}
+
+	#w2-collapse{
+		padding: 0;
 	}	
+
+	.navbar_img{
+		display: inline-block;
+	}
+
+	ul.navbar-nav.navbar-right.nav{
+		display: inline-block;
+		float: none!important;
+	}
+
+	nav .container{
+		width: 100%;
+		padding: 0;
+	}
 /*******************  Навигационная панель Конец  ********************/	
 
 

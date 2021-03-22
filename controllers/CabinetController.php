@@ -241,7 +241,7 @@ class CabinetController extends Controller {
         } //else { //  первый раз открываем страницу - показываем все заказы
           
         $exec_list = User::find()
-                  ->Where(['isexec' => 1])
+                ->Where(['isexec' => 1])
                 //  ->filterWhere(['AND',                     
                 //    ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
                               //])
