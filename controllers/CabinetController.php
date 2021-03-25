@@ -14,16 +14,18 @@ use app\models\User;
 use app\models\WorkForm;
 use app\models\PaymentForm;
 use app\models\Order;
+use app\models\Review;
 use app\models\OrderCategory;
 use app\models\AddOrderForm;
 use app\models\OrderStatus;
+use app\models\NotificationForm;
 
 require_once('../libs/convert_date_ru_en.php');
 require_once('../libs/convert_date_en_ru.php');
 require_once('../libs/convert_datetime_en_ru.php');
 require_once('../libs/rdate.php');
 
-// Контроллер ЗАКАЗЧИКА 
+// Контроллер ЗАКАЗЧИКА - 
 class CabinetController extends Controller {  
     
     public $layout = 'cabinet';    // общий шаблон для всех видов контроллера
@@ -354,6 +356,34 @@ class CabinetController extends Controller {
       return $this->render('execCard', ['exec' => $exec, 'order' => $order]); 
     }
 
+    // вывести карточку текущего Пользователя (Заказчика  или Исполнителя) *********
+    public function actionUserCard() {
+
+      // получить данные текущего Пользователя из БД
+      $identity = Yii::$app->user->identity;
+      //debug ($identity['id']);
+
+      $user = User::find()
+              ->Where([ 'id'=> $identity['id'] ]) 
+              ->with('category', 'workForm')
+              ->asArray()
+              ->one();
+
+      //debug($user);
+      //Список Личных заказов пользователя 
+      $orders_list=Order::find()->where([ 'user_id'=> $identity['id'] ])
+                  ->with('category','orderStatus','orderCity')
+                   ->orderBy('added_time DESC')->asArray()->all();
+
+      //Отзывов о пользователе оставлено
+      $reviews=Review::find()->where([ 'for_user_id'=> $identity['id'] ])
+                ->with('fromUser')->asArray()->all();
+      //debug($reviews);  
+        
+      // вывести карточку Юзера
+      return $this->render('userCard', compact('user', 'orders_list', 'reviews')); 
+    }
+
     // Настройка данных Текущего Юзера *******************************************************
     public function actionUserTuning() {
 
@@ -365,6 +395,59 @@ class CabinetController extends Controller {
       
       // вывести страницу настроек
       return $this->render('userTuning', compact('identity', 'work_form_name')); 
+    }
+    
+    // Настройка Уведомлений Текущего Юзера *******************************************************
+    public function actionNotificationsTuning() {
+      // получить текущего Юзера
+      $identity = Yii::$app->user->identity;
+      $model= new NotificationForm();
+
+      // проверить поступление данных по Pjax
+      if (Yii::$app->request->isPjax) { 
+        $data = Yii::$app->request->post();
+        
+        foreach($_POST['NotificationForm'] as $key=>$val) {
+           if (isset($val)) $model[$key]=$val;
+        }
+        // сохраняем в БД
+        $model->save_notification($identity['id']);
+       
+        // возвращаемся в настройки уведомлений
+        return $this->render('notificationsTuning', compact('model'));
+      }
+        
+      // получить текущие настройки из БД       
+      $user = User::find()
+            ->select(['push_notif', 'show_notif', 'email_notif', 'info_notif'])
+            ->where(['id'=>$identity['id']])
+            ->asArray()
+            ->one();
+
+      // присвоить настройки модели      
+      $model->push_notif = $user['push_notif']; 
+      $model->show_notif = $user['show_notif']; 
+      $model->email_notif = $user['email_notif']; 
+      $model->info_notif = $user['info_notif'];           
+            
+      //debug($model);      
+      // вывести страницу настроек уведомлений
+      return $this->render('notificationsTuning', compact('model')); 
+    }
+
+    // Страница Помощь   
+    /* *******************************************************/
+    public function actionHelp() {
+           
+      // вывести страницу help
+      return $this->render('help'); 
+    }
+
+    // Пополнение баланса
+    public function actionBalance() {
+           
+      // вывести страницу help
+      return $this->render('balance'); 
     }
 
 }

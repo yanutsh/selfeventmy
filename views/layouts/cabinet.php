@@ -91,30 +91,46 @@ $avatar = $identity['avatar'];
                         </div>
                         
                         <div class="header_item">
-                            <?php 
-                            echo Nav::widget([
-                            //echo Menu::widget([                                
-                                'items' => [
-                                    ['label' => 'Заказы', 'url' => ['/cabinet/index']],
-                                    ['label' => 'Чат', 'url' => ['/']],                         
-                                    ['label' => 'Исполнители', 'url' => ['/cabinet/executive-list']],
-                                    ['label' => $username, 'items' => [
-                                        ['label' => 'Баланс', 'url' =>'#!'],
-                                        ['label' => 'Помощь', 'url' =>'#!'],
-                                        ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'],
-                                        ['label' => 'Абонементы', 'url' => '#!'],         
-                                    ]],
-                                ],
-                               'options' => ['class' => 'navbar-nav navbar-right'],
-
-                            ]);
-                            //NavBar::end();
+                            <?php
+                            if ($identity['isexec']) {
+                                echo Nav::widget([                               
+                                    'items' => [
+                                        ['label' => 'Заказы', 'url' => ['/cabinet/index']],
+                                        ['label' => 'Чат', 'url' => ['/']],                         
+                                        ['label' => 'Исполнители', 'url' => ['/cabinet/executive-list']],
+                                        ['label' => $username, 'items' => [
+                                            ['label' => 'Баланс', 'url' =>'/cabinet/balance'],
+                                            ['label' => 'Помощь', 'url' =>'/cabinet/help'],
+                                            ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'],
+                                            ['label' => 'Абонемент', 'url' => '№!'],         
+                                        ]],
+                                    ],
+                                   'options' => ['class' => 'navbar-nav navbar-right'],
+                                ]);
+                            }else{
+                                echo Nav::widget([                               
+                                    'items' => [
+                                        ['label' => 'Заказы', 'url' => ['/cabinet/index']],
+                                        ['label' => 'Чат', 'url' => ['/']],                         
+                                        ['label' => 'Исполнители', 'url' => ['/cabinet/executive-list']],
+                                        ['label' => $username, 'items' => [
+                                            ['label' => 'Баланс', 'url' =>'/cabinet/balance'],
+                                            ['label' => 'Помощь', 'url' =>'/cabinet/help'],
+                                            ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'], 
+                                        ]],
+                                    ],
+                                   'options' => ['class' => 'navbar-nav navbar-right'],
+                                ]);
+                            }    
                              ?>                            
+                            
                         </div>    <!-- </div>  -->
 
                         <div class="header_item">
                             <div class="navbar_img">
-                                <img src="/web/uploads/images/users/<?= $avatar?>" alt="Аватар">
+                                <a href="<?=Url::to('/cabinet/user-card')?>">
+                                    <img src="/web/uploads/images/users/<?= $avatar?>" alt="Аватар">
+                                </a>
                             </div>
                         </div>
                     </div>

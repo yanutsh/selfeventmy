@@ -539,6 +539,10 @@ body{
 		margin-bottom: 32px;
 	}
 
+	.b_header .b_text{
+		top: -20px;
+	}
+
 	.b_header div{
 		display: inline-block;	
 	}
@@ -786,7 +790,7 @@ body{
 
 	.b_text.b_text__tuning{
 		display:  block;
-		margin: -8px auto;
+		margin: 25px auto;
 		font-weight: bold;
 	}
 
@@ -876,7 +880,7 @@ body{
 	}
 /*******************  Лента исполнителей ExecList  Конец  ********************/
 
-/*******************   Карточка исполнителя **********************************/
+/*******************  Карточка исполнителя **********************************/
 	.filtr.filtr_exec{
 		padding-top: 24px;
 	}
@@ -957,7 +961,7 @@ body{
 
 	.lk__main.lk__main__exec{
 		position: relative;
-		padding: 24px 74px 10px 74px;
+		padding: 24px 44px 10px 44px;
 	}
 
 	.lk__main.lk__main__exec p{
@@ -987,7 +991,7 @@ body{
 	.lk__main__exec .b-right .letter{
 		position: relative;
 		line-height: 38px;
-	    padding-left: 26px;
+	    padding-left: 16px;
 	    width: 139px;
 	    height: 40px;
 	    background-color: #AE4A84;
@@ -1005,6 +1009,7 @@ body{
 
 	.lk__main__exec .letter img{
 		width: 30px;
+		vertical-align: middle;
 	}
 
 	.exec_prepayment{
@@ -1054,7 +1059,139 @@ body{
     	max-width: 150px;
 	}
 
-/*******************   Карточка исполнителя  Конец**********************************/
+/*******************  Карточка исполнителя  Конец**********************************/
+
+/*******************  Карточка Юзера **********************************/
+	.refer{
+		position: absolute;
+	    top: 30px;
+	    right: 80px;
+	    font-size: 14px;
+	    color: #AE4A84;
+	    cursor: pointer;
+	}
+
+	.review_header img{
+		width: 41px;
+	    border-radius: 50%;	
+	}
+
+	.review_header .fio_text {
+		position: relative;
+		top: -6px;
+	    display: inline-block;    
+	    margin-left: 10px;
+	    font-size: 14px;
+	    color: #424242;
+	    line-height: 20px;
+	}
+
+	.review_details{
+		width: 588px;
+		margin: 10px auto 15px;
+		background: #F9F9F9;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+		padding: 10px 16px;	
+		border-radius: 5px;	
+	}
+
+	.review_details p{
+		font-size: 14px;
+		font-weight: normal;
+		color:#000;
+	}
+
+	.order_status{
+		font-size: 14px;
+	}
+
+	.user_orders a{
+		text-decoration: none;
+		color:#323232;
+	}
+
+
+	.review_list,
+	.user_orders {
+		display: none;
+	}
+/*******************  Карточка Юзера Конец*****************************/
+
+/*******************  Настройка уведомлений *****************************/
+	.notifications_content{
+		width: 435px;
+		margin: 0 auto;
+	}
+
+	.notifications_content .order_content__title{
+		font-size: 42px;
+	}
+
+	div.text.text__push{
+		width: 60%;
+	}
+/*******************  Настройка уведомлений Конец **********************/	
+
+/*******************  Страница Баланс**********************************/
+
+	.balance_content{
+		width: 590px;
+		margin: 0 auto;
+	}
+
+	.text__card{
+		display: inline-block;
+	    position: relative;
+	    top: -3px;
+	    margin-left: 10px;
+	}
+
+	.text.text__card a{
+		position: absolute;
+	    top: 0px;
+	    right: -450px;
+	    color: #AE4A84;
+	}
+
+	a.text_details{
+		font-size: 14px;	
+		color: 	#AE4A84;
+		line-height: 34px;
+		text-decoration: none;	
+
+	}
+/*******************  Страница Баланс Конец**********************************/
+
+/*******************  Помощь  ***************************************************/
+	.help_content{
+		width: 343px;
+		margin:0 auto;
+	}
+
+	.help_content .order_content__title {
+		font-size: 48px;
+	}
+
+	.help_content .refer{
+		position: static;
+		display: inline-block;
+		font-size: 14px;
+		color: #AE4A84;
+		margin-top: 6px;
+		margin-bottom: 14px;
+	}
+
+	.help_buttons{
+		margin-top: 12px;
+		display: flex;
+	    justify-content: space-between;
+	}
+
+	.help_buttons img{
+		width: 150px;
+		height: auto;
+	}
+/*******************  Помощь  Конец***************************************************/	
 
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{

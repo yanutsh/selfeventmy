@@ -44,23 +44,24 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
     <div class="order_content order_content__tuning">
             
-
-        <div class="order_content__subtitle">Абонементы
-            <a href="#!">
-                <i class="fas fa-chevron-right"></i>
-            </a>
-        </div>        
-        <div class="text">Приобретите или посмотрите информацию о <br>действующих абонементах</div>
+        <?php   if ( $identity['isexec'] ){ // Абонементы показываем Исполнителям?>     
+            <div class="order_content__subtitle">Абонементы
+                <a href="#!">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>        
+            <div class="text">Приобретите или посмотрите информацию о <br>действующих абонементах</div>
+        <?php   } ?>
 
         <div class="order_content__subtitle">Настройки уведомлений
-            <a href="#!">
+            <a href="/cabinet/notifications-tuning">
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>
         <div class="text">Настройки пуш-уведомлений и информация о <br>рассылках</div>
 
         <div class="order_content__subtitle">Информация о профиле
-            <a href="#!">
+            <a href="/cabinet/user-card">
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>
