@@ -19,6 +19,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 //use yii\widgets\Menu;
 
+require_once('../libs/user_photo.php');
+
 //TemplateAsset::register($this);
 FontAsset::register($this);
 AppAsset::register($this);
@@ -96,13 +98,13 @@ $avatar = $identity['avatar'];
                                 echo Nav::widget([                               
                                     'items' => [
                                         ['label' => 'Заказы', 'url' => ['/cabinet/index']],
-                                        ['label' => 'Чат', 'url' => ['/']],                         
+                                        ['label' => 'Чат', 'url' => ['/cabinet/chat-list']],                         
                                         ['label' => 'Исполнители', 'url' => ['/cabinet/executive-list']],
                                         ['label' => $username, 'items' => [
                                             ['label' => 'Баланс', 'url' =>'/cabinet/balance'],
                                             ['label' => 'Помощь', 'url' =>'/cabinet/help'],
                                             ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'],
-                                            ['label' => 'Абонемент', 'url' => '№!'],         
+                                            ['label' => 'Абонемент', 'url' => '#!'],         
                                         ]],
                                     ],
                                    'options' => ['class' => 'navbar-nav navbar-right'],
@@ -111,12 +113,12 @@ $avatar = $identity['avatar'];
                                 echo Nav::widget([                               
                                     'items' => [
                                         ['label' => 'Заказы', 'url' => ['/cabinet/index']],
-                                        ['label' => 'Чат', 'url' => ['/']],                         
+                                        ['label' => 'Чат', 'url' => ['/cabinet/chat-list']],                         
                                         ['label' => 'Исполнители', 'url' => ['/cabinet/executive-list']],
                                         ['label' => $username, 'items' => [
                                             ['label' => 'Баланс', 'url' =>'/cabinet/balance'],
                                             ['label' => 'Помощь', 'url' =>'/cabinet/help'],
-                                            ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'], 
+                                            ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'],                              
                                         ]],
                                     ],
                                    'options' => ['class' => 'navbar-nav navbar-right'],
@@ -129,7 +131,7 @@ $avatar = $identity['avatar'];
                         <div class="header_item">
                             <div class="navbar_img">
                                 <a href="<?=Url::to('/cabinet/user-card')?>">
-                                    <img src="/web/uploads/images/users/<?= $avatar?>" alt="Аватар">
+                                    <img src="<?= user_photo($avatar)?>" alt="Аватар">
                                 </a>
                             </div>
                         </div>

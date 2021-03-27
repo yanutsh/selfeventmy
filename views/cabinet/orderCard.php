@@ -14,6 +14,8 @@ use app\models\City;
 use kartik\date\DatePicker;
 use yii\widgets\Pjax;
 
+require_once('../libs/user_photo.php');
+
 TemplateAsset::register($this);
 RegistrationAsset::register($this);
 
@@ -29,7 +31,7 @@ $city = City::find() ->orderBy('name')->all();
 <div class="wrapper__addorder wrapper__addorder__card">
     <div class="b_header">
         <div class="b_avatar">
-            <img src="/web/uploads/images/users/<?= $order['user']['avatar']?>" alt="">
+            <img src="<?= user_photo($order['user']['avatar'])?>" alt="">
         </div>
        <!--  <div class="clearfix"></div> -->
         <div class="b_text">

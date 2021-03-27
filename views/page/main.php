@@ -30,13 +30,9 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
             <?php endif;?>           
 
         <h3><?php 
-            echo ("Юзер- ".Yii::$app->user->identity->username); 
-            //debug(Yii::$app->defaultRoute) ;
-            //debug(Yii::$app->basePath) ;
-
+            echo ("Юзер- ".Yii::$app->user->identity->username);            
         ?></h3>
         <br>
-        
 
             <div class="search">
                 <div class="search__img"></div>                       
@@ -55,43 +51,24 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
         <div class="wrapper__title">Категории</div>
         <p>На нашем сервисе 30 категорий исполнителей и более 40 подкатегорий по услугам - рестораны, ведущие, кейтеринг, эвент-агентства, музыканты, фото, видео, аудио, прокат и аренда, флористы и многие другие.</p>
 
-        <div class="categories"> 
-            <div class="item"> 
-                <img src="/web/uploads/images/010-host.png" alt="Иконка категории">
-                <p>Фотограф</p>
-            </div>
-            <div class="item"> 
-                <img src="/web/uploads/images/010-host.png" alt="Иконка категории">
-                 <p>Фотограф</p>
-            </div>
-            <div class="item"> 
-                <img src="/web/uploads/images/010-host.png" alt="Иконка категории">
-                 <p>Фотограф</p>
-            </div>
-            <div class="item"> 
-                <img src="/web/uploads/images/010-host.png" alt="Иконка категории">
-                 <p>Фотограф</p>
-            </div>
-            <div class="item"> 
-                <img src="/web/uploads/images/010-host.png" alt="Иконка категории">
-                 <p>Фотограф</p>
-            </div>
-            <div class="item"> 
-                <img src="/web/uploads/images/010-host.png" alt="Иконка категории">
-                 <p>Фотограф</p>
-            </div>
-            <div class="item"> 
-                <img src="/web/uploads/images/010-host.png" alt="Иконка категории">
-                 <p>Фотограф</p>
-            </div>
-            <div class="item"> 
-                <img src="/web/uploads/images/010-host.png" alt="Иконка категории">
-                 <p>Фотограф</p>
-            </div>       
+        <div class="categories">
+            <!-- показываем первые 12 категорий -->
+            <?php 
+            $i=1;
+            foreach($categories as $cat){ ?> 
+                <div class="item <?php if ($i>12) echo 'item__add';?>"> 
+                    <img src="/web/uploads/images/<?php 
+                        if ($cat['icon']) echo $cat['icon'];
+                        else echo('010-host.png');?>" alt="Иконка категории">
+                    <p><?=$cat['name']?></p>
+                </div>
+            <?php $i++;
+            } ?>
+               
         </div>            
 
         <div class="all-categories">
-            <a href="<?= \yii\helpers\Url::to(['page/frontend', 'id' => 2]) ?>" class="pink-button center">Все категории</a>
+            <button class="pink-button center" id="all_category">Все категории</button>
         </div>
 
         <div class="block-header wrapper__title">
@@ -179,7 +156,21 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
         </div>
     </section>
-
-    
-
 </div>
+<?php   
+$script = <<< JS
+    // сворачивание категорий
+    $('#all_category').on('click',function(e){
+        
+        if ($(this).text()=="Все категории") {
+            $(this).text("Свернуть");
+            $('.item.item__add').show(500); //fadeIn(3000); //css('display','block').fadeIn(1000);
+        }else{
+            $(this).text("Все категории");
+            $('.item.item__add').hide(500); //fadeOut(1000); //.css('display','none')            
+        }   
+    })    
+JS;
+//маркер конца строки, обязательно сразу, без пробелов и табуляции
+$this->registerJs($script, yii\web\View::POS_READY);
+?>

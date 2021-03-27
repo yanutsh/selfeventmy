@@ -1279,7 +1279,7 @@ footer {
     padding:  0 15px;
     display:  flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-bottom: 22px;  
   }
       .categories .item{
@@ -1303,7 +1303,11 @@ footer {
         }
         .categories .item:hover p{
           display: block;
-        }  
+        } 
+        
+  .item.item__add{
+    display: none;
+  }       
 
   .all-categories{
     text-align:   center;

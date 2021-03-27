@@ -19,6 +19,7 @@ use app\models\RegForm;
 use app\models\SignupForm;
 use app\models\LoginForm;
 use app\models\User;
+use app\models\Category;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 use yii\base\Response;
@@ -85,7 +86,8 @@ class PageController extends Controller
       if ($id === Null) $id=1;
 
         $pageModel = Page::findOne(['id' => $id, 'status' => 1]);
- 
+        $categories= Category::find()->asArray()->orderBy('name')->all();
+
       //if(\Yii::$app->request->get('region')) {echo "есть запрос региона"; die;}
       // если в GET новый город - записываем в кукис
         if(\Yii::$app->request->get('inputCity')) {
@@ -113,7 +115,8 @@ class PageController extends Controller
             //$model = new User::
             return $this->render($template, [
                         // common
-                        'page' => $pageModel,                        
+                        'page' => $pageModel,
+                        'categories' => $categories,                        
             ]);
         }
         else

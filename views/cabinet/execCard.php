@@ -14,7 +14,6 @@ TemplateAsset::register($this);
 //CabinetAsset::register($this);
 
 ?>
-
 	<?php 
 		$identity = Yii::$app->user->identity;
 		//debug ($identity['avatar']);

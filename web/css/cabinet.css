@@ -556,7 +556,7 @@ body{
 		width: 92px;
 		height: 92px;
 		border-radius: 50%;
-		background-color: #424242;
+		/*background-color: #424242;*/
 		border: 0.5px solid #fff; 
 		margin: 19px 24px; 
 	}
@@ -1192,6 +1192,76 @@ body{
 		height: auto;
 	}
 /*******************  Помощь  Конец***************************************************/	
+
+/*******************  Чат - главная ******************************************/
+
+	.order_content.tabs_header{
+		padding: 0;
+		margin-bottom: 20px;
+	}
+
+	.tabs_header ul{
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.tabs_header li{
+		flex-basis: 100%;
+		text-align: center;	
+	}
+
+	.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+		background-color: #AE4A84!important;
+	}	
+
+	.order_info{
+		display: flex;
+		justify-content: flex-start;
+		margin-bottom: 17px;
+	}
+
+	.order_info .number_info{
+		flex-basis: 70px;
+		width: 70px;
+		height: 70px;
+		border-radius: 50%;
+		background-color: #f7b491;
+	}
+
+	.order_info .number_info span{
+		line-height: 70px;
+	    font-size: 36px;
+	    font-weight: bold;
+	    color: #fff;
+	    display: inline-block;
+	    width: 100%;
+	    text-align: center;
+	}  
+
+	.tab-pane{
+		padding-top: 40px;	
+	} 
+
+	.chat .text_info {
+		margin-left: 20px;
+		width: 85%;
+	}
+
+	.chat .full_number,
+	.chat .last_message{
+		font-size: 12px;
+	}
+
+	.chat .fio{
+		font-size: 14px;
+		margin-top: 4px;
+	}
+
+	.chat .last_message{
+		margin-top: 8px;
+	}		
+
+/*******************  Чат - главная Конец ******************************************/
 
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{

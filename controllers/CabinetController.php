@@ -11,6 +11,7 @@ use app\models\Category;
 use app\models\Subcategory;
 use app\models\City;
 use app\models\User;
+use app\models\Chat;
 use app\models\WorkForm;
 use app\models\PaymentForm;
 use app\models\Order;
@@ -147,6 +148,116 @@ class CabinetController extends Controller {
         //debug( $order_status);
 
         return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count'));              
+    }
+
+    // ЛК - список Чатов  ********************************************
+    public function actionChatList() {
+        //$model = new ExecFiltrForm();
+        
+        // Если пришёл PJAX запрос
+        if (Yii::$app->request->isPjax) { 
+        //   // Устанавливаем формат ответа JSON
+        //   //debug('Еесть Ajax');
+        //   Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //   $data = Yii::$app->request->post();
+             //debug($_GET['var']);
+            if ($_GET['var']=="first") $msg="первый"; 
+            return $this->render('chatList', compact('msg')); 
+
+        //   if ($data['data']=='reset'){ // сброс фильтра = модель не загружаем
+        //     $date_from = convert_date_ru_en(Yii::$app->params['date_from']);
+        //     $date_to = convert_date_ru_en(Yii::$app->params['date_to']);  
+        //   }elseif ($model->load($data)) { // Получаем данные модели из запроса
+        //     $date_from = convert_date_ru_en($model->date_from);
+        //     $date_to = convert_date_ru_en($model->date_to);
+        //   }else {
+        //       // Если нет, отправляем ответ с сообщением об ошибке
+        //       return [
+        //           "data" => null,
+        //           "error" => "error1"
+        //       ];
+        //   } 
+            
+        //   //debug($model);
+
+        //     // фильтрация и определение количества заказов 
+        //     // астройки фильтра по предоплате
+        //     if ( $model->prepayment == 1)  {      // без предоплаты
+        //         $prep_compare = "=";
+        //         $prep_value = '0';
+        //     }elseif ( $model->prepayment == 2) {  // c предоплатoй
+        //         $prep_compare = ">=";
+        //         $prep_value = '100';
+        //     }else{
+        //         $prep_compare = ">=";             // любой вариант
+        //         $prep_value = '0';
+        //     } 
+
+        //     //debug ($model); 
+
+        //     $query = User::find()
+        //       ->filterWhere(['AND',
+        //           ['isexec' => 1],                       
+        //           //['between', 'added_time', $date_from, $date_to],
+        //           ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
+        //           ['<=', 'budget_from', $model->budget_to],
+        //           ['work_form_id' => $model->work_form_id],
+        //          // ['in','city_id', $model->city_id],
+        //          // [$prep_compare, 'prepayment', $prep_value],
+                                      
+        //                     ]);
+        //        /////->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');
+
+        //     if ($model->category_id)  
+        //         $query->andWhere(['id' => ExecCategory::find()->select('user_id')->andWhere(['category_id'=>  $model->category_id])]);                 
+              
+        //     // debug( $pages);
+        //     $exec_list = $query->all();       
+        //     $count=$query->count(); // найдено заказов Всего
+        //     //debug( $count);
+        //     $category = Category::find() ->orderBy('name')->all();
+        //     $city = City::find() ->orderBy('name')->all();
+            
+        //     $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
+        //     $payment_form= PaymentForm::find() ->orderBy('payment_name')->all();
+        //     //$order_status = OrderStatus::find() ->orderBy('name')->all();
+
+        //       // Фильтр по Формам работы
+        //       // if (!$model->work_form_id == "") {  // если значение фильтра установлено
+        //       //   foreach ($orders_list as $key=>$order) {
+        //       //     if (!($order['workForm']['id'] == $model->work_form_id)) {
+        //       //        unset($orders_list[$key]); // удаляем заказ из списка               
+        //       //     }                  
+        //       //   }                  
+        //       // }
+                    
+
+        //       $count= count($exec_list); 
+        //       //debug($count) ;            
+
+        //       $this->layout='contentonly';
+        //       return [
+        //           "data" => $count,
+        //           "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list')), //$html_list, 
+        //           "error" => null
+        //       ];  
+
+           
+         } //else { //  первый раз открываем страницу - показываем все заказы
+          
+        $chat_list = Chat::find()
+                //->Where(['isexec' => 1])
+                //  ->filterWhere(['AND',                     
+                //    ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
+                              //])
+                ->with('exec', 'order')
+                // ->orderBy('added_time DESC')
+                ->asArray()->all();  //count();
+
+        //$count= count($chat_list);            
+        //debug( $chat_list);        
+              
+        return $this->render('chatList', compact('chat_list'));              
     }
 
     // ЛК - фильтр и список Исполнителей ********************************************

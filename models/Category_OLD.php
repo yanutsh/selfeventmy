@@ -9,10 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $name Категория организаторов
- * @property string|null $icon
  *
- * @property ExecCategory[] $execCategories
- * @property OrderCategory[] $orderCategories
  * @property Subcategory[] $subcategories
  */
 class Category extends \yii\db\ActiveRecord
@@ -32,7 +29,7 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['name', 'icon'], 'string', 'max' => 100],
+            [['name'], 'string', 'max' => 100],
         ];
     }
 
@@ -43,37 +40,16 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Категория организаторов',
-            'icon' => 'Иконка',
+            'name' => 'Категория услуги',
         ];
     }
 
     /**
-     * Gets query for [[ExecCategories]].
+     * Gets query for [[Subcategory]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getExecCategories()
-    {
-        return $this->hasMany(ExecCategory::className(), ['category_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[OrderCategories]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrderCategories()
-    {
-        return $this->hasMany(OrderCategory::className(), ['category_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Subcategories]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSubcategories()
+    public function getSubcategory()
     {
         return $this->hasMany(Subcategory::className(), ['category_id' => 'id']);
     }

@@ -15,6 +15,7 @@ use yii\widgets\Pjax;
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
 require_once('../libs/time_ago.php');
+require_once('../libs/user_photo.php');
 ?>
 
 <div class="top100">Исполнители ТОП 100</div>
@@ -27,7 +28,7 @@ foreach ($exec_list as $el)
         <div class="order_item execlist">
             <!-- <div class="b_header"> -->
                 <div class="b_avatar">
-                    <img src="/web/uploads/images/users/<?= $el['avatar']?>" alt="">                 
+                    <img src="<?= user_photo($el['avatar'])?>" alt="">                 
                 </div>
                
                 <div class="b_text">
@@ -67,7 +68,7 @@ foreach ($exec_list as $el)
         <div class="order_item execlist">
             <!-- <div class="b_header"> -->
                 <div class="b_avatar">
-                    <img src="/web/uploads/images/users/<?= $el['avatar']?>" alt="">                 
+                    <img src="<?= user_photo($el['avatar'])?>" alt="">                 
                 </div>
                
                 <div class="b_text">
