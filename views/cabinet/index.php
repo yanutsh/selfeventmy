@@ -22,6 +22,7 @@ TemplateAsset::register($this);
 		//debug($identity['isexec']);		
 	?>
 	
+	
 	<div class="container">
 
 		<div class="wrapper">

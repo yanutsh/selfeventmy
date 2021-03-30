@@ -554,6 +554,33 @@ class CabinetController extends Controller {
       return $this->render('help'); 
     }
 
+    // Страница Информация о Профиле   
+    /* *******************************************************/
+    public function actionProfileInfo() {
+      $identity = Yii::$app->user->identity;      
+            
+      $user = USER::find()->where(['id' => $identity['id']])->with('workForm')->one();
+      //debug($user);
+
+      if (Yii::$app->request->isPjax) { 
+          
+          $data = Yii::$app->request->post();
+          //debug($data);
+
+          if ($data['field_name'] == 'myself'){
+            $user->myself = $data['User']['myself']; 
+          }elseif ($data['field_name'] == 'contact'){
+            $user->username = $data['User']['username'];
+          } 
+
+          $user->save(); // записать изменения в БД
+          return $this->render('profileInfo', compact('user'));   
+
+      }
+
+      return $this->render('profileInfo', compact('user')); 
+    }
+
     // Пополнение баланса
     public function actionBalance() {
            

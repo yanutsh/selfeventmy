@@ -38,11 +38,26 @@ TemplateAsset::register($this);
 			    					<a type='button' href="<?php echo Url::to(['cabinet/add-order', 'isexec' => '1']);?>" class='register active'>Создать заказ</a>
 			    				<?php } ?>
 
-			    				<?//= debug($category); ?>
 			    				<div class="filtr__header">
 				    				<div class="title">Фильтр</div>
-				    				<a href="/cabinet" id="reset" alt="">Сбросить</a>
+				    				<a href="/cabinet/executive-list" id="reset" alt="">Сбросить все</a>
 			    				</div>
+
+			    				<div class="only_top">
+			    					<div>Только ТОП 100</div>
+			    					<div class="toggle-button-cover"> 
+					                    <div class="button-cover">
+					                        <div class="button r" id="button-top">
+					                          <input type="checkbox" class="checkbox" 
+					                          id="chk_top"name= 'NotificationForm[push_notif]' 
+						                      <?php //if ($model['push_notif']) echo 'checked';?>>
+					                          <div class="knobs"></div>
+					                          <div class="layer"></div>
+					                        </div>
+					                    </div>
+					                </div>
+			    				</div>
+
 			    				<?php  //Pjax::begin(); ?>	
 			    				<?php $form = ActiveForm::begin([
 			    					'id' => 'filter-form-exec',
@@ -153,3 +168,22 @@ TemplateAsset::register($this);
 	    </div>
 
 	</div>
+	<?php
+		$script = <<< JS
+		    // Показ только ТОП-100 исполнителей
+		    $('#button-top').on('click',function(e){
+		    	
+		   	    // отправка формы по pjax и потом удаление фона: 
+		   	    if ($('#chk_top').is(':checked')){
+					//alert('Включен'); // скрываем остальных исполнителей
+		   	    	$('.top100__all').css('display', 'none');
+				} else {
+					//alert('Выключен');// показываем остальных исполнителей
+					$('.top100__all').css('display', 'block');
+				}	   	
+		    	 	    	
+			});
+		JS;
+		//маркер конца строки, обязательно сразу, без пробелов и табуляции
+		$this->registerJs($script, yii\web\View::POS_READY);
+	?>

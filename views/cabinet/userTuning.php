@@ -61,7 +61,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
         <div class="text">Настройки пуш-уведомлений и информация о <br>рассылках</div>
 
         <div class="order_content__subtitle">Информация о профиле
-            <a href="/cabinet/user-card">
+            <a href="/cabinet/profile-info">
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>

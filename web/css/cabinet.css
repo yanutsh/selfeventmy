@@ -101,14 +101,30 @@ body{
 
 	.filtr__header{
 		position: relative;
+		margin-bottom: 35px;
 	}
 
 	#reset{
 		position: absolute;
-		bottom: 5px;
+		bottom: 0px;
 		right: 0;
+		line-height: 22px;
+		font-size: 14px;
+		color: #AE4A84;
+		text-decoration: none;
 		/*margin-left: 50px;*/
-	} 
+	}
+
+	.only_top{
+		display: flex;
+		justify-content: space-between;
+		position: relative;
+		font-size: 18px;
+		font-weight: bold;
+		color:#AE4A84;
+		margin-bottom: 20px;
+
+	}
 
 	.glyphicon.glyphicon-calendar.kv-dp-icon{
 		left: 8px;
@@ -625,7 +641,7 @@ body{
 	.order_content{
 		background-color: #fff;
 		border-radius: 10px;
-		padding: 0 35px 20px;
+		padding: 0 35px 48px;
 	}
 
 	.order_content__title{
@@ -1263,6 +1279,34 @@ body{
 
 /*******************  Чат - главная Конец ******************************************/
 
+/*******************  Редактирование профиля ******************************************/
+	.text_details.profile{
+		position: absolute;
+		top: 0;
+		right: 0;
+		line-height: normal;
+		cursor: pointer;
+	}
+
+	.text.profile{
+		position: relative;
+	}
+	.text.profile.study{
+		font-size: 12px;
+		color: #676767;
+	}
+
+	div.text_details.profile{
+		right: 0;
+	}
+
+	.modal-footer{
+		display: none;
+	}
+
+	
+/*******************  Редактирование профиля Конец******************************************/
+
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{
 		position: relative;
@@ -1291,8 +1335,11 @@ body{
 	    top: 0;
 	    right: 0;
 	    bottom: 0;
-	    left: 0;
-	  
+	    left: 0px;	  
+	}
+
+	.only_top .toggle-button-cover{
+		left: -17px;
 	}
 
 	.button.r
@@ -1305,6 +1352,10 @@ body{
 	    /*margin: -20px auto 0 auto;*/
 	    box-sizing: border-box;
 	    /*overflow: hidden;*/
+	}
+
+	.only_top .button.r{
+		right: 33px;		
 	}
 
 	.button.r, .button.r .layer
@@ -1341,7 +1392,8 @@ body{
 	}
 
 	/* Button 1 */
-	#button-1 .knobs:before
+	#button-1 .knobs:before,
+	#button-top .knobs:before
 	{
 	    content: '';
 	    position: absolute;
@@ -1361,7 +1413,8 @@ body{
 	    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
 	}
 
-	#button-1 .checkbox:checked + .knobs:before
+	#button-1 .checkbox:checked + .knobs:before,
+	#button-top .checkbox:checked + .knobs:before
 	{
 	    content: '';
 	    left: 20px;
@@ -1370,12 +1423,14 @@ body{
 
 	}
 
-	#button-1 .checkbox:checked ~ .layer
+	#button-1 .checkbox:checked ~ .layer,
+	#button-top .checkbox:checked ~ .layer
 	{
 	    background-color: #fcebeb;
 	}
 
-	#button-1 .knobs, #button-1 .knobs:before, #button-1 .layer
+	#button-1 .knobs, #button-1 .knobs:before, #button-1 .layer,
+	#button-top .knobs, #button-top .knobs:before, #button-top .layer
 	{
 	    transition: 0.3s ease all;
 	}

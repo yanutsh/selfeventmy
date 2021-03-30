@@ -3,16 +3,11 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
-use yii\web\User;
+//use yii\web\User;
 use app\assets\TemplateAsset;
 use app\assets\RegistrationAsset;
-use app\components\page\PageAttributeWidget as PAW;
-use app\models\WorkForm;
-use app\models\Sex;
-use app\models\Category;
-use app\models\City;
-use kartik\date\DatePicker;
-use yii\widgets\Pjax;
+
+//use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
 RegistrationAsset::register($this);
