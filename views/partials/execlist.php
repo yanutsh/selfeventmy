@@ -16,6 +16,8 @@ TemplateAsset::register($this);
 //CabinetAsset::register($this);
 require_once('../libs/time_ago.php');
 require_once('../libs/user_photo.php');
+
+//debug($model['only_top']);
 ?>
 
 <div class="top100">Исполнители ТОП 100</div>
@@ -38,14 +40,12 @@ foreach ($exec_list as $el)
                 </div>
 
                 <div class="b_right">
-                    <p class="reiting_num">5.0</p>
+                    <p class="reiting_num"><?= $el['reyting']?></p>
                     <p class="reitibg_text">Рейтинг</p>
                 </div>
 
                 <div class="exec_details">
-                    <p>Привет! Меня зовут Ольга! за моими плечами более 100 проведенных свадеб. 
-                        Привет! Меня зовут Ольга! за моими плечами более 100 проведенных свадеб. 
-                        Привет! Меня зовут Ольга! за моими плечами более 100 проведенных свадеб. </p>
+                    <p><?= $el['myself']?> </p>
                 </div>  
 
                 <!-- <div class="item_footer"> -->
@@ -59,7 +59,9 @@ foreach ($exec_list as $el)
 }?>
 
 
-<div class="top100__all">
+<div class="top100__all" style="display:
+        <?php if (isset($model['only_top'])) echo "none"; 
+              else echo "block"?>">
     <div class="top100">Все исполнители</div>
 <?php
     foreach ($exec_list as $el) 
@@ -79,14 +81,12 @@ foreach ($exec_list as $el)
                     </div>
 
                     <div class="b_right">
-                        <p class="reiting_num">5.0</p>
+                        <p class="reiting_num"><?= $el['reyting']?></p>
                         <p class="reitibg_text">Рейтинг</p>
                     </div>
 
                     <div class="exec_details">
-                        <p>Привет! Меня зовут Ольга! за моими плечами более 100 проведенных свадеб. 
-                            Привет! Меня зовут Ольга! за моими плечами более 100 проведенных свадеб. 
-                            Привет! Меня зовут Ольга! за моими плечами более 100 проведенных свадеб. </p>
+                        <p><?= $el['myself']?></p>
                     </div>  
 
                     <!-- <div class="item_footer"> -->

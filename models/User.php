@@ -61,6 +61,7 @@ class User extends ActiveRecord implements IdentityInterface
             'id' => 'ID',
             'username' => 'ФИО',
             'myself' => 'О себе',
+            'reyting' => 'Рейтинг',
         ];
     }
 

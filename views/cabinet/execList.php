@@ -41,22 +41,7 @@ TemplateAsset::register($this);
 			    				<div class="filtr__header">
 				    				<div class="title">Фильтр</div>
 				    				<a href="/cabinet/executive-list" id="reset" alt="">Сбросить все</a>
-			    				</div>
-
-			    				<div class="only_top">
-			    					<div>Только ТОП 100</div>
-			    					<div class="toggle-button-cover"> 
-					                    <div class="button-cover">
-					                        <div class="button r" id="button-top">
-					                          <input type="checkbox" class="checkbox" 
-					                          id="chk_top"name= 'NotificationForm[push_notif]' 
-						                      <?php //if ($model['push_notif']) echo 'checked';?>>
-					                          <div class="knobs"></div>
-					                          <div class="layer"></div>
-					                        </div>
-					                    </div>
-					                </div>
-			    				</div>
+			    				</div>			    				
 
 			    				<?php  //Pjax::begin(); ?>	
 			    				<?php $form = ActiveForm::begin([
@@ -68,6 +53,30 @@ TemplateAsset::register($this);
 								    'method'=>'post',
 								    'enableAjaxValidation' => false,
 				                ]); ?>
+
+				                <div class="only_top">
+			    					<div>Только ТОП 100</div>
+			    					<div class="toggle-button-cover"> 
+					                    <div class="button-cover">
+					                        <div class="button r" id="button-top">
+					                          <input type="checkbox" class="checkbox" 
+					                          	name= 'ExecFiltrForm[only_top]' 
+						                      <?php if ($model['only_top']) echo 'checked';?>>
+					                          <div class="knobs"></div>
+					                          <div class="layer"></div>
+					                        </div>
+					                    </div>
+					                </div>
+			    				</div>
+
+				                <div class="form-group input__block">
+				                	<label class='control-label'>Рейтинг </label>
+					                <select name="ExecFiltrForm[reyting]" id="execfiltrform-reyting" class="form-control">
+					                	<option value='1'>По убыванию</option>
+					                	<option value='0'>По возрастанию</option>          	
+					                </select>
+					                <!-- <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> -->
+				                </div>
 
 				                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
 
@@ -133,6 +142,27 @@ TemplateAsset::register($this);
 			                    <div class="form-group"> 
 			                    	<div class='register__user active__button'>Показано исполнителей - <span><?= $count ?></span> шт.</div>
                     			</div>
+
+<?php
+		// $script = <<< JS
+		//     // Показ только ТОП-100 исполнителей
+		//     $('#button-top').on('click',function(e){
+		    	
+		//    	    // отправка формы по pjax и потом удаление фона: 
+		//    	    if ($('#chk_top').is(':checked')){
+		// 			//alert('Включен'); // скрываем остальных исполнителей
+		//    	    	$('.top100__all').css('display', 'none');
+		// 		} else {
+		// 			//alert('Выключен');// показываем остальных исполнителей
+		// 			$('.top100__all').css('display', 'block');
+		// 		}	   	
+		    	 	    	
+		// 	});
+		// JS;
+		// //маркер конца строки, обязательно сразу, без пробелов и табуляции
+		// $this->registerJs($script, yii\web\View::POS_READY);
+?>
+
 			                    <?php ActiveForm::end(); ?>
 			                    <?php //Pjax::end(); ?>
 			                    <!-- Ответ сервера будем выводить сюда -->
@@ -155,7 +185,7 @@ TemplateAsset::register($this);
 
 										    				
 			    				<?php  	
-									echo $this->render('@app/views/partials/execlist.php', compact('exec_list'));
+									echo $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model'));
 								?>	
 			    			</div>
 			    			
@@ -168,22 +198,4 @@ TemplateAsset::register($this);
 	    </div>
 
 	</div>
-	<?php
-		$script = <<< JS
-		    // Показ только ТОП-100 исполнителей
-		    $('#button-top').on('click',function(e){
-		    	
-		   	    // отправка формы по pjax и потом удаление фона: 
-		   	    if ($('#chk_top').is(':checked')){
-					//alert('Включен'); // скрываем остальных исполнителей
-		   	    	$('.top100__all').css('display', 'none');
-				} else {
-					//alert('Выключен');// показываем остальных исполнителей
-					$('.top100__all').css('display', 'block');
-				}	   	
-		    	 	    	
-			});
-		JS;
-		//маркер конца строки, обязательно сразу, без пробелов и табуляции
-		$this->registerJs($script, yii\web\View::POS_READY);
-	?>
+	

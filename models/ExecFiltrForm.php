@@ -20,7 +20,8 @@ class ExecFiltrForm extends Model
     public  $budget_to;         // Бюджет до    
     public  $prepayment;        // Форма оплаты
     public  $work_form_id;      // Форма рпботы
-      
+    public  $reyting;           // Сортировка по рейтингу
+    public  $only_top;          // 1-Вывод только ТОП-100
     /**
      * {@inheritdoc}
      */
@@ -28,7 +29,7 @@ class ExecFiltrForm extends Model
     {
         return [                
             // ['category_id', 'default', 'value' => '1'],            
-            [['category_id', 'date_from', 'date_to', 'order_status_id', 'prepayment', 'work_form_id', 'city_id'], 'safe'], 
+            [['category_id', 'date_from', 'date_to', 'order_status_id', 'prepayment', 'work_form_id', 'city_id', 'reyting', 'only_top'], 'safe'], 
 
            //[['date_from', 'date_to'], 'date'],
            // ['date_from', 'default', 'value' => date('d.m.Y')],
@@ -54,6 +55,7 @@ class ExecFiltrForm extends Model
             'prepayment'    => 'Форма оплаты',
             'work_form_id'     => 'Форма работы',
             'order_status_id' => 'Статус заказа', 
+            'reyting' => 'Рейтинг',
         ];
     }
 

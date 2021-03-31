@@ -284,22 +284,26 @@ class CabinetController extends Controller {
                   "data" => null,
                   "error" => "error1"
               ];
-          } 
+          }          
             
           //debug($model);
 
-            // фильтрация и определение количества заказов 
-            // астройки фильтра по предоплате
-            if ( $model->prepayment == 1)  {      // без предоплаты
-                $prep_compare = "=";
-                $prep_value = '0';
-            }elseif ( $model->prepayment == 2) {  // c предоплатoй
-                $prep_compare = ">=";
-                $prep_value = '100';
-            }else{
-                $prep_compare = ">=";             // любой вариант
-                $prep_value = '0';
-            } 
+          if ($model['reyting']) $reyting_order="DESC"; // 1 - по убыванию
+          else $reyting_order = "ASC";                     // 0 - по возрастанию
+          //debug ($reyting_order);
+
+          // фильтрация и определение количества заказов 
+          // астройки фильтра по предоплате
+          if ( $model->prepayment == 1)  {      // без предоплаты
+              $prep_compare = "=";
+              $prep_value = '0';
+          }elseif ( $model->prepayment == 2) {  // c предоплатoй
+              $prep_compare = ">=";
+              $prep_value = '100';
+          }else{
+              $prep_compare = ">=";             // любой вариант
+              $prep_value = '0';
+          } 
 
             //debug ($model); 
 
@@ -313,8 +317,12 @@ class CabinetController extends Controller {
                  // ['in','city_id', $model->city_id],
                  // [$prep_compare, 'prepayment', $prep_value],
                                       
-                            ]);
+                            ])
+              ->orderBy('reyting '.$reyting_order);
+
                /////->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');
+
+              //debug($query, false);
 
             if ($model->category_id)  
                 $query->andWhere(['id' => ExecCategory::find()->select('user_id')->andWhere(['category_id'=>  $model->category_id])]);                 
@@ -323,7 +331,8 @@ class CabinetController extends Controller {
             $exec_list = $query->all();       
             $count=$query->count(); // найдено заказов Всего
             //debug( $count);
-            $category = Category::find() ->orderBy('name')->all();
+
+            $category = Category::find()->orderBy('name')->all();
             $city = City::find() ->orderBy('name')->all();
             
             $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
@@ -346,7 +355,7 @@ class CabinetController extends Controller {
               $this->layout='contentonly';
               return [
                   "data" => $count,
-                  "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list')), //$html_list, 
+                  "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model')),  
                   "error" => null
               ];  
 
@@ -359,6 +368,7 @@ class CabinetController extends Controller {
                 //    ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
                               //])
                 ->with('workForm', 'category')
+                ->orderBy( 'reyting DESC')
                 // ->orderBy('added_time DESC')
                 ->asArray()->all();  //count();
 
