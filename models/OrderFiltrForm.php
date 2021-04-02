@@ -21,7 +21,6 @@ class OrderFiltrForm extends Model
     public  $prepayment;        // Форма оплаты
     public  $work_form_id;      // Форма рпботы
     public  $order_status_id;   // Статус заказа
-
     
     /**
      * {@inheritdoc}
@@ -30,7 +29,7 @@ class OrderFiltrForm extends Model
     {
         return [                
             // ['category_id', 'default', 'value' => '1'],            
-            [['category_id', 'date_from', 'date_to', 'order_status_id', 'prepayment', 'work_form_id', 'city_id'], 'safe'], 
+            [['category_id', 'date_from', 'date_to', 'order_status_id', 'prepayment', 'work_form_id', 'city_id', 'reset_city'], 'safe'], 
 
            //[['date_from', 'date_to'], 'date'],
            // ['date_from', 'default', 'value' => date('d.m.Y')],

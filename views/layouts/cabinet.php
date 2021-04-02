@@ -93,6 +93,10 @@ $avatar = $identity['avatar'];
                         </div>
                         
                         <div class="header_item">
+                            <!-- уведомление для чатов -->
+                            <div id="badge_chat" class="badge <?php if(Yii::$app->session['kol_new_chats']==0) echo "hidden"; ?>">             
+                                <?= Yii::$app->session['kol_new_chats'] ?>                  
+                            </div>
                             <?php
                             if ($identity['isexec']) {
                                 echo Nav::widget([                               
@@ -130,7 +134,7 @@ $avatar = $identity['avatar'];
 
                         <div class="header_item">
                             <div class="navbar_img">
-                                <a href="<?=Url::to('/cabinet/user-card')?>">
+                                <a href="<?=Url::to('/cabinet/profile-info')?>">
                                     <img src="<?= user_photo($avatar)?>" alt="Аватар">
                                 </a>
                             </div>

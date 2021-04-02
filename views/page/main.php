@@ -5,6 +5,8 @@ use yii\web\User;
 use app\assets\TemplateAsset;
 use app\components\page\PageAttributeWidget as PAW;
 
+require_once('../libs/time_ago.php');
+
 TemplateAsset::register($this);
 
 $this->title = $page->seo_title;
@@ -30,7 +32,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
             <?php endif;?>           
 
         <h3><?php 
-            echo ("Юзер- ".Yii::$app->user->identity->username);            
+            //echo ("Юзер- ".Yii::$app->user->identity->username);            
         ?></h3>
         <br>
 
@@ -115,44 +117,35 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
 
             <div class="list-request">
-                <div class="element">
-                    <!-- <div class="image"><img src="<?= \Yii::$app->params['image_dir_url'] ?>req-img.png"></div> -->
-                    <div class="b">
-                        <div class="name">Заказчик: ИП Иван Иванов</div>
-                        <div class="category">Требуется: <span>Ведущий</span></div>            
-                        <div class="text">Стишки на корпоратив. Срочно нужна помощь!!! Всем привет. Вообщем смысл вопроса в том что нужна помощь в придумывании частушек песенок или стишков на корпоратив.<br>СРОЧНО!!!</div>
-                        <div class="money">10 000 Р</div>
-                        <div class="city">Mocква</div>
-                        <div class="time">2 минуты назад</div>
+                <?php
+                foreach ($last_orders as $ol) 
+                { ?>
+                    <div class="element">
+                        <!-- <div class="image"><img src="<?= \Yii::$app->params['image_dir_url'] ?>req-img.png"></div> -->
+                        <div class="b">
+                            <div class="name">Заказчик: <?= $ol['workForm']['work_form_name']." ". $ol['user']['username']?></div>
+                            <div class="category">Требуется: 
+                                <span>
+                                    <?php 
+                                        $category_names = "";
+                                        foreach ($ol['category'] as $cat){
+                                            if ( $category_names=="" ) $category_names = $cat['name']; 
+                                            else $category_names .= ", ".$cat['name'];                
+                                        } 
+                                        echo $category_names;
+                                        ?>
+                                </span>
+                            </div>            
+                            <div class="text"><?= $ol['details'] ?></div>
+                            <div class="money"><?= $ol['budget_to'] ?> ₽</div>
+                            <div class="city"><?= $ol['orderCity']['name'] ?></div>
+                            <div class="time"><?= showDate(strtotime($ol['added_time']))?></div>
+                        </div>
                     </div>
-                </div>
-                <div class="element">
-                    <!-- <div class="image"><img src="<?= \Yii::$app->params['image_dir_url'] ?>req-img.png"></div> -->
-                    <div class="b">
-                        <div class="name">Заказчик: ИП Иван Иванов</div>
-                        <div class="category">Требуется: <span>Ведущий</span></div>            
-                        <div class="text">Стишки на корпоратив. Срочно нужна помощь!!! Всем привет. Вообщем смысл вопроса в том что нужна помощь в придумывании частушек песенок или стишков на корпоратив.<br>СРОЧНО!!!</div>
-                        <div class="money">1 000 Р</div>
-                        <div class="city">Mocква</div>
-                        <div class="time">2 минуты назад</div>
-                    </div>
-                </div>
-                <div class="element">
-                    <!-- <div class="image"><img src="<?= \Yii::$app->params['image_dir_url'] ?>req-img.png"></div> -->
-                    <div class="b">
-                        <div class="name">Заказчик: ИП Иван Иванов</div>
-                        <div class="category">Требуется: <span>Ведущий</span></div>            
-                        <div class="text">Стишки на корпоратив. Срочно нужна помощь!!! Всем привет. Вообщем смысл вопроса в том что нужна помощь в придумывании частушек песенок или стишков на корпоратив.<br>СРОЧНО!!!</div>
-                        <div class="money">900 Р</div>
-                        <div class="city">Mocква</div>
-                        <div class="time">2 минуты назад</div>
-                    </div>
-                </div>
-            </div>
+                <?php 
+                } ?>    
 
-           <!--  <div class="all-requests">
-                <a href="<?= \yii\helpers\Url::to(['page/frontend', 'id' => 3]) ?>" class="pink-button">Все заявки</a>
-            </div> -->
+            </div>          
 
         </div>
     </section>

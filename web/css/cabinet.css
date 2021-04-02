@@ -75,6 +75,26 @@ body{
 		width: 100%;
 		padding: 0;
 	}
+
+	.header_item{
+		position: relative;
+	}
+
+	#badge_chat {
+		background-color: #f50d0d;
+	    position: absolute; 
+	    /*margin-left: -12px;*/
+	    top: 6px; /*16px;*/
+	    width: 16px !important;
+	    height: 16px !important;
+	    padding: 3px 2px !important;
+	    font-size: 12px !important;   
+    }
+
+	#badge_chat	{
+		top: 8px;
+	    left: 128px;
+	}
 /*******************  Навигационная панель Конец  ********************/	
 
 
@@ -161,7 +181,8 @@ body{
 		font-weight: bold;
 	}
 
-	#orderfiltrform-city_id{
+	#orderfiltrform-city_id,
+	#execfiltrform-city_id{
 		height: 0;
 	}
 
@@ -894,6 +915,16 @@ body{
 		font-size: 18px;
 		font-weight: bold;
 	}
+
+	.input__block a{
+		position: absolute;
+	    right: 0;
+	    font-size: 12px;
+	    /* vertical-align: bottom; */
+	    line-height: 21px;
+	    text-decoration: none;
+	    color: #AE4A84;
+	}
 /*******************  Лента исполнителей ExecList  Конец  ********************/
 
 /*******************  Карточка исполнителя **********************************/
@@ -1300,11 +1331,27 @@ body{
 		right: 0;
 	}
 
+	.modal-header h2{
+		font-size: 24px;
+	}
+
 	.modal-footer{
 		display: none;
 	}
-
 	
+	.delete_account{
+		text-align: center;
+	}
+
+	.delete_account h3{
+		font-size: 18px;
+		margin-bottom: 20px;
+	}
+
+	.delete_account p{
+		font-size: 14px;
+		font-weight: normal;
+	}
 /*******************  Редактирование профиля Конец******************************************/
 
 /******************************  Выключатель  ********************************/

@@ -1089,6 +1089,9 @@ footer {
   .template-main .section-2 .all-requests {
     padding: 20px 0;
     text-align: center; }
+.list-request .element .b{
+  width: 100%;
+}    
 .template-main .section-3 {
   padding: 40px 0; }
   .template-main .section-3 .header {

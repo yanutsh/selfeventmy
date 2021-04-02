@@ -44,11 +44,32 @@ $(document).ready(function() {
         })
         // Запрещаем прямую отправку данных из формы
         return false;
-    })    
-    	
+    }) 
+
+    // Сброс отдельных полей фильтра ЗАКАЗОВ
+        $('#order_reset_category').on('click', function(){ // Категория Услуги. 
+
+            $('#orderfiltrform-category_id').val(""); // сбросили значение поля        
+            $('#order-filter-form').change();         // сгенерировали изменение формы
+        });
+
+        $('#order_reset_city').on('click', function(){ // Сброс городов.                  
+            $('.search-choice-close').click();         // имитируем клик-закрытие
+            $('#order-filter-form').change();          // сгенерировали изменение формы
+        });
+        
+
+        $('#order_reset_work_form').on('click', function(){ // Форма работы.            
+            $('#orderfiltrform-work_form_id').val(""); // сбросили значение поля        
+            $('#order-filter-form').change();          // сгенерировали изменение формы
+        });
+
+        
+    // Сброс отдельных полей фильтра ЗАКАЗОВ КОНЕЦ
+
     // При изменении любого эл-та фильтра ЗАКАЗОВ- отправляем данные фильтра 
     // на просчет числа заказов
-    $('#filter-form').change(function(event) {    
+    $('#order-filter-form').change(function(event) {    
     	//alert ('Change filter-form');
         //event.preventDefault();
         // Получаем объект формы
@@ -65,7 +86,7 @@ $(document).ready(function() {
         		if (data.error == null) {
                     // Если ответ сервера успешно получен
                     //console.dir(data);
-                    $('#filter-form .register__user span').text(data.data);
+                    $('#order-filter-form .register__user span').text(data.data);
                     //$("#output").text(data.data);
                     $("#orders_list").html(data.orders);
 
@@ -81,7 +102,7 @@ $(document).ready(function() {
         })
         // Запрещаем прямую отправку данных из формы
         return false;
-    }) 
+    })    
 
     // При изменении любого эл-та фильтра ИСПОЛНИТЕЛЕЙ- отправляем данные фильтра 
     // на просчет числа заказов

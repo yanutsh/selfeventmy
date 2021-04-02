@@ -10,25 +10,27 @@ use yii\helpers\Html;
  *
  * @property int $id
  * @property int $user_id
- * @property int $status_order_id Статус заказа
- * @property string $details
- * @property string|null $added_time
  * @property string|null $who_need Кто нужен
+ * @property string $details
  * @property int $city_id
  * @property int $members Число участников
  * @property string $date_from
  * @property string|null $date_to
  * @property string|null $wishes Пожелания
- * @property int $order_budget
+ * @property int|null $order_budget
  * @property int|null $budget_from
  * @property int|null $budget_to
- * @property int|null $prepayment Предоплата
+ * @property int $prepayment Предоплата
+ * @property string|null $added_time
+ * @property int $status_order_id Статус заказа
  *
+ * @property Chat[] $chats
+ * @property Dialog[] $dialogs
  * @property User $user
  * @property OrderStatus $statusOrder
+ * @property FsCity $city
  * @property OrderCategory[] $orderCategories
  * @property OrderPhoto[] $orderPhotos
- * @property Category[] $categories
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -79,6 +81,27 @@ class Order extends \yii\db\ActiveRecord
             'prepayment' => 'Предоплата',
         ];
     }
+
+    /**
+     * Gets query for [[Chats]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChats()
+    {
+        return $this->hasMany(Chat::className(), ['order_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Dialogs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDialogs()
+    {
+        return $this->hasMany(Dialog::className(), ['order_id' => 'id']);
+    }
+
 
     /**
      * Gets query for [[User]].

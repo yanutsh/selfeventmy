@@ -20,6 +20,7 @@ use app\models\SignupForm;
 use app\models\LoginForm;
 use app\models\User;
 use app\models\Category;
+use app\models\Order;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 use yii\base\Response;
@@ -87,6 +88,11 @@ class PageController extends Controller
 
         $pageModel = Page::findOne(['id' => $id, 'status' => 1]);
         $categories= Category::find()->asArray()->orderBy('name')->all();
+        $last_orders= Order::find()                  
+                ->with('category','orderStatus','orderCity', 'user','workForm')
+                ->orderBy('added_time DESC')
+                ->asArray()->limit(5)->all();
+        //debug($last_orders) ;
 
       //if(\Yii::$app->request->get('region')) {echo "есть запрос региона"; die;}
       // если в GET новый город - записываем в кукис
@@ -115,8 +121,9 @@ class PageController extends Controller
             //$model = new User::
             return $this->render($template, [
                         // common
-                        'page' => $pageModel,
-                        'categories' => $categories,                        
+                        'page' => $pageModel,  // main.php
+                        'categories' => $categories, 
+                        'last_orders' => $last_orders,                       
             ]);
         }
         else
@@ -350,9 +357,14 @@ class PageController extends Controller
           //debug($model);
           if ($model->login()) 
           {       
-             //debug("ЛОГИН прошел"); 
-             $identity = Yii::$app->user->identity;
-
+              //debug("ЛОГИН прошел"); 
+              $identity = Yii::$app->user->identity;
+              //debug($identity);
+              if ($identity['blk']==1){ // если стоит признак Удаления - сбрасываем его
+                $identity['blk'] = 0;
+                $identity['blk_date'] = Null;
+                $identity->save();
+              }
              //debug($identity);
              Yii::$app->getResponse()->redirect(
                   ['/cabinet/index',

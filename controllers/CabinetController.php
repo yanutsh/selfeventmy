@@ -12,6 +12,7 @@ use app\models\Subcategory;
 use app\models\City;
 use app\models\User;
 use app\models\Chat;
+use app\models\Dialog;
 use app\models\WorkForm;
 use app\models\PaymentForm;
 use app\models\Order;
@@ -27,18 +28,19 @@ require_once('../libs/convert_datetime_en_ru.php');
 require_once('../libs/rdate.php');
 
 // Контроллер ЗАКАЗЧИКА - 
-class CabinetController extends Controller {  
+class CabinetController extends AppController {  
     
     public $layout = 'cabinet';    // общий шаблон для всех видов контроллера
-
-  	// ЛК - фильтр и список Заказов  ***********************************************
+   	
+    // ЛК - фильтр и список Заказов  ***********************************************
     public function actionIndex()	
     {
-      	//$this->layout='cabinet';
-
-        $model = new OrderFiltrForm();
+      // получить число новых сообщений из БД по заказам текущего Юзера
+        Yii::$app->runAction('cabinet/get-new-mess');            
+      // запомнили в сессию 
         
-        // Если пришёл AJAX запрос
+        $model = new OrderFiltrForm();
+      // Если пришёл AJAX запрос
         if (Yii::$app->request->isAjax) { 
           // Устанавливаем формат ответа JSON
           //debug('Еесть Ajax');
@@ -72,7 +74,13 @@ class CabinetController extends Controller {
             }else{
                 $prep_compare = ">=";             // любой вариант
                 $prep_value = '0';
-            } 
+            }
+
+            // сброс фильтра по городам
+            // if ($model['reset_city']) {
+            //   $model->city_id = Null;
+            //   debug($model->city_id);
+            // }  
 
             //debug ($model); 
 
@@ -113,10 +121,7 @@ class CabinetController extends Controller {
               //     }                  
               //   }                  
               // }
-                    
-
-              $count= count($orders_list); 
-              //debug($count) ;            
+                 
 
               $this->layout='contentonly';
               return [
@@ -147,13 +152,15 @@ class CabinetController extends Controller {
         $order_status = OrderStatus::find() ->orderBy('name')->all();
         //debug( $order_status);
 
-        return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count'));              
+        return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats'));              
     }
 
     // ЛК - список Чатов  ********************************************
     public function actionChatList() {
         //$model = new ExecFiltrForm();
-        
+        // получить число новых сообщений из БД по заказам текущего Юзера
+          Yii::$app->runAction('cabinet/get-new-mess');            
+        // запомнили в сессию   
         // Если пришёл PJAX запрос
         if (Yii::$app->request->isPjax) { 
         //   // Устанавливаем формат ответа JSON
@@ -247,9 +254,7 @@ class CabinetController extends Controller {
           
         $chat_list = Chat::find()
                 //->Where(['isexec' => 1])
-                //  ->filterWhere(['AND',                     
-                //    ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
-                              //])
+                
                 ->with('exec', 'order')
                 // ->orderBy('added_time DESC')
                 ->asArray()->all();  //count();
@@ -581,11 +586,16 @@ class CabinetController extends Controller {
             $user->myself = $data['User']['myself']; 
           }elseif ($data['field_name'] == 'contact'){
             $user->username = $data['User']['username'];
+          }elseif ($data['field_name'] == 'delеte'){//удаление/блокировка эккаунта            
+            $user->blk = 1; 
+            $user->blk_date=date('Y-m-d H:i:s');             
+          }elseif ($data['field_name'] == 'deleteinfo'){
+            // сбросить сессии, куки, вывести модальное окно
+            return $this->redirect('/page/logout',302); //
           } 
 
           $user->save(); // записать изменения в БД
-          return $this->render('profileInfo', compact('user'));   
-
+          //return $this->render('profileInfo', compact('user')); 
       }
 
       return $this->render('profileInfo', compact('user')); 

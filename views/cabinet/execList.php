@@ -78,11 +78,15 @@ TemplateAsset::register($this);
 					                <!-- <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> -->
 				                </div>
 
-				                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
+				                <div class="input__block">
+					                <a href="#!" id="reset_category">Cбросить</a>
+					                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
+				                </div>
 
 				                <div class="input__block field-orderfiltrform-city_id">
+				                	<a href="#!" id="reset_city">Cбросить</a>
 				                	<label class='control-label'>Город (города)</label>
-					                <select name="ExecFiltrForm[city_id][]" id="orderfiltrform-city_id" class="js-chosen" multiple="multiple">
+					                <select name="ExecFiltrForm[city_id][]" id="execfiltrform-city_id" class="js-chosen" multiple="multiple">
 					                	<?php foreach($city as $c) {?>
 					                		<option value=<?= $c['id']?>><?= $c['name']?> </option>
 					                	<?php } ?>				                	

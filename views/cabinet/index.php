@@ -39,14 +39,13 @@ TemplateAsset::register($this);
 			    					<a type='button' href="<?php echo Url::to(['cabinet/add-order', 'isexec' => '1']);?>" class='register active'>Создать заказ</a>
 			    				<?php } ?>
 
-			    				<?//= debug($category); ?>
 			    				<div class="filtr__header">
 				    				<div class="title">Фильтр</div>
 				    				<a href="/cabinet" id="reset" alt="">Сбросить</a>
 			    				</div>
-			    				<?php  //Pjax::begin(); ?>	
+			    				<?php Pjax::begin(); ?>	
 			    				<?php $form = ActiveForm::begin([
-			    					'id' => 'filter-form',
+			    					'id' => 'order-filter-form',
 				                    'options' => [
 				                    	'data-pjax' => true,
 				                     ],
@@ -55,9 +54,13 @@ TemplateAsset::register($this);
 								    'enableAjaxValidation' => false,
 				                ]); ?>
 
-				                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
+				                <div class="input__block">
+					                <a href="#!" id="order_reset_category">Cбросить</a>
+					                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
+					            </div>    
 
 				                <div class="input__block field-orderfiltrform-city_id">
+				                	<a href="#!" id="order_reset_city">Cбросить</a>       	
 				                	<label class='control-label'>Город (города)</label>
 					                <select name="OrderFiltrForm[city_id][]" id="orderfiltrform-city_id" class="js-chosen" multiple="multiple">
 					                	<?php foreach($city as $c) {?>
@@ -112,7 +115,11 @@ TemplateAsset::register($this);
 
 			                    <?= $form->field($model, 'prepayment')->dropDownList (ArrayHelper::map($payment_form, 'id', 'payment_name'),['prompt'=>'Все формы оплаты']) ?>
 
-			                    <?= $form->field($model, 'work_form_id')->dropDownList (ArrayHelper::map($work_form, 'id', 'work_form_name'),['prompt'=>'Все формы работы']) ?>
+			                    <div class="input__block">
+			                    	<a href="#!" id="order_reset_work_form">Cбросить</a>
+			                    	<?= $form->field($model, 'work_form_id')->dropDownList (ArrayHelper::map($work_form, 'id', 'work_form_name'),['prompt'=>'Все формы работы']) ?>
+			                    </div>
+			                 
 
 			                    <?= $form->field($model, 'order_status_id')->dropDownList (ArrayHelper::map($order_status, 'id', 'name'),['prompt'=>'Любой статус заказа']) ?>
 			                    	
@@ -120,7 +127,7 @@ TemplateAsset::register($this);
 			                    	<div class='register__user active__button'>Показано заказов - <span><?= $count ?></span> шт.</div>
                     			</div>
 			                    <?php ActiveForm::end(); ?>
-			                    <?php //Pjax::end(); ?>
+			                    <?php Pjax::end(); ?>
 			                    <!-- Ответ сервера будем выводить сюда -->
 								<!-- <p id="output"></p> -->
 

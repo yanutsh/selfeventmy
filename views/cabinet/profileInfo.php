@@ -51,7 +51,7 @@ $identity = Yii::$app->user->identity;
 						]); ?>
 
 						<input hidden type="text" name="field_name" value="myself">
-						<?= $form->field($user, 'myself')->textarea(['style'=>'resize:vertical', 'rows'=>'5']); //->label(false); ?>
+						<?= $form->field($user, 'myself')->textarea(['style'=>'resize:vertical', 'rows'=>'5']); ?>
 	    				
 						<div class="form-group">
 		        		 	<?= Html::submitButton('Сохранить', [
@@ -138,7 +138,7 @@ $identity = Yii::$app->user->identity;
             	<?php 
 				// модальное окно - Контактные данные					
 					Modal::begin([
-					    'header' => '<h2>Контактные данные</h2>',
+					    'header' => '<h2>Редактирование профиля</h2>',
 					    'id' => "contact_win",					    
 					    'toggleButton' => [
 					    	'label' => 'Редактировать',
@@ -188,15 +188,116 @@ $identity = Yii::$app->user->identity;
 				$this->registerJs($script, yii\web\View::POS_READY);
 			?>
             <?php Pjax::end(); ?>
-        <!-- Контактные данные Конец-->    
+        <!-- Контактные данные Конец-->
 
+        <!-- Удаление профиля-->
+        	<?php Pjax::begin(); ?>
             <div class="order_content__subtitle">
             	<span>Удалить профиль</span>
-            	<a href="" class="text_details profile">Редактировать</a>
-            </div>
-            <div class="text">Навсегда удалить профиль.</div>            
+            	<?php 
+				// модальное окно - Контактные данные					
+					Modal::begin([
+					    'header' => '<h2>Удаление аккаунта</h2>',
+					    'id' => "delete_win",					    
+					    'toggleButton' => [
+					    	'label' => 'Редактировать',
+					    	'tag' => "a",
+					    	'class' => 'text_details profile',
+					    	'id' => 'modal_delete',					    
+					    ],
+					    'footer' => false,
+					]);
+            		
+					$form = ActiveForm::begin([
+						'id' => 'delete-form',
+						'options' => [
+	                        'data-pjax' => true,	                       
+	                        ],
+						]); ?>
 
-        </div>   
+						<input hidden type="text" name="field_name" value="delеte">
+						<div class="delete_account">
+							<h3>Вы действительно хотите удалить аккаунт?</h3>
+							<p>Профиль будет полностью удален <br> без возможности его восстановить</p>
+						</div>		    				
+						<div class="form-group">
+		        		<?= Html::submitButton('Удалить', [
+		        				'class' => 'register__user active__button', 
+		        				'name' => 'delete-button',
+		        				'id'=> 'delete-button'
+		        			]) ?>
+		    			</div>
+	 
+	    			<?php ActiveForm::end(); ?>
+
+	    			<?php 
+					Modal::end();					
+				// модальное окно - Контактные данные -Конец	
+				?>	
+            </div>
+            <div class="text">Навсегда удалить профиль.</div> 
+            <?php
+				$script = <<< JS
+				    // Закрытие фона модального окна
+				    $('#delete-button').click(function(e){
+				   	    // отправка формы по pjax и потом удаление фона:   	   	
+				    	$('.modal-backdrop.fade.in').css('display','none'); 
+				    	$('body').removeAttr('class');
+				    	//имитация клика по кнопке модального окна с последней инфо.
+				    	$('#modal_deleteinfo').click();  	    	
+					});
+				JS;
+				//маркер конца строки, обязательно сразу, без пробелов и табуляции
+				$this->registerJs($script, yii\web\View::POS_READY);
+			?>
+            <?php Pjax::end(); ?>           
+        <!-- Удаление профиля Конец -->
+
+        	        					
+	        <?php 
+	        Pjax::begin();
+			// Скрытое модальное окно - Удаление - последнее инфо 					
+				Modal::begin([
+				    'header' => '<h2>Аккаунт Удален</h2>',
+				    'id' => "deleteinfo_win",					    
+				    'toggleButton' => [
+				    	'label' => 'Предупреждение',
+				    	'tag' => "a",
+				    	'class' => 'text_details profile hidden',
+				    	'id' => 'modal_deleteinfo',					    
+				    ],
+				    'footer' => false,
+				]);
+	    		
+				$form = ActiveForm::begin([
+					'id' => 'delete-form',
+					'options' => [
+	                    'data-pjax' => true,	                       
+	                    ],
+					]); ?>
+
+					<input hidden type="text" name="field_name" value="deleteinfo">
+					<div class="delete_account">
+						<!-- <h3>Последнее предупреждение - Вы действительно хотите удалить аккаунт?</h3> -->
+						<p>Аккаунт скрыт из сервиса.<br>В течении 30 дней его можно<br> восстановить - для этого зайдите в свой аккаунт.<br> В противном случае он будет удален безвозвратно!</p>
+					</div>		    				
+					<div class="form-group">
+	        		<?= Html::submitButton('Вернуться на главную', [
+	        				'class' => 'register__user active__button', 
+	        				'name' => 'deleteinfo-button',
+	        				'id'=> 'deleteinfo-button'
+	        			]) ?>
+	    			</div>
+
+				<?php ActiveForm::end(); ?>
+
+				<?php 
+				Modal::end();					
+			// модальное окно - Удаление последнее инфо -Конец
+			Pjax::end();	
+			?> 
+           
+        	  
 
     </div>        
 </div>

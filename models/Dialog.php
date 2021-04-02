@@ -12,6 +12,7 @@ use Yii;
  * @property int $user_id кто написал
  * @property string $message сообщение
  * @property string $send_time
+ * @property int $new Новое сообщение-1
  *
  * @property Order $order
  * @property User $user
@@ -33,7 +34,7 @@ class Dialog extends \yii\db\ActiveRecord
     {
         return [
             [['order_id', 'user_id', 'message'], 'required'],
-            [['order_id', 'user_id'], 'integer'],
+            [['order_id', 'user_id', 'new'], 'integer'],
             [['message'], 'string'],
             [['send_time'], 'safe'],
             [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
@@ -48,10 +49,11 @@ class Dialog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'order_id' => 'по какому заказу',
-            'user_id' => 'кто написал',
-            'message' => 'сообщение',
+            'order_id'  => 'по какому заказу',
+            'user_id'   => 'кто написал',
+            'message'   => 'сообщение',
             'send_time' => 'Send Time',
+            'new'       => 'Новое сообщение',
         ];
     }
 
