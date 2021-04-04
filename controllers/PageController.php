@@ -19,8 +19,10 @@ use app\models\RegForm;
 use app\models\SignupForm;
 use app\models\LoginForm;
 use app\models\User;
+use app\models\UserCity;
 use app\models\Category;
 use app\models\Order;
+use app\models\City;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 use yii\base\Response;
@@ -395,27 +397,29 @@ class PageController extends Controller
     }
 
     // Регистрация пользователей **********************************************
-    public function actionRegcust()
+    public function actionRegistration()
     {
       // // запоминаем пользователя - Исполнитель или Заказчик
       // if (isset($_GET['isexec']))  $_SESSION['isexec'] = $_GET['isexec'];      
      
+      // Загрузка аватара
       if (Yii::$app->request->isAjax) {
         if(isset($_FILES[0]['name']) && !empty($_FILES[0]['name'])) 
           {
             //print_r($_FILES);
-            require_once('../libs/upload_tmp_photo.php');  
-            
+            require_once('../libs/upload_tmp_photo.php');             
            } 
         //debug($model);
              
         //return 'Загрузили аватар';
       }
 
-      $model = new RegForm();                
+      $model = new RegForm();
+      $city = City::find()->asArray()->orderBy('name Asc')->all();                
 
       if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()) && $model->check_validate())
-      {            
+      {  
+        
         // проверяем на заполнение согласий  
           $errors = Null;
           if (!($model->personal =='yes')) $errors="- нет согласия на обработку персональных данных";
@@ -423,16 +427,15 @@ class PageController extends Controller
 
           if ($errors) {  
              Yii::$app->session->setFlash('errors', $errors);
-             return $this->render('regUser', compact('model'));
-          } //else{
-            //   Yii::$app->session->setFlash('success', 'Спасибо за регитсрацию. Please check your inbox for verification email.');
-            // }
+             return $this->render('regUser', compact('model','city'));
+          } 
         // проверяем на заполнение согласий  КОНЕЦ
         
         // записать данные юзера из RegForm в User и в БД
-          //debug($model);            
+        debug($model);            
 
           $user = new User();
+          $user_city = new UserCity();
 
           $user->work_form_id = $model->work_form_id;
           $user->username = $model->username;             
@@ -455,7 +458,16 @@ class PageController extends Controller
           if ($user->save()){ // && $this->sendEmail($user);
             $_SESSION['user_id']=$user->getId(); //получили id нового юзера             
 
-            //echo "В БД записано";         
+          // Записываем города пользователя  
+          if (isset($model->city_id)){
+            foreach($model->city_id as $c_id) {
+              $user_city = new UserCity();
+              $user_city->user_id =  $_SESSION['user_id'];
+              $user_city->city_id = $c_id;
+              $user_city->save();
+            }
+          }  
+          //echo "В БД записано";         
             
             // перейти к подтверждению данных  
             Yii::$app->getResponse()->redirect(
@@ -467,9 +479,7 @@ class PageController extends Controller
           }else echo "Не записано в БД";     
       }    
 
-      return $this->render('regUser', [
-          'model' => $model, 
-      ]);
+      return $this->render('regUser', compact('model','city'));
     }
 
     public function actionEditavatar()

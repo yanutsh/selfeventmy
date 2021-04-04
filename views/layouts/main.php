@@ -127,7 +127,7 @@ AppAsset::register($this);
                                                     <?= //Html::submitButton('Войти', ['class' => 'btn btn-primary', 'name' => 'login-button']) 
                                                     Html::submitButton('Войти', ['class' => 'enter active login', 'name' => 'login-button']) ?>
                                                 </div>
-                                                <a href="<?php echo Url::to(['page/regcust']);?>" class="register register__login">Регистрация
+                                                <a href="<?php echo Url::to(['page/registration']);?>" class="register register__login">Регистрация
                                                 </a> 
 
                                             <?php ActiveForm::end(); ?>
@@ -155,13 +155,13 @@ AppAsset::register($this);
 						                <div class="modal_header">Кто вы?</div>
 						                <div class="modal_text">
 						                    Если вы - Исполнитель - тот, кто выполняет заказы и готов предоставить свои услуги, то выберите 
-						                    <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите 
-						                    <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">Ищу исполнителя</a> 
+						                    <a href="<?php echo Url::to(['page/registration', 'isexec' => '1']);?>">Я исполнитель</a>, а если вы в поисках исполнителей - то выберите 
+						                    <a href="<?php echo Url::to(['page/registration', 'isexec' => '0']);?>">Ищу исполнителя</a> 
 						                </div>
 
 						                <div class="who_you">
 		                                    <div class="who_you__item">
-		                                        <a href="<?php echo Url::to(['page/regcust', 'isexec' => '1']);?>"> 
+		                                        <a href="<?php echo Url::to(['page/registration', 'isexec' => '1']);?>"> 
 		                                            <div class="modal__b1"></div>
 		                                        </a>
 
@@ -169,8 +169,8 @@ AppAsset::register($this);
 		                                        <div class="who_you__text">Получай заказы с гарантией оплаты и зарабатывай на постоянном потоке заказов</div>
 		                                    </div>
 		                                    <div class="who_you__item">
-		                                        <!-- <a href="/regcust"> -->
-		                                        <a href="<?php echo Url::to(['page/regcust', 'isexec' => '0']);?>">    
+		                                        <!-- <a href="/registration"> -->
+		                                        <a href="<?php echo Url::to(['page/registration', 'isexec' => '0']);?>">    
 		                                            <div class="modal__b2"></div>
 		                                        </a>
 

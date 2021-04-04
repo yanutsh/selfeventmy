@@ -48,6 +48,16 @@ class City extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Region]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRegion()
+    {
+        return $this->hasOne(FsRegion::className(), ['id' => 'id_region']);
+    }
+
+    /**
      * Gets query for [[Orders]].
      *
      * @return \yii\db\ActiveQuery

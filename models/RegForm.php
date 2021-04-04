@@ -38,6 +38,8 @@ class RegForm extends Model
     //public  $verification_token;
     public  $personal;
     public  $agreement;
+    public  $city_id;
+    public  $docFiles;
      
     //public  $workForm;
      
@@ -50,7 +52,7 @@ class RegForm extends Model
         return [
             [['work_form_id', 'username', 'phone', 'email', 'password'], 'required'],
             [['work_form_id', 'sex_id', 'isexec'], 'integer'],
-            [['birthday'], 'safe'],
+            [['birthday','city_id', 'docFiles'], 'safe'],
             [['username', 'email', 'password'], 'string', 'max' => 255],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
 
@@ -66,6 +68,7 @@ class RegForm extends Model
             //[['phone'], 'unique'],
             //[['phone'], 'match', 'pattern' => '/^\+\d{1}-\d{3}-\d{3}-\d{2}-\d{2}$/'],
             [['phone'], 'match', 'pattern' => '/^\d{11}$/', 'message' => 'Введите телефон в формате - 11 цифр, например, 792101234567'],
+            [['docFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 6],  
             
 
            // [['password_reset_token'], 'unique'],
@@ -104,6 +107,7 @@ class RegForm extends Model
             //'verification_token' => 'Verification Token',
             'personal' => 'Обработка перс. данных',
             'agreement' => 'Соглашение', 
+            'city_id'  => 'Город'
         ];
     }
 
@@ -115,5 +119,24 @@ class RegForm extends Model
             //debug($errors);
         }         
        return true;
+    }
+
+
+    // агрузка скринов документов
+    public function upload()
+    {            
+        if ($this->validate()) { 
+            //debug($this->docFiles);
+            $_SESSION['doc_photo'] = array();
+            foreach ($this->docFiles as $file) {
+                $newfilename=date('YmdHis').rand(100,1000) . '.' . $file->extension;
+                $file->saveAs('uploads/images/docs/' . $newfilename);
+                $_SESSION['doc_photo'][] = $newfilename;
+            }
+
+            return true;
+        } else {            
+           return false;
+        }
     }
 }

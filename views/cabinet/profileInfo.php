@@ -253,7 +253,7 @@ $identity = Yii::$app->user->identity;
             <?php Pjax::end(); ?>           
         <!-- Удаление профиля Конец -->
 
-        	        					
+               					
 	        <?php 
 	        Pjax::begin();
 			// Скрытое модальное окно - Удаление - последнее инфо 					
@@ -295,10 +295,9 @@ $identity = Yii::$app->user->identity;
 				Modal::end();					
 			// модальное окно - Удаление последнее инфо -Конец
 			Pjax::end();	
-			?> 
-           
+			?>         
         	  
-
+		</div>	
     </div>        
 </div>
 

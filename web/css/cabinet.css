@@ -182,7 +182,8 @@ body{
 	}
 
 	#orderfiltrform-city_id,
-	#execfiltrform-city_id{
+	#execfiltrform-city_id,
+	#regform-city_id{
 		height: 0;
 	}
 
@@ -1333,6 +1334,7 @@ body{
 
 	.modal-header h2{
 		font-size: 24px;
+		font-weight: 700;
 	}
 
 	.modal-footer{
@@ -1411,7 +1413,7 @@ body{
 	    padding: 0;
 	}
 
-	.checkbox
+	.checkbox.tuning
 	{
 	    position: relative;
 	    top: -10px;

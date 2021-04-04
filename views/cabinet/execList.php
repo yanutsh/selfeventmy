@@ -45,7 +45,8 @@ TemplateAsset::register($this);
 
 			    				<?php  //Pjax::begin(); ?>	
 			    				<?php $form = ActiveForm::begin([
-			    					'id' => 'filter-form-exec',
+			    					//'id' => 'filter-form-exec',
+			    					'id' => 'exec-filter-form',
 				                    'options' => [
 				                    	'data-pjax' => true,
 				                     ],
@@ -59,7 +60,7 @@ TemplateAsset::register($this);
 			    					<div class="toggle-button-cover"> 
 					                    <div class="button-cover">
 					                        <div class="button r" id="button-top">
-					                          <input type="checkbox" class="checkbox" 
+					                          <input type="checkbox" class="checkbox tuning" 
 					                          	name= 'ExecFiltrForm[only_top]' 
 						                      <?php if ($model['only_top']) echo 'checked';?>>
 					                          <div class="knobs"></div>
@@ -79,12 +80,12 @@ TemplateAsset::register($this);
 				                </div>
 
 				                <div class="input__block">
-					                <a href="#!" id="reset_category">Cбросить</a>
+					                <a href="#!" id="exec_reset_category">Cбросить</a>
 					                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
 				                </div>
 
 				                <div class="input__block field-orderfiltrform-city_id">
-				                	<a href="#!" id="reset_city">Cбросить</a>
+				                	<a href="#!" id="exec_reset_city">Cбросить</a>
 				                	<label class='control-label'>Город (города)</label>
 					                <select name="ExecFiltrForm[city_id][]" id="execfiltrform-city_id" class="js-chosen" multiple="multiple">
 					                	<?php foreach($city as $c) {?>

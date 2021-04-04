@@ -98,17 +98,19 @@ $avatar = $identity['avatar'];
                                 <?= Yii::$app->session['kol_new_chats'] ?>                  
                             </div>
                             <?php
+                            $balance=185;
                             if ($identity['isexec']) {
                                 echo Nav::widget([                               
                                     'items' => [
                                         ['label' => 'Заказы', 'url' => ['/cabinet/index']],
                                         ['label' => 'Чат', 'url' => ['/cabinet/chat-list']],                         
-                                        ['label' => 'Исполнители', 'url' => ['/cabinet/executive-list']],
+                                        ['label' => 'Баланс '.$balance." ₽", 'url' => ['/cabinet/balance']],
                                         ['label' => $username, 'items' => [
-                                            ['label' => 'Баланс', 'url' =>'/cabinet/balance'],
+                                            //['label' => 'Баланс', 'url' =>'/cabinet/balance'],
                                             ['label' => 'Помощь', 'url' =>'/cabinet/help'],
                                             ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'],
-                                            ['label' => 'Абонемент', 'url' => '#!'],         
+                                            ['label' => 'Абонемент', 'url' => '#!'], 
+                                            ['label' => 'Выход', 'url' => '/page/logout'],         
                                         ]],
                                     ],
                                    'options' => ['class' => 'navbar-nav navbar-right'],
@@ -122,7 +124,8 @@ $avatar = $identity['avatar'];
                                         ['label' => $username, 'items' => [
                                             ['label' => 'Баланс', 'url' =>'/cabinet/balance'],
                                             ['label' => 'Помощь', 'url' =>'/cabinet/help'],
-                                            ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'],                              
+                                            ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'], 
+                                             ['label' => 'Выход', 'url' => '/page/logout'],                             
                                         ]],
                                     ],
                                    'options' => ['class' => 'navbar-nav navbar-right'],

@@ -46,7 +46,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                 <div class="toggle-button-cover"> 
                       <div class="button-cover">
                         <div class="button r" id="button-1">
-                          <input type="checkbox" class="checkbox" name= 'NotificationForm[push_notif]' 
+                          <input type="checkbox" class="checkbox tuning" name= 'NotificationForm[push_notif]' 
 	                      <?php if ($model['push_notif']) echo 'checked';?>>
                           <div class="knobs"></div>
                           <div class="layer"></div>
@@ -61,7 +61,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 	            <div class="toggle-button-cover"> 
                   <div class="button-cover">
                     <div class="button r" id="button-1">
-                      <input type="checkbox" class="checkbox" name= 'NotificationForm[show_notif]' 
+                      <input type="checkbox" class="checkbox tuning" name= 'NotificationForm[show_notif]' 
 	                      <?php if ($model['show_notif']) echo ' checked';
 	                      else echo '';?>>
                       <div class="knobs"></div>
@@ -77,7 +77,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 	           	<div class="toggle-button-cover"> 
 	                  <div class="button-cover">
 	                    <div class="button r" id="button-1">
-	                      <input type="checkbox" class="checkbox" name= 'NotificationForm[email_notif]' 
+	                      <input type="checkbox" class="checkbox tuning" name= 'NotificationForm[email_notif]' 
 	                      <?php if ($model['email_notif']) echo 'checked';?>>
 	                      <div class="knobs"></div>
 	                      <div class="layer"></div>
@@ -92,7 +92,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 	            <div class="toggle-button-cover"> 
 	                  <div class="button-cover">
 	                    <div class="button r" id="button-1">
-	                      <input type="checkbox" class="checkbox" name= 'NotificationForm[info_notif]' 
+	                      <input type="checkbox" class="checkbox tuning" name= 'NotificationForm[info_notif]' 
 	                      <?php if ($model['info_notif']) echo 'checked';?>>
 	                      <div class="knobs"></div>
 	                      <div class="layer"></div>

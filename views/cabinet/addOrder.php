@@ -40,7 +40,7 @@ $city = City::find() ->orderBy('name')->all();
                     'options' => [
                         'data-pjax' => true,
                         'enctype' => 'multipart/form-data',
-                        ],
+                        ], 
                 ]); ?>
 
                 <div class="step_one">
@@ -65,7 +65,7 @@ $city = City::find() ->orderBy('name')->all();
                                 <div class="toggle-button-cover"> 
                                       <div class="button-cover">
                                         <div class="button r" id="button-1">
-                                          <input type="checkbox" class="checkbox" id="sum_exactly">
+                                          <input type="checkbox" class="checkbox tuning" id="sum_exactly">
                                           <div class="knobs"></div>
                                           <div class="layer"></div>
                                         </div>
@@ -84,7 +84,7 @@ $city = City::find() ->orderBy('name')->all();
                                 <div class="toggle-button-cover"> 
                                       <div class="button-cover">
                                         <div class="button r" id="button-1">
-                                          <input type="checkbox" class="checkbox" id="predoplata">
+                                          <input type="checkbox" class="checkbox tuning" id="predoplata">
                                           <div class="knobs"></div>
                                           <div class="layer"></div>
                                         </div>
@@ -165,33 +165,27 @@ $city = City::find() ->orderBy('name')->all();
 
                     <?= $form->field($model, 'wishes')->textArea(['placeholder'=>'Ваши пожелания к проведению мероприятия']) ?>
 
-                    <!-- <p>Добавить Фотографии</p>                      -->
+                    <!-------------------Добавить Фотографии заказа---------------------->
 
-                   <?php  
-                   $max_photos_order=6; 
-                   // передаем признак добавления нового заказа в javascript
+                    <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+
+                    <?php  
+                    $max_photos_order=6; 
+                    // передаем признак добавления нового заказа в javascript
                     echo   "<script> 
-                                var add_new_order=1;
+                                var add_new_order=1; // для предпросмотра
                             </script>";
                     ?>
 
                     <div class="b-add-item">
                         <!-- <a href="#!" class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.) -->
-                        <div  class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.)    
-                            
-                            <!-- <div class="form-group"> -->
-                                  <!-- <label for="image">Добавить Фотографии</label> -->
-                                  <input type="file" name="AddOrderForm[imageFiles][]" id="image" accept="image/*" 
+                        <div  class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.) 
+                            <input type="file" name="AddOrderForm[imageFiles][]" id="image" accept="image/*" 
                                   onChange="readmultifiles(this.files,<?= $max_photos_order?>)" multiple/>
-
-                                   <?//= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>  
-                            <!-- </div> -->
-                        <!-- </a> -->
                         </div>
                     </div>
                     <div class="image-preview image_large">                              
-                    </div>
-                    
+                    </div>                    
 
                     <!-- вывод flesh - сообщения об ошибках-->
                     <?php if( Yii::$app->session->hasFlash('errors') ): ?>
@@ -266,7 +260,7 @@ $script = <<< JS
             //alert("Записать заказ");
             console.log($('#start_record').val());
             $('#start_record').val('1');
-            console.log($('#start_record').val());
+            //console.log($('#start_record').val());
         })
 
     // Переключатель показа поля точного бюджета)

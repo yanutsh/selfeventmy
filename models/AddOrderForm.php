@@ -3,8 +3,7 @@
 namespace app\models;
 
 use yii\base\Model;
-
-
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "yii_order".
@@ -29,8 +28,8 @@ class AddOrderForm extends Model
     public $budget_to;
     public $order_budget;
     public $prepayment = 0;   
-    public $orderPhoto;
-    public $imageFiles;
+    //public $order_photo;
+    public $imageFiles;  // класс - UploadedFile
 
     public $status_order_id = 2;
 
@@ -41,8 +40,9 @@ class AddOrderForm extends Model
             //[['user_id', 'status_order_id', 'city_id', 'category_id','members', 'order_budget', 'budget_from', 'budget_to', 'prepayment'], 'integer'],
             [['user_id', 'status_order_id', 'city_id', 'members', 'order_budget', 'budget_from','budget_to', 'prepayment'], 'integer'],
             [['details', 'wishes'], 'string'],
-            [['city_id', 'category_id','subcategory_id','added_time', 'date_from', 'date_to', 'members'], 'safe'],
+            [['city_id', 'category_id','subcategory_id','added_time', 'date_from', 'date_to', 'members', 'order_photo'], 'safe'],
             [['who_need'], 'string', 'max' => 255],
+
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 6],           
             
         ];
@@ -71,7 +71,7 @@ class AddOrderForm extends Model
             'budget_from' => 'Бюджет, от',
             'budget_to' => 'Бюджет, до *',
             'prepayment' => 'Предоплата',
-            'imageFiles' => 'Фотографии'
+            'order_photo' => 'Фотографии'
         ];
     }
 

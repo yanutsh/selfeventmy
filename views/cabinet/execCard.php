@@ -10,6 +10,8 @@ use kartik\date\DatePicker;
 use app\components\page\PageAttributeWidget as PAW;
 use yii\widgets\Pjax;
 
+require_once('../libs/user_photo.php');
+
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
 
@@ -32,8 +34,8 @@ TemplateAsset::register($this);
 			    		<div class="lk__left">
 			    			<div class="filtr filtr_exec ">
 			    				
-			    				<div class="b_avatar b_avatar__exec">
-						            <img src="/web/uploads/images/users/<?= $exec['avatar']?>" alt="">
+			    				<div class="b_avatar b_avatar__exec">   					
+						            <img src="<?= user_photo($exec['avatar'])?>" alt="">
 						        </div>						        
 
 						       <!--  <div class="clearfix"></div> -->

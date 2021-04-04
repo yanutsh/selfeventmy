@@ -9,15 +9,19 @@ class RegistrationAsset extends AssetBundle {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
+        'css/cabinet.css',
         'css/avatar.css', 
         'ui/jquery-ui.css', 
         'css/app.css',
-        'css/slick.css',            
+        'css/slick.css', 
+        'css/chosen.min.css',            
     ];
     public $js = [
         'js/registration.js', 
         'ui/jquery-ui.js',
         'js/jquery.ui.touch-punch.min.js', 
+        'js/chosen.jquery.js',
+        'js/cabinet.js',
         'js/app.js',
         'js/slick.min.js',      
     ];

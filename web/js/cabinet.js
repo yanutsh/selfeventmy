@@ -44,28 +44,7 @@ $(document).ready(function() {
         })
         // Запрещаем прямую отправку данных из формы
         return false;
-    }) 
-
-    // Сброс отдельных полей фильтра ЗАКАЗОВ
-        $('#order_reset_category').on('click', function(){ // Категория Услуги. 
-
-            $('#orderfiltrform-category_id').val(""); // сбросили значение поля        
-            $('#order-filter-form').change();         // сгенерировали изменение формы
-        });
-
-        $('#order_reset_city').on('click', function(){ // Сброс городов.                  
-            $('.search-choice-close').click();         // имитируем клик-закрытие
-            $('#order-filter-form').change();          // сгенерировали изменение формы
-        });
-        
-
-        $('#order_reset_work_form').on('click', function(){ // Форма работы.            
-            $('#orderfiltrform-work_form_id').val(""); // сбросили значение поля        
-            $('#order-filter-form').change();          // сгенерировали изменение формы
-        });
-
-        
-    // Сброс отдельных полей фильтра ЗАКАЗОВ КОНЕЦ
+    })
 
     // При изменении любого эл-та фильтра ЗАКАЗОВ- отправляем данные фильтра 
     // на просчет числа заказов
@@ -102,11 +81,30 @@ $(document).ready(function() {
         })
         // Запрещаем прямую отправку данных из формы
         return false;
-    })    
+    })
+
+    // Сброс отдельных полей фильтра ЗАКАЗОВ
+        $('#order_reset_category').on('click', function(){ // Категория Услуги. 
+
+            $('#orderfiltrform-category_id').val(""); // сбросили значение поля        
+            $('#order-filter-form').change();         // сгенерировали изменение формы
+        });
+
+        $('#order_reset_city').on('click', function(){ // Сброс городов.                  
+            $('.search-choice-close').click();         // имитируем клик-закрытие
+            $('#order-filter-form').change();          // сгенерировали изменение формы
+        });
+        
+
+        $('#order_reset_work_form').on('click', function(){ // Форма работы.            
+            $('#orderfiltrform-work_form_id').val(""); // сбросили значение поля        
+            $('#order-filter-form').change();          // сгенерировали изменение формы
+        });        
+    // Сброс отдельных полей фильтра ЗАКАЗОВ КОНЕЦ    
 
     // При изменении любого эл-та фильтра ИСПОЛНИТЕЛЕЙ- отправляем данные фильтра 
     // на просчет числа заказов
-    $('#filter-form-exec').change(function(event) {    
+    $('#exec-filter-form').change(function(event) {    
       //alert ('Change filter-form-exec');
         //event.preventDefault();
         // Получаем объект формы
@@ -123,7 +121,7 @@ $(document).ready(function() {
             if (data.error == null) {
                     // Если ответ сервера успешно получен
                     //console.dir(data);
-                    $('#filter-form-exec .register__user span').text(data.data);
+                    $('#exec-filter-form .register__user span').text(data.data);
                     //$("#output").text(data.data);
                     $("#exec_list").html(data.orders);
 
@@ -139,7 +137,24 @@ $(document).ready(function() {
         })
         // Запрещаем прямую отправку данных из формы
         return false;
-    }) 
+    })
+
+    // Сброс отдельных полей фильтра ИСПОЛНИТЕЛЕЙ
+        $('#exec_reset_category').on('click', function(){ // Категория Услуги.            
+            $('#execfiltrform-category_id').val(""); // сбросили значение поля        
+            $('#exec-filter-form').change();         // сгенерировали изменение формы
+        });
+
+        $('#exec_reset_city').on('click', function(){ // Сброс городов.                  
+            $('.search-choice-close').click();      // имитируем клик-закрытие городов
+            $('#exec-filter-form').change();          // сгенерировали изменение формы
+        });        
+
+        // $('#order_reset_work_form').on('click', function(){ // Форма работы.            
+        //     $('#orderfiltrform-work_form_id').val(""); // сбросили значение поля        
+        //     $('#order-filter-form').change();          // сгенерировали изменение формы
+        // });        
+    // Сброс отдельных полей фильтра ИСПОЛНИТЕЛЕЙ КОНЕЦ 
 
     // для выпадающего списка Город
     //$(document).ready(function(){

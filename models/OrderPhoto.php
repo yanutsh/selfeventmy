@@ -71,4 +71,18 @@ class OrderPhoto extends \yii\db\ActiveRecord
         unset($_SESSION['order_photo']);
         
      }
+
+    // Запись фотографий к заказу 
+    // public function  saveOrderPhoto($photoes,$order_id){
+        
+    //     foreach ($photoes as $photo) {
+    //         //echo "<br>photo=".$photo;
+    //         $order_photo = new OrderPhoto();
+    //         $order_photo->order_id = $order_id;
+    //         $order_photo->photo = $photo;        
+            
+    //         $order_photo->save();                     
+    //     }
+    //     //debug ("Конец foreach");
+    // }
 }

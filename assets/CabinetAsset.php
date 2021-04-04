@@ -4,6 +4,7 @@
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
+
  */
 
 namespace app\assets;
@@ -26,7 +27,6 @@ class CabinetAsset extends AssetBundle {
         'css/chosen.min.css', 
         'css/slick.css', 
         'css/slick-theme.css',
-
     ];
     public $js = [
         //'js/bootstrap.3.4.min.js',

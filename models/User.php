@@ -30,6 +30,9 @@ use yii\web\IdentityInterface;
  * @property Order[] $orders
  * @property WorkForm $workForm
  * @property Sex $sex
+ * @property UserCity[] $userCities  // города предпринимательской деятельности
+ * @property FsCity[] $cities        // города
+ * @property UserDoc[] $userDocs
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -100,16 +103,38 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(Sex::className(), ['id' => 'sex_id']);
     }
+
+    /**
+     * Gets query for [[UserCities]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserCities()
+    {
+        return $this->hasMany(UserCity::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Cities]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCities()
+    {
+        return $this->hasMany(FsCity::className(), ['id' => 'city_id'])->viaTable('yii_user_city', ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UserDocs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserDocs()
+    {
+        return $this->hasMany(UserDoc::className(), ['user_id' => 'id']);
+    }
     
-    // public function behaviors()
-    // {
-    //     return [
-    //         TimestampBehavior::className(),
-    //     ];
-    // }
-
-   
-
+    
     /**
      * {@inheritdoc}
      */

@@ -15,12 +15,14 @@ use app\models\Chat;
 use app\models\Dialog;
 use app\models\WorkForm;
 use app\models\PaymentForm;
+use app\models\AddOrderForm;
 use app\models\Order;
 use app\models\Review;
 use app\models\OrderCategory;
-use app\models\AddOrderForm;
 use app\models\OrderStatus;
+use app\models\OrderPhoto;
 use app\models\NotificationForm;
+use yii\web\UploadedFile;
 
 require_once('../libs/convert_date_ru_en.php');
 require_once('../libs/convert_date_en_ru.php');
@@ -395,19 +397,30 @@ class CabinetController extends AppController {
          // Если пришёл PJAX запрос
         if (Yii::$app->request->isPjax) { 
           // Устанавливаем формат ответа JSON
-          //debug('Еесть Ajax');
           //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
           $data = Yii::$app->request->post();
-          $model->load($data);
+          $model->load($data); 
                 
           if ($_POST['start_record']=="1") { // Есть Команда - записать заказ в БДем по 
-            // Вытаскиваем из модели нужные данные и записываем по таблицам
-              //debug($model);
+            // Вытаскиваем из модели нужные данные и записываем по таблицам            
+
             $order= new Order();
             $new_id = $order->saveOrder($model);
             if ($new_id) {
-              //debug ("Заказ Записан в БД id=".$new_id);
-
+              //debug ("Заказ Записан в БД id=".$new_id);             
+              
+              //вытаскиваем фотографии
+              $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+              if (isset($model->imageFiles)) { 
+                if ($model->upload()) {   // file is uploaded successfully ? 
+                  //debug($_SESSION['order_photo']);               
+                  // записываем фотографии в БД
+                  $order_photo = new OrderPhoto();
+                  $order_photo->saveOrderPhoto($new_id);
+                  //unset($_SESSION['order_photo']);
+                } else debug("Ошибка - Фотографии не загружены");
+              }
+                
               // записываем категории и подкатегории заказа
               $order_category = new OrderCategory();
               $order_category->saveOrderCategory($model, $new_id); 

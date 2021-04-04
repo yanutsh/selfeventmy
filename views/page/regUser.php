@@ -8,6 +8,7 @@ use app\assets\RegistrationAsset;
 use app\components\page\PageAttributeWidget as PAW;
 use app\models\WorkForm;
 use app\models\Sex;
+use app\models\City;
 use kartik\date\DatePicker;
 use yii\widgets\Pjax;
 
@@ -67,12 +68,22 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                             ['prompt'=>'Выберите вариант']
                         ); ?>
 
-                    <?= $form->field($model, 'username') ?>                    
-                    <?//= $form->field($model, 'created_at') ?>
-                    <?//= $form->field($model, 'updated_at') ?>
-                    <?//= $form->field($model, 'status') ?>
+                    <?= $form->field($model, 'username') ?> 
+
+                    <div class="input__block field-orderfiltrform-city_id">
+                        <a href="#!" id="register_reset_city">Cбросить</a>
+                        <label class='control-label'>Город (города)</label>
+
+                        <select name="RegForm[city_id][]" id="regform-city_id" class="js-chosen" multiple="multiple">
+                            <?php foreach($city as $c) {?>
+                                <option value=<?= $c['id']?>><?= $c['name']?></option>   
+                            <?php } ?>                                  
+                        </select>                        
+
+                        <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                    </div>                  
+                                        
                     
-                    <?//= $form->field($model, 'sex_id') ?>
                     <?= $form->field($model, 'sex_id')->dropdownList(
                             Sex::find()->select(['sex', 'id'])
                             ->indexBy('id')->column() //,
@@ -107,8 +118,6 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                         <a href="#!" class="password-control2"></a>
                     </div>
                                         
-                    <?//= $form->field($model, 'personal')->checkbox() ?>
-
                     <div class="personal_check">
                         <label class="checkbox">
                             
@@ -145,9 +154,41 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                          </div>
                     <?php endif;?>
 
+
+                    <!----------------Для исполнителей-------------------------------->
+                    <!----------------Добавить Фотографии документов------------------>
+
+                    <?php 
+                    if ($_GET['isexec']==1) {
+                        $max_photos_order=6; 
+                        // передаем признак добавления нового заказа в javascript
+                        echo   "<script> 
+                                    var add_new_order=1;
+                                </script>";
+                        ?>
+
+                        <div class="b-add-item">                            
+                            <div  class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.)    
+                                
+                                <!-- <div class="form-group"> -->
+                                      <!-- <label for="image">Добавить Фотографии</label> -->
+                                      <input type="file" name="RegForm[docFiles][]" id="image" accept="image/*" 
+                                      onChange="readmultifiles(this.files,<?= $max_photos_order?>)" multiple/>
+
+                            </div>
+                        </div>
+                        <div class="image-preview image_large">                              
+                        </div>                  
+
+                       
+                    <?php 
+                    } ?>
+
+                    <!-----------Добавить Фотографии документов КОНЕЦ---------------> 
+
                     <div class="form-group">
                         <?= Html::submitButton('Зарегистрироваться', ['class' => 'register__user']) ?>
-                    </div>
+                    </div> 
                 <?php ActiveForm::end(); ?>
                 <?php //Pjax::end(); ?>
 
