@@ -14,6 +14,8 @@ use app\components\page\PageAttributeWidget as PAW;
 // use kartik\date\DatePicker;
 // use yii\widgets\Pjax;
 
+require_once('../libs/user_photo.php');
+
 TemplateAsset::register($this);
 RegistrationAsset::register($this);
 
@@ -32,7 +34,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 <div class="wrapper__addorder wrapper__addorder__card">
     <div class="b_header b_header__tuning">
         <div class="b_avatar b_avatar__tuning">
-            <img src="/web/uploads/images/users/<?= $identity['avatar']?>" alt="">
+            <img src="<?= user_photo($identity['avatar'])?>" alt="">
         </div>
 
        <!--  <div class="clearfix"></div> -->

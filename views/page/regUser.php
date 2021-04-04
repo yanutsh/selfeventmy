@@ -116,8 +116,53 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                     <div class="pass__f2">    
                         <?= $form->field($model, 'password_repeat')->passwordInput() ?>
                         <a href="#!" class="password-control2"></a>
-                    </div>
-                                        
+                    </div>                                        
+                   
+
+                    <!-- вывод flesh - сообщения об ошибках-->
+                    <?php if( Yii::$app->session->hasFlash('errors') ): ?>
+                         <div class="alert alert-danger alert-dismissible" role="alert">
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                         <?php echo Yii::$app->session->getFlash('errors'); ?>
+                         </div>
+                    <?php endif;?>
+
+
+                    <!----------------Для исполнителей-------------------------------->
+                    <!----------------Добавить Фотографии документов------------------>
+                    <div class="form_subtitle">Документы</div>
+                    <p>Пришлите скриншоты документов для подтверждения вашего статуса и повышения рейтинга.</p>
+
+                    <?php 
+                    if ($_GET['isexec']==1) {
+                        $max_photos_order=6; 
+                        // передаем признак добавления нового заказа в javascript
+                        echo   "<script> 
+                                    var add_new_order=1;
+                                </script>";
+                        ?>
+
+                        <div class="b-add-item registration">                            
+                            <div  class="add-photo">Выберите фотографии документов 
+                                      <input type="file" name="RegForm[imageFiles][]" id="image" accept="image/*" 
+                                      onChange="readmultifiles(this.files,<?= $max_photos_order?>)" multiple/>
+                            </div>
+                        </div>
+                        <div class="image-preview image_large">                              
+                        </div>                  
+
+                       
+                    <?php 
+                    } ?>
+
+                    <p class='doc_list'>Необходимые документы дл Юр. лиц:</p>
+                    <ul>
+                        <li>ИНН организации</li>
+                        <li>ИНН организации</li>
+                        <li>ИНН организации</li>
+                    </ul>      
+                    <!-----------Добавить Фотографии документов КОНЕЦ---------------> 
+
                     <div class="personal_check">
                         <label class="checkbox">
                             
@@ -146,52 +191,11 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                         </label>
                     </div>
 
-                    <!-- вывод flesh - сообщения об ошибках-->
-                    <?php if( Yii::$app->session->hasFlash('errors') ): ?>
-                         <div class="alert alert-danger alert-dismissible" role="alert">
-                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                         <?php echo Yii::$app->session->getFlash('errors'); ?>
-                         </div>
-                    <?php endif;?>
-
-
-                    <!----------------Для исполнителей-------------------------------->
-                    <!----------------Добавить Фотографии документов------------------>
-
-                    <?php 
-                    if ($_GET['isexec']==1) {
-                        $max_photos_order=6; 
-                        // передаем признак добавления нового заказа в javascript
-                        echo   "<script> 
-                                    var add_new_order=1;
-                                </script>";
-                        ?>
-
-                        <div class="b-add-item">                            
-                            <div  class="add-photo">Прикрепить фото (до <?= $max_photos_order ?> шт.)    
-                                
-                                <!-- <div class="form-group"> -->
-                                      <!-- <label for="image">Добавить Фотографии</label> -->
-                                      <input type="file" name="RegForm[docFiles][]" id="image" accept="image/*" 
-                                      onChange="readmultifiles(this.files,<?= $max_photos_order?>)" multiple/>
-
-                            </div>
-                        </div>
-                        <div class="image-preview image_large">                              
-                        </div>                  
-
-                       
-                    <?php 
-                    } ?>
-
-                    <!-----------Добавить Фотографии документов КОНЕЦ---------------> 
-
                     <div class="form-group">
                         <?= Html::submitButton('Зарегистрироваться', ['class' => 'register__user']) ?>
                     </div> 
                 <?php ActiveForm::end(); ?>
-                <?php //Pjax::end(); ?>
-
+               
             </div><!-- page-regCust -->
            
             <?php Pjax::end(); ?>

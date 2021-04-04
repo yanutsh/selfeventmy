@@ -28,7 +28,7 @@ class AddOrderForm extends Model
     public $budget_to;
     public $order_budget;
     public $prepayment = 0;   
-    //public $order_photo;
+    
     public $imageFiles;  // класс - UploadedFile
 
     public $status_order_id = 2;

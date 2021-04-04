@@ -13,19 +13,22 @@ use yii\web\NotFoundHttpException;
 use app\models\NavigationMain;
 use app\models\Page;
 use app\models\Settings;
+use app\models\User;
+use app\models\UserCity;
+use app\models\UserDoc;
+use app\models\Category;
+use app\models\Order;
+use app\models\City;
+
 use app\models\BuyRequestForm;
 use app\models\SearchForm;
 use app\models\RegForm;
 use app\models\SignupForm;
 use app\models\LoginForm;
-use app\models\User;
-use app\models\UserCity;
-use app\models\Category;
-use app\models\Order;
-use app\models\City;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 use yii\base\Response;
+use yii\web\UploadedFile;
 
 /**
  * PageController implements the CRUD actions for Page model.
@@ -335,9 +338,7 @@ class PageController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
-
-    
+    }    
 
     /**
      * Logs in a user.
@@ -432,7 +433,7 @@ class PageController extends Controller
         // проверяем на заполнение согласий  КОНЕЦ
         
         // записать данные юзера из RegForm в User и в БД
-        debug($model);            
+        //debug($model);            
 
           $user = new User();
           $user_city = new UserCity();
@@ -456,18 +457,35 @@ class PageController extends Controller
           
           //debug($user);     
           if ($user->save()){ // && $this->sendEmail($user);
-            $_SESSION['user_id']=$user->getId(); //получили id нового юзера             
+            $new_id = $user->getId(); //получили id нового юзера
+            $_SESSION['user_id'] = $new_id;
 
-          // Записываем города пользователя  
-          if (isset($model->city_id)){
-            foreach($model->city_id as $c_id) {
-              $user_city = new UserCity();
-              $user_city->user_id =  $_SESSION['user_id'];
-              $user_city->city_id = $c_id;
-              $user_city->save();
-            }
-          }  
-          //echo "В БД записано";         
+            //вытаскиваем веденные фотографии
+              $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+              if (isset($model->imageFiles)) { 
+                
+                //debug($model->imageFiles);
+
+                if ($model->upload()) {   // file is uploaded successfully ? 
+                  //debug($_SESSION['doc_photo']);
+
+                  // записываем фотографии в БД  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                  $user_doc = new UserDoc();
+                  $user_doc->saveUserDoc($new_id);
+                  
+                } else debug("Ошибка - Фотографии не загружены");
+              }
+
+              // Записываем города пользователя  
+              if (isset($model->city_id)){
+                foreach($model->city_id as $c_id) {
+                  $user_city = new UserCity();
+                  $user_city->user_id =  $_SESSION['user_id'];
+                  $user_city->city_id = $c_id;
+                  $user_city->save();
+                }
+              }  
+            //echo "В БД записано";         
             
             // перейти к подтверждению данных  
             Yii::$app->getResponse()->redirect(

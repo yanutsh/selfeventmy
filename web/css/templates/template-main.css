@@ -1894,3 +1894,31 @@ footer {
     top: 4px;
   }
 /********************** Модальное окно Login  Конецццц *********************/
+
+/*********************** Регистрация Юзера ********************************/
+.regcust p,
+.regcust li{
+  font-size: 14px;
+}
+
+.b-add-item.registration{
+  margin: 20px 0 5px;
+}
+
+.doc_list{
+  margin-top: 15px;
+  margin-bottom: 4px;
+}
+
+.regcust ul{ 
+  list-style-type:disc;
+  margin-left: 20px;
+  margin-bottom: 30px;
+}
+
+.regcust .photo_item {
+  width: 72px;
+  height: auto;
+  margin: 5px;
+}
+/*********************** Регистрация Юзера Конец ****************************/

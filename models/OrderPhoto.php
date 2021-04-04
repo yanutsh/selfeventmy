@@ -58,7 +58,7 @@ class OrderPhoto extends \yii\db\ActiveRecord
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
     }
 
-     public function saveOrderPhoto($order_id) {
+    public function saveOrderPhoto($order_id) {
         //debug($imageFiles);
         //debug($_SESSION['order_photo']);
         foreach ($_SESSION['order_photo'] as $fname) {   //imageFiles as $fname) {                    
@@ -70,7 +70,7 @@ class OrderPhoto extends \yii\db\ActiveRecord
         }
         unset($_SESSION['order_photo']);
         
-     }
+    }
 
     // Запись фотографий к заказу 
     // public function  saveOrderPhoto($photoes,$order_id){

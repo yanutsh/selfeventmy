@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $user_id
- * @property string $doc_photo имя фотографии
+ * @property string $photo имя фотографии
  *
  * @property User $user
  */
@@ -29,9 +29,9 @@ class UserDoc extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'doc_photo'], 'required'],
+            [['user_id', 'photo'], 'required'],
             [['user_id'], 'integer'],
-            [['doc_photo'], 'string', 'max' => 255],
+            [['photo'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -44,7 +44,7 @@ class UserDoc extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'doc_photo' => 'имя фотографии',
+            'photo' => 'имя фотографии',
         ];
     }
 
@@ -57,4 +57,17 @@ class UserDoc extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function saveUserDoc($user_id) {
+        //debug($_SESSION['doc_photo']);
+       
+        foreach ($_SESSION['doc_photo'] as $fname) {   //imageFiles as $fname) {                    
+                $user_doc = new UserDoc();              
+                $user_doc->user_id = $user_id;
+                $user_doc->photo = $fname;   //->name;     
+                
+                $user_doc->save();               
+        }
+        unset($_SESSION['doc_photo']);           //debug(" НЕ записано");
+   }
 }
