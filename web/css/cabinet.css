@@ -1354,6 +1354,28 @@ body{
 		font-size: 14px;
 		font-weight: normal;
 	}
+
+	#cityform-city_id{
+		height: 0;
+	}
+
+	table.user_cities{
+		margin-bottom: 20px;
+	}
+	
+	.city_del{
+		width: 100px;
+		text-align: center;
+	}
+
+	.city_del a{
+		position: static;
+	}
+
+	.city_del img{
+		width: 15px;
+		vertical-align: middle;
+	}	
 /*******************  Редактирование профиля Конец******************************************/
 
 /******************************  Выключатель  ********************************/

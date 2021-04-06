@@ -30,7 +30,8 @@ class UserCity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'city_id'], 'required'],
+           // [['user_id', 'city_id'], 'required'],
+            [['user_id'], 'required'],
             [['user_id', 'city_id'], 'integer'],
             [['user_id', 'city_id'], 'unique', 'targetAttribute' => ['user_id', 'city_id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -68,4 +69,20 @@ class UserCity extends \yii\db\ActiveRecord
     {
         return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
+
+
+    // запись в БД городов пользователя ************************************************
+    public function saveUserCity($city_id, $user_id) {
+        //debug($_SESSION['doc_photo']);
+        
+        //debug ("identity id=".$identity['id']);
+        foreach ($city_id as $c) {   //imageFiles as $fname) {                    
+                $user_city = new UserCity();              
+                $user_city->user_id = $user_id;
+                $user_city->city_id = $c;   //->name;     
+                
+                $user_city->save();               
+        }
+        unset($_SESSION['doc_photo']);           //debug(" НЕ записано");
+   }
 }

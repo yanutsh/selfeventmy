@@ -77,6 +77,7 @@ $identity = Yii::$app->user->identity;
 				    	$('.modal-backdrop.fade.in').css('display','none'); 
 				    	$('body').removeAttr('class');  	    	
 					});
+
 				JS;
 				//маркер конца строки, обязательно сразу, без пробелов и табуляции
 				$this->registerJs($script, yii\web\View::POS_READY);
@@ -84,19 +85,119 @@ $identity = Yii::$app->user->identity;
             <?php Pjax::end(); ?>
         <!-- О Себе -Конец	     -->
            
-            <?php // Вывод данных только для Исполнителя            
-            if ($identity['isexec']) {?>
-	            <div class="order_content__subtitle">
-	            	<span>Города</span>
-	            	<a href="" class="text_details profile">Редактировать</a>
-	            </div>
-	            <div class="text">Москва, Область</div>
-	            
+        <?php // Вывод данных только для Исполнителя ************************* **********************************************************************           
+        if ($identity['isexec']) {?>        	
+        
+        <!-- Города------------------------------------------------------  -->    
+            <?php Pjax::begin(); ?>
+            <?php //debug($user) ?>
+            <div class="order_content__subtitle">
+            	<span>Города</span>
+            	<?php 
+				// модальное окно - Города					
+					Modal::begin([
+					    'header' => '<h2>Редактирование информации</h2>',
+					    'id' => "city_win",	
+					    'toggleButton' => [
+					     	'label' => 'Редактировать',
+					     	'tag' => "a",
+					     	'class' => 'text_details profile',
+					     	'id' => 'modal_city',
+					     ],
+					    'footer' => 'низ',
+					]); ?>
 
-	            <div class="order_content__subtitle">
-	            	<span>Сфера деятельности</span>
-	            	<a href="" class="text_details profile">Редактировать</a>
-	            </div>	
+					<!-- список введенных городов для удаления -->
+					<?php Pjax::begin(); ?>
+					<table class='user_cities'>
+						<?php 
+						foreach($user['cities'] as $u_city) 
+						{?>
+							<tr>
+								<td class="city_name"><?= $u_city['name'] ?></td>
+								<td class="city_del">
+									<a href="/cabinet/delete-user-city?city_id=<?= $u_city['id']?>">
+										<img src="/web/uploads/images/delete_icon_32px.png" alt="">
+									</a>								
+								</td>
+							</tr>
+						<?php } ?>
+					</table>
+					<?php Pjax::end(); ?>
+
+					
+					<?php
+					//($city);
+					$form = ActiveForm::begin([
+						'id' => 'city-form',
+						'options' => [
+	                        'data-pjax' => true,	                       
+	                        ],
+						]); ?>
+
+						<input hidden type="text" name="field_name" value="city">
+						<?= $form->field($user_city, 'city_id[]')->dropDownList(ArrayHelper::map($city, 'id', 'name'),
+							[	//'prompt'=>'Выберите город',
+								'id' => "cityform-city_id",
+								'class' => "js-chosen city",
+								'multiple' => "multiple",
+							]) 
+							->label('Добавить город(а)') ?>
+	    				
+						<div class="form-group">
+		        		 	<?= Html::submitButton('Сохранить', [
+		        				'class' => 'register__user active__button', 
+		        				'name' => 'city-button',
+		        				'id'=> 'city-button'
+		        			]) ?>
+		    			</div>
+	 
+	    			<?php ActiveForm::end(); ?>
+
+	    			<?php 
+					Modal::end();					
+				// модальное окно - Города -Конец	
+				?>		
+            	
+            </div>
+
+            <?php //Pjax::begin(); ?>
+            <div class="text"><?= 
+            	$cities_all="";
+            	foreach($user['cities'] as $city){
+            		if ($cities_all  =='') $cities_all = $city['name'];
+            		else $cities_all .= ", ".$city['name'];            		
+            	}
+            	echo $cities_all;
+             ?></div>
+            <?php
+				$script = <<< JS
+				    // Закрытие фона модального окна
+				    $('#city-button').click(function(e){
+				   	    // отправка формы по pjax и потом удаление фона:   	   	
+				    	$('.modal-backdrop.fade.in').css('display','none'); 
+				    	$('body').removeAttr('class');  	    	
+					});
+
+					$('.js-chosen.city').chosen({
+				        width: '100%',
+				        no_results_text: 'Совпадений не найдено',
+				        placeholder_text_single: 'Выберите город',
+				        placeholder_text_multiple: 'Любой город',
+				    });
+				JS;
+				//маркер конца строки, обязательно сразу, без пробелов и табуляции
+				$this->registerJs($script, yii\web\View::POS_READY);
+			?>
+            <?php Pjax::end(); ?>
+        <!-- Города -Конец	---------------------------------------------- -->
+
+        <!-- Категории услуг---------------------------------------------  -->
+            <div class="order_content__subtitle">
+            	<span>Сфера деятельности</span>
+            	<a href="" class="text_details profile">Редактировать</a>
+            </div>
+
 	            <!-- организовать цикл по услугам-->           
 		            <div class="text profile">
 		            	<span>Ведение праздников</span>
@@ -107,6 +208,7 @@ $identity = Yii::$app->user->identity;
 		            	<div href="" class="text_details profile">от 3 000 Р</div>
 		            </div>	      
 		        <a href="" class="text_details">Добавить деятельность</a>
+		<!-- Категории услуг Конец---------------------------------------  -->        
 
 		        <div class="order_content__subtitle">
 	            	<span>Образование</span>            	
@@ -129,7 +231,7 @@ $identity = Yii::$app->user->identity;
 		            	<a href="" class="text_details profile">Даты</a>            	
 		            </div> 	                  
 		        <a href="" class="text_details">Добавить образование</a>
-		    <?php } ?>    
+		<?php } ?>    
 
 		<!-- Контактные данные -->
 	        <?php Pjax::begin(); ?>
@@ -297,7 +399,7 @@ $identity = Yii::$app->user->identity;
 			Pjax::end();	
 			?>         
         	  
-		</div>	
+		</div>
     </div>        
 </div>
 

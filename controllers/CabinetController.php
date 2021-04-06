@@ -21,8 +21,10 @@ use app\models\Review;
 use app\models\OrderCategory;
 use app\models\OrderStatus;
 use app\models\OrderPhoto;
+use app\models\UserCity;
 use app\models\NotificationForm;
 use yii\web\UploadedFile;
+use yii\helpers\Url;
 
 require_once('../libs/convert_date_ru_en.php');
 require_once('../libs/convert_date_en_ru.php');
@@ -587,7 +589,10 @@ class CabinetController extends AppController {
     public function actionProfileInfo() {
       $identity = Yii::$app->user->identity;      
             
-      $user = USER::find()->where(['id' => $identity['id']])->with('workForm')->one();
+      $user = USER::find()->where(['id' => $identity['id']])->with('workForm','cities')->one();
+      $city = City::find()->orderBy('name ASC')->asArray()->all();
+      $user_city = new UserCity();
+      
       //debug($user);
 
       if (Yii::$app->request->isPjax) { 
@@ -595,23 +600,41 @@ class CabinetController extends AppController {
           $data = Yii::$app->request->post();
           //debug($data);
 
+
           if ($data['field_name'] == 'myself'){
             $user->myself = $data['User']['myself']; 
           }elseif ($data['field_name'] == 'contact'){
-            $user->username = $data['User']['username'];
-          }elseif ($data['field_name'] == 'delеte'){//удаление/блокировка эккаунта            
+            $user->username = $data['User']['username'];            
+          }elseif ($data['field_name'] == 'delеte'){      //удаление/блокировка эккаунта            
             $user->blk = 1; 
             $user->blk_date=date('Y-m-d H:i:s');             
           }elseif ($data['field_name'] == 'deleteinfo'){
             // сбросить сессии, куки, вывести модальное окно
             return $this->redirect('/page/logout',302); //
           } 
-
+          elseif ($data['field_name'] == 'city'){   // добавляем города пользователя  БД
+            //debug($data);
+            if (!Empty($data['UserCity']['city_id'])){
+              foreach($data['UserCity']['city_id'] as $uc_id) {
+                $user_city = new UserCity();
+                $user_city->city_id = $uc_id;
+                $user_city->user_id = $identity['id'];
+                $user_city->save();
+              }  
+            
+              // обновляем информацию о пользователе
+              $user = USER::find()->where(['id' => $identity['id']])->with('workForm','cities')->one(); 
+                         
+              return $this->render('profileInfo', compact('user','city','user_city')); 
+            }  
+          }
+            
           $user->save(); // записать изменения в БД
+          return $this->render('profileInfo', compact('user','city','user_city')); 
           //return $this->render('profileInfo', compact('user')); 
       }
 
-      return $this->render('profileInfo', compact('user')); 
+      return $this->render('profileInfo', compact('user','city','user_city')); 
     }
 
     // Пополнение баланса
@@ -621,6 +644,21 @@ class CabinetController extends AppController {
       return $this->render('balance'); 
     }
 
+    // Удаление города пользователя
+    public function actionDeleteUserCity() {
+      $user_id = Yii::$app->user->identity->id;  
+      $city_id = $_GET['city_id'];
+      //echo "user_id=".$user_id." city_id=".$city_id;
+
+      //$user_city = new UserCity();
+      $user_city = UserCity::find()->where(['user_id'=>$user_id, 'city_id'=>$city_id])->one();      
+      if ($user_city) $res = $user_city->delete(); 
+
+      // обновляем информацию о пользователе и возвращаем в модальное окно Город (Pjax)
+      $user = User::find()->where(['id'=>$user_id])->one();
+      return $this->render('profileInfo', compact('user'));
+      
+    }
 }
 
 ?>

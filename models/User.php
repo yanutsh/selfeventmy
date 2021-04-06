@@ -6,6 +6,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use app\models\City;
 
 /**
  * @property int $id
@@ -121,7 +122,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getCities()
     {
-        return $this->hasMany(FsCity::className(), ['id' => 'city_id'])->viaTable('yii_user_city', ['user_id' => 'id']);
+        return $this->hasMany(City::className(), ['id' => 'city_id'])->viaTable('yii_user_city', ['user_id' => 'id']);
     }
 
     /**
