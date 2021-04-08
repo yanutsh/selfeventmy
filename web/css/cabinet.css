@@ -1109,7 +1109,17 @@ body{
 
 /*******************  Карточка исполнителя  Конец**********************************/
 
-/*******************  Карточка Юзера **********************************/
+/*******************  Профиль Юзера **********************************/
+	.b_text.b_text__exec p.checked{
+		color: #4cd964;
+		margin-top: 12px;
+	}
+
+	.filtr.filtr_exec  p.rose{
+		color: #AE4A84;
+		text-align: center;
+	}	
+
 	.refer{
 		position: absolute;
 	    top: 30px;
@@ -1158,12 +1168,27 @@ body{
 		color:#323232;
 	}
 
-
 	.review_list,
 	.user_orders {
 		display: none;
 	}
-/*******************  Карточка Юзера Конец*****************************/
+
+	.photo_album{
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.portfolio_item{
+		margin: 5px;
+	}
+
+	.portfolio_item img{
+		width: 121px;
+		height: 98px;
+	}
+
+/*******************  Профиль Юзера Конец*****************************/
 
 /*******************  Настройка уведомлений *****************************/
 	.notifications_content{
@@ -1324,8 +1349,9 @@ body{
 		position: relative;
 	}
 	.text.profile.study{
-		font-size: 12px;
+		font-size: 14px;
 		color: #676767;
+		margin: 3px 0 10px;
 	}
 
 	div.text_details.profile{
@@ -1376,6 +1402,19 @@ body{
 		width: 15px;
 		vertical-align: middle;
 	}	
+
+	#modal_action{
+		cursor: pointer;
+	}
+
+	.cont .subtitle{
+		font-size: 18px;
+		margin-bottom: 10px;
+	}
+
+	a#modal_action {
+		position: static;
+	}
 /*******************  Редактирование профиля Конец******************************************/
 
 /******************************  Выключатель  ********************************/

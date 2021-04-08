@@ -8,6 +8,7 @@ use app\models\OrderFiltrForm;
 use app\models\ExecFiltrForm;
 use app\models\ExecCategory;
 use app\models\Category;
+use app\models\UserCategory;
 use app\models\Subcategory;
 use app\models\City;
 use app\models\User;
@@ -396,7 +397,7 @@ class CabinetController extends AppController {
     public function actionAddOrder()  { 
         $model = new AddOrderForm();
 
-         // Если пришёл PJAX запрос
+        // Если пришёл PJAX запрос
         if (Yii::$app->request->isPjax) { 
           // Устанавливаем формат ответа JSON
           //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -588,21 +589,31 @@ class CabinetController extends AppController {
     /* *******************************************************/
     public function actionProfileInfo() {
       $identity = Yii::$app->user->identity;      
-            
-      $user = USER::find()->where(['id' => $identity['id']])->with('workForm','cities')->one();
+      $user_id = $identity['id'];
+
+      $user = USER::find()->where(['id' => $identity['id']])
+              ->with('workForm','cities')->one();
+
+      $user_subcategory = UserCategory::find()
+              ->where(['user_id'=>$user_id]) 
+              ->with('subcategory')->asArray()->all();
+      //debug($user_subcategory);       
+      $category = Category::find()->orderBy('name ASC')->all();
+      $subcategory = ""; //Subcategory::find()->orderBy('name ASC')->all();
       $city = City::find()->orderBy('name ASC')->asArray()->all();
-      $user_city = new UserCity();
       
+      $user_city = new UserCity();
+      $user_category = new UserCategory();
+      $category_model = new Category();
       //debug($user);
 
       if (Yii::$app->request->isPjax) { 
-          
-          $data = Yii::$app->request->post();
-          //debug($data);
-
+        $data = Yii::$app->request->post();
+          //debug($data); 
 
           if ($data['field_name'] == 'myself'){
             $user->myself = $data['User']['myself']; 
+            return $this->render('profileInfo', compact('user')); 
           }elseif ($data['field_name'] == 'contact'){
             $user->username = $data['User']['username'];            
           }elseif ($data['field_name'] == 'delеte'){      //удаление/блокировка эккаунта            
@@ -628,13 +639,44 @@ class CabinetController extends AppController {
               return $this->render('profileInfo', compact('user','city','user_city')); 
             }  
           }
+          elseif ($data['field_name'] == 'add_category'){ //добавляем услуги
             
+
+             $category_model->id = $data['Category']['id']; 
+             $category_id = $data['Category']['id'];
+
+             $user_category->load($data);
+             //Если ввели подкатегорию - записываем в БД
+             if (!Empty($user_category['subcategory_id'])) {
+                $user_category->user_id = $identity['id'];
+                $user_category->category_id = $category_id;
+               //debug($user_category);
+
+                $user_category->save();                
+             }  
+
+             $user_subcategory = UserCategory::find()->
+                where(['user_id'=>$identity['id'],'category_id'=>$category_id])-> 
+                with('subcategory')->
+                asArray()->
+                all();    
+                
+             $subcategory = Subcategory::find()->
+                where(['category_id'=>$category_id ])-> //$user_category['category_id']])->
+                orderBy('name ASC')
+                ->asArray()
+                ->all();
+
+                //debug($subcategory);
+          } 
+
           $user->save(); // записать изменения в БД
-          return $this->render('profileInfo', compact('user','city','user_city')); 
+          //return $this->render('profileInfo', compact('user','city','user_city','category')); 
           //return $this->render('profileInfo', compact('user')); 
+          return $this->render('profileInfo', compact('user','city','user_city', 'category', 'category_model','user_category','subcategory','user_subcategory')); 
       }
 
-      return $this->render('profileInfo', compact('user','city','user_city')); 
+      return $this->render('profileInfo', compact('user','city','user_city', 'category', 'category_model', 'user_category','subcategory','user_subcategory')); 
     }
 
     // Пополнение баланса
@@ -644,7 +686,7 @@ class CabinetController extends AppController {
       return $this->render('balance'); 
     }
 
-    // Удаление города пользователя
+    // Удаление города пользователя ***************************************************
     public function actionDeleteUserCity() {
       $user_id = Yii::$app->user->identity->id;  
       $city_id = $_GET['city_id'];
@@ -656,9 +698,74 @@ class CabinetController extends AppController {
 
       // обновляем информацию о пользователе и возвращаем в модальное окно Город (Pjax)
       $user = User::find()->where(['id'=>$user_id])->one();
-      return $this->render('profileInfo', compact('user'));
-      
+      //debug($user);
+
+      return $this->render('profileInfo', compact('user'));      
     }
-}
+
+    // Если есть запрос на удаление - удаляем подкатегорию услуги ***************************
+    public function actionDeleteUserSubcategory() {     
+      
+        $user_id = Yii::$app->user->identity->id; 
+        $subcategory_id =$_GET['subcategory_id'];        
+        //debug($user_id);
+        $user_category = UserCategory::find()->
+              where(['user_id'=>$user_id,
+                      'subcategory_id'=>$_GET['subcategory_id']])           
+              ->one();         
+
+        if ($user_category) { 
+          $category_id = $user_category['category_id']; // Вытаскиваем категорию  
+          $res=$user_category->delete();                // Удаляем подкатегорию
+        }
+            
+        $user_subcategory = UserCategory::find()->
+                where(['user_id'=>$user_id,'category_id'=>$category_id])-> 
+                with('subcategory')->
+                //asArray()->
+                all();
+         
+          //debug($user_subcategory) ;    
+          //return Yii::$app->response->redirect(['/cabinet/profile-info']);
+        if (Yii::$app->request->isPjax) {            
+          return $this->render('profileInfo', compact('user_subcategory'));
+          //return $this->render('profileInfo', compact('user'));  
+        }else echo "ПО Pjax не передалось";
+    }    
+
+  // добавление вида услуг Исполнителя ************************************************
+  public function actionAddUserCategory()
+  {      
+    $model = new \app\models\UserCategory();
+    $category = Category::find()->orderBy('name ASC')->all();
+
+    // если запрос пришел по Pjax
+    if (Yii::$app->request->isPjax) { 
+      $data = Yii::$app->request->post();
+      $model->load($data); 
+      debug($model);
+      //if ($model->validate()) {
+        $subcategory = Subcategory::find()->where(['category_id'=>$model['category_id']])->orderBy('name ASC')->asArray()->all();
+              // form inputs are valid, do something here
+            //debug($subcategory);
+        return $this->render('addUserCategory', compact('model','category', 'subcategory'));
+      //}
+    }
+
+      if ($model->load(Yii::$app->request->post())) {
+          if ($model->validate()) {
+            $subcategory = Subcategory::find()->where(['category_id'=>$model['category_id']])->orderBy('name ASC')->asArray()->all();
+              // form inputs are valid, do something here
+            //debug($subcategory);
+            return $this->render('addUserCategory', compact('model','subcategory'));
+            //return;
+          }
+      }
+
+      
+      return $this->render('addUserCategory', compact('model','category'));
+  }
+
+}  
 
 ?>

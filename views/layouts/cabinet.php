@@ -137,7 +137,7 @@ $avatar = $identity['avatar'];
 
                         <div class="header_item">
                             <div class="navbar_img">
-                                <a href="<?=Url::to('/cabinet/profile-info')?>">
+                                <a href="<?=Url::to('/cabinet/user-card')?>">
                                     <img src="<?= user_photo($avatar)?>" alt="Аватар">
                                 </a>
                             </div>
