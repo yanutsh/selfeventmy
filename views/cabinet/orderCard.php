@@ -31,7 +31,9 @@ $city = City::find() ->orderBy('name')->all();
 <div class="wrapper__addorder wrapper__addorder__card">
     <div class="b_header">
         <div class="b_avatar">
-            <img src="<?= user_photo($order['user']['avatar'])?>" alt="">
+            <a href="/cabinet/user-card?id=<?=$order['user']['id']?>">
+                <img src="<?= user_photo($order['user']['avatar'])?>" alt="">
+            </a>
         </div>
        <!--  <div class="clearfix"></div> -->
         <div class="b_text">

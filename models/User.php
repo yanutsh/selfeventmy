@@ -28,13 +28,21 @@ use app\models\City;
  * @property int $updated_at
  * @property string|null $verification_token
  *
+ * @property Album[] $albums
+ * @property Chat[] $chats
+ * @property Dialog[] $dialogs
+ * @property ExecCategory[] $execCategories
  * @property Order[] $orders
+ * @property Review[] $reviews
+ * @property Review[] $reviews0
  * @property WorkForm $workForm
  * @property Sex $sex
+ * @property UserCategory[] $userCategories
  * @property UserCity[] $userCities  // города предпринимательской деятельности
- * @property FsCity[] $cities        // города
+ * @property FsCity[] $cities
  * @property UserDoc[] $userDocs
- */
+  */
+
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
@@ -71,6 +79,16 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Gets query for [[Albums]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAlbums()
+    {
+        return $this->hasMany(Album::className(), ['user_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Orders]].
      *
      * @return \yii\db\ActiveQuery
@@ -82,7 +100,12 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getCategory()
     {
-         return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('yii_exec_category', ['user_id' => 'id']);
+         return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('yii_user_category', ['user_id' => 'id']);
+    }
+
+    public function getSubcategory()
+    {
+         return $this->hasMany(Subcategory::className(), ['id' => 'subcategory_id'])->viaTable('yii_user_category', ['user_id' => 'id']);
     }
 
     /** Связь с таблицей WorkForm
@@ -133,6 +156,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function getUserDocs()
     {
         return $this->hasMany(UserDoc::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UserEducations]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserEducations()
+    {
+        return $this->hasMany(UserEducation::className(), ['user_id' => 'id']);
     }
     
     

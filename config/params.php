@@ -31,7 +31,7 @@ return [
     'timer' =>  30,     // таймер повторной отправки кода подтверждения, сек
 
     // Фильтр поиска заказов - Дата от         
-    'date_from' => date('d.m.Y', mktime(0, 0, 0, date("m"), date("d")-30, date("Y"))), 
+    'date_from' => date('d.m.Y', mktime(0, 0, 0, date("m"), date("d")-365, date("Y"))), 
     'date_to' => date('d.m.Y', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))),    // Дата до
 
     // Предустановленные даты мероприятия         

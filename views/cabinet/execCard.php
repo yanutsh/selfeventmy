@@ -10,7 +10,9 @@ use kartik\date\DatePicker;
 use app\components\page\PageAttributeWidget as PAW;
 use yii\widgets\Pjax;
 
+require_once('../libs/days_from.php');
 require_once('../libs/user_photo.php');
+require_once('../libs/convert_date_en_ru.php');
 
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
@@ -53,13 +55,20 @@ TemplateAsset::register($this);
 						        	</div>
 						        	<div class="st-item">
 						        		<div class="b_stat">
-						                    <p class="reiting_num">1567</p>
+						                    <p class="reiting_num"><?php 
+						                    if($orders_list) echo count($orders_list);
+						                    else echo("0"); ?>	                    	
+						                    </p>
 						                    <p class="reiting_text">Заказы</p>
 						                </div>
 						        	</div>
 						        	<div class="st-item">
 						        		<div class="b_stat">
-						                    <p class="reiting_num">150</p>
+						                    <p class="reiting_num"><?php 
+						                    if($reviews) echo count($reviews);
+						                    else echo "0";
+						                    	?>
+						                    </p>
 						                    <p class="reiting_text">Отзывы</p>
 						                </div>
 						        	</div>
@@ -76,10 +85,10 @@ TemplateAsset::register($this);
 
 			    		<div class="lk__left">
 			    			<div class="filtr filtr_exec ">
-			    				<p>Форма работы - физ. лицо</p>
-			    				<p>Последний визит - 5 мин назад</p>
-			    				<p>Сегодня - Свободен</p>
-			    				<p>На сайте - 799 дней</p>
+			    				<p>Форма работы - <?= $exec['workForm']['work_form_name']?></p>
+			    				<p>Последний визит - ХХ мин назад</p>
+			    				<p>Сегодня - ?Свободен?</p>
+			    				<p>На сайте - <?= days_from($exec['created_at'])." дн."?></p>
 			    			</div>
 			    		</div>		
 			    	</div>
@@ -87,7 +96,14 @@ TemplateAsset::register($this);
 
 			    	<div class="col-md-8">
 			    		<div class="lk__main lk__main__exec">
-			    			<p class="title">Фотограф</p>
+			    			<p class="subtitle">Категории услуг</p>
+			    			<div class="title"><?php
+				    			$c=""; 
+			    				foreach($exec['category'] as $cat) { 			    			if ($c=="") $c = $cat['name'];
+			           				else $c .= ", ".$cat['name'];
+			           			}
+			           			echo $c; ?>		      		
+			    			</div>
 			    			<a href="mailto:<?= 'yanutsh@m.ru'?>" target="_blank">
 				    			<div class="b-right">
 					    			<div class="letter">
@@ -97,53 +113,97 @@ TemplateAsset::register($this);
 	           					</div>
            					</a>
 
-           					<p>г. Москва</p>
+           					<!-- <p>г. Москва</p> -->
 
            					<div class="exec_prepayment">
-           						Работает без предоплаты за услуги
+           						???Работает без предоплаты за услуги???
            					</div> 
 
            					<p class="subtitle">Города</p>
-	           					<p class="text">
-	           						Москва, Московская обл.
-	           					</p>
+           					<p class="text">
+	           				<?php 
+	           				$c="";
+	           				foreach($exec['cities'] as $city) {
+	           					if ($c=="") $c = $city['name'];
+	           					else $c .= ", ".$city['name'];
+	           				}
+	           				echo $c;
+	           				?>		           					
+	           				</p>
+
            					<p class="subtitle">О себе</p>
-	           					<p class="text">
-	           						Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos sed vitae, nostrum omnis molestias optio voluptate maxime a officiis beatae error ipsa doloribus est deserunt nemo ab aut odit adipisci quis eius, laudantium dignissimos consectetur quo, fugit hic. Nam totam, doloremque harum quis esse dicta architecto possimus dignissimos non id corporis placeat, ut quam accusamus. Sed adipisci repellat, nemo autem maxime vel impedit, iusto error tenetur pariatur veritatis eaque dolor aspernatur quasi enim illum expedita ratione officia corporis! Inventore rerum quia, libero nam officia mollitia! Voluptate vitae, odit iure enim consequatur modi harum aut cupiditate, veniam dignissimos libero ab architecto?
-	           					</p>
+	           					<p class="text"><?= $exec['myself']?></p>
            					<p class="subtitle ">Услуги</p>
            						<div>
-	           						<p class="text subtitle_text">Ведение праздников</p>
-	           						<p class="text subtitle_text">Ведение праздников</p>
+           						<ul class="service">           							
+           							<?php 			           				
+			           				foreach($exec['subcategory'] as $sc) { ?>
+			           					<!-- <p class="text subtitle_text"><?= $sc['name'];?></p> -->
+			           					<li><?= $sc['name'];?></li>
+			           				<?php } ?>
+			           			</ul>	
            						</div>
 
            					<p class="subtitle">Образование</p>
            						<div>
-		           					<p class="text subtitle_text">Наименование Учебного заведения</p>
-		           					<p class="text_slow">Курсы повышения квалификации</p>
-		           					<p class="text subtitle_text">Наименование Учебного заведения</p>
-		           					<p class="text_slow">Курсы повышения квалификации</p>
+           						<?php  
+           						foreach($exec['userEducations'] as $ue) { ?>	
+		           					<p class="text subtitle_text">
+		           						<?=$ue['institute'] ?>
+		           					</p>
+		           					<p class="text_slow">
+		           						<?=$ue['course'] ?>
+		           						<span>окончил <?= convert_date_en_ru($ue['end_date'])?></span>	
+		           					</p>
+		           				<?php } ?>			           					
 	           					</div>
 
 	           				<p class="subtitle">Портфолио</p>
-	           				<p class="text subtitle_text">Название альбома 1</p>
-	           				<div class="portfolio-slider">
-					            <?php foreach($order['orderPhotos'] as $photo){ ?>}
-					                <div><img src="/web/uploads/images/orders/<?= $photo['photo']?>" alt=""></div>
-					            <?php } ?>
-					        </div>
+	           				<?php 
+	           				// цикл по альбомам 	
+	           				foreach($albums as $alb) { ?>
+	           				
+		           				<p class="text subtitle_text">Альбом: <?= $alb['album_name']?></p>
+		           				<div class="slider portfolio-slider">	
+						            <?php 
+						            // цикл по фоткам альбома
+						            foreach($alb['albumPhotos'] as $photo){ ?>}
+						                <div><img src="/web/uploads/images/portfolio/<?= $photo['photo_name']?>" alt="">
+						                </div>
+						            <?php } ?>
+						        </div>
 
-					        <p class="text subtitle_text">Название альбома 2</p>
-	           				<div class="portfolio-slider">
-					            <?php foreach($order['orderPhotos'] as $photo){ ?>}
-					                <div><img src="/web/uploads/images/orders/<?= $photo['photo']?>" alt=""></div>
-					            <?php } ?>
-					        </div>
-
-	
+					        <?php } ?>	
+					        	
 			    		</div>
-			    			
-			    		</div>			    			
+
+			    		<!-- Отзывы -->
+			    		<div class="lk__main lk__main__exec">
+			    			<div class="refer" id="show_user_reviews">Смотреть все</div>
+				    		<p class="subtitle">Отзывы</p>
+	           					<p class="text">
+	           						<!-- Отзывов о пользователе оставлено -->
+	           						Всего отзывов получено - <?= count($reviews)?>
+	           					</p>
+	           					<div class="review_list">
+	           						<?php foreach($reviews as $r) { ?>
+	           							<div class="review_header">
+	           								<img src="<?= user_photo($r['fromUser']['avatar'])?>" alt="">
+	           								
+	           								<div class="fio_text">
+	           									<div class="fio">
+	           										<?= $r['fromUser']['username']?>
+	           									</div>
+	           									<div class="stars">Звезды</div>
+	           								</div>	           								.
+	           							</div>
+
+	           							<div class="review_details">
+	           								<p><?= $r['review'] ?>
+	           							</div>
+	           						<?php } ?>
+	           					</div>	
+			    		</div>    			
 			    	</div>	
 			   		
 		    	</div>
@@ -152,3 +212,20 @@ TemplateAsset::register($this);
 	    </div>
 
 	</div>
+	<?php 	
+$script = <<< JS
+	// сворачивание отзывов
+	$('#show_user_reviews').on('click',function(e){
+		//alert("Все отзывы");
+		if ($(this).text()=="Смотреть все") {
+			$(this).text("Свернуть");
+			$('.review_list').css('display','block');
+		}else{
+			$(this).text("Смотреть все");
+			$('.review_list').css('display','none');			
+		}	
+	})
+JS;
+//маркер конца строки, обязательно сразу, без пробелов и табуляции
+$this->registerJs($script, yii\web\View::POS_READY);
+?>

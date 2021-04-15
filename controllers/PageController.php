@@ -19,6 +19,7 @@ use app\models\UserDoc;
 use app\models\Category;
 use app\models\Order;
 use app\models\City;
+use app\models\WorkForm;
 
 use app\models\BuyRequestForm;
 use app\models\SearchForm;
@@ -35,7 +36,7 @@ use yii\web\UploadedFile;
  */
 class PageController extends Controller
 {
-	/**
+     /**
      * @inheritdoc
      */
     public function behaviors()
@@ -360,9 +361,16 @@ class PageController extends Controller
           //debug($model);
           if ($model->login()) 
           {       
-              //debug("ЛОГИН прошел"); 
+              // "ЛОГИН прошел"; 
               $identity = Yii::$app->user->identity;
               //debug($identity);
+
+              // запоминаем в сессии
+              $session = Yii::$app->session;
+              $session['identity'] = $identity;
+              $wfn = WorkForm::find()->select('work_form_name')->where(['id'=>$identity['work_form_id']])->asArray()->one();
+              $session['work_form_name'] = $wfn['work_form_name'];
+            
               if ($identity['blk']==1){ // если стоит признак Удаления - сбрасываем его
                 $identity['blk'] = 0;
                 $identity['blk_date'] = Null;

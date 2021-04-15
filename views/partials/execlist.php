@@ -24,8 +24,9 @@ require_once('../libs/user_photo.php');
 
 <?php
 foreach ($exec_list as $el) 
-{ ?>
-    <a href="/cabinet/exec-card?id=<?= $el['id'] ?>">
+{ 
+    //print_r ($el)?>
+    <a class="block" href="/cabinet/exec-card?id=<?= $el['id'] ?>">
         <!-- <div class="order_item"> -->
         <div class="order_item execlist">
             <!-- <div class="b_header"> -->

@@ -23,6 +23,7 @@ foreach ($orders_list as $ol)
 { ?>
     <a href="/cabinet/order-card?id=<?= $ol['id']?>">
         <div class="order_item">
+            <div class="order_number">Заказ №<?= $ol['id']?></div>
             <div class="order_status <?php
                 if ($ol['status_order_id']==2) echo 'color_green';
                 elseif ($ol['status_order_id']==4) echo 'color_red';?>">
@@ -47,9 +48,13 @@ foreach ($orders_list as $ol)
                  <div class="order_added"><?= showDate(strtotime($ol['added_time']))?></div>
             </div>
         </div>
-    </a>          
+    </a>
+
+    <div class="answer">
+        <div class="text">Ваше предложение будет Х в рейтинге заказа</div>
+        <div class="otklic">Откликнуться за ХХХ ₽</div>
+    </div>           
     <?php
-    
 }
 ?>
 <div class="paginat"> 

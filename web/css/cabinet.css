@@ -262,6 +262,27 @@ body{
 /*******************  Левая панель  Конец ******* *********************/ 
 
 /*******************  Правая панель   *********************************/ 
+	#orders_list{
+		width: 644px;
+    	margin: 0 auto;
+	}
+
+	.order_number{
+		position: absolute;
+	    right: 60px;
+	    font-size: 17px;
+	    font-weight: 700;
+	    color: rgb(174, 74, 132);
+	}
+
+	a.block{
+		text-decoration: none;
+	}
+
+	.order_item.execlist .exec_details{
+		display: block;
+	} 
+
 	.lk__main p{
 		padding: 30px;
 		margin: 0;
@@ -570,7 +591,7 @@ body{
 
 	.b_header{
 		position: relative;
-		height: 130px;
+		height: 147px;
 		background-color: #AE4A84;
 		border-radius: 10px;
 		color: #fff;
@@ -719,7 +740,7 @@ body{
 
 	.reiting div.blank { 
 		position: relative;
-	    top: 2px;
+	    top: -5px;
 	    left: 20px;
 	    display: inline-block;
 	    font-size: 14px;
@@ -810,6 +831,28 @@ body{
 /*******************  Карточка заказа  Конец **********************************/
 
 /*******************  Настройки Юзера  ****************************************/
+	.checked{
+		position: relative;
+    	top: -14px;
+    	color: #4cd964;
+	}
+
+	.text.text_moon{
+		margin-top: 10px;
+	}
+
+	.text.text_moon a{
+		color: #AE4A84;
+		margin-left: 20px;
+	}
+
+	.check_need {
+		width: 661px;
+    	/*height: 120px;*/
+    	box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
+    	padding: 1px 24px 15px;
+    	margin-top: 20px;
+	}
 	.b_header.b_header__tuning{
 		text-align: center;
 		padding-top: 10px;
@@ -828,7 +871,7 @@ body{
 
 	.b_text.b_text__tuning{
 		display:  block;
-		margin: 25px auto;
+		margin: 25px auto 0;
 		font-weight: bold;
 	}
 
@@ -847,7 +890,12 @@ body{
 		color: #AE4A84;
 	}
 
-
+	.text.text__anketa{
+		display: inline-block;
+        position: relative;
+    	top: -3px;
+    	margin-left: 10px;
+	}
 /*******************  Настройки Юзера  Конец **********************************/
 
 /*******************  Лента исполнителей ExecList *****************************/
@@ -929,6 +977,16 @@ body{
 /*******************  Лента исполнителей ExecList  Конец  ********************/
 
 /*******************  Карточка исполнителя **********************************/
+	ul.service {		
+	    list-style-type: disc;
+	    margin-left: 30px;
+	    margin-bottom: 20px;
+	}
+
+	.text_slow span{
+		float: right;
+	}
+
 	.filtr.filtr_exec{
 		padding-top: 24px;
 	}
@@ -1014,12 +1072,15 @@ body{
 
 	.lk__main.lk__main__exec p{
 		padding: 0;
+		margin-bottom: 20px;
 	}
 
 	.lk__main__exec .title{
+		width: 	70%;
 		font-size: 24px;
 	    font-weight: bold;    
 	    color: #AE4A84
+
 	}
 
 	.lk__main__exec div{
@@ -1098,13 +1159,35 @@ body{
 		margin-bottom: 20px;
 	}
 
+	.slick-track {
+	  display: flex!important;
+	  align-items: center;
+	}	
+
 	.portfolio-slider {
 		margin-bottom: 10px;
 		/*display: block;*/
 	} 
 
 	.portfolio-slider img {
-    	max-width: 150px;
+    	max-width: 180px;
+	}
+
+	.answer{
+		display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    margin-bottom: 25px;
+	}
+	.answer .text{
+		font-size: 14px;
+		color: #424242;
+	}
+
+	.answer .otklic{
+		font-size: 18px;
+		font-weight: bold;
+		color: #AE4A84;
 	}
 
 /*******************  Карточка исполнителя  Конец**********************************/
@@ -1417,6 +1500,14 @@ body{
 	}
 /*******************  Редактирование профиля Конец******************************************/
 
+/*******************  Фотоальбомы ******************************************/
+	p.new_album{
+		position: relative;
+	    margin-bottom: 12px;
+	    color: #424242;
+	    text-align: right;
+	    top: -33px;
+	}
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{
 		position: relative;

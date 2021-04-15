@@ -24,8 +24,10 @@ use app\models\OrderStatus;
 use app\models\OrderPhoto;
 use app\models\UserCity;
 use app\models\NotificationForm;
+use app\models\Album;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
+use yii\data\ActiveDataProvider;
 
 require_once('../libs/convert_date_ru_en.php');
 require_once('../libs/convert_date_en_ru.php');
@@ -482,24 +484,59 @@ class CabinetController extends AppController {
       // получить данные Исполнителя из БД
       $exec = User::find()
               ->Where(['id'=> $_GET['id']])
-              ->with('category', 'workForm')
+              ->with('category', 'subcategory', 'workForm', 'cities', 'userEducations')
               ->asArray()
               ->one();
 
       //debug($exec);
-      // для получения картинок слайдера        
-      $order = Order::find()
-              ->Where(['id'=> 50 ])
+      // для получения картинок слайдера -ЗАМЕНИТЬ НА ФОТО иЗ ПОРТФОЛИО       
+      $orders_list = Order::find()
+              ->Where([ 'user_id'=> $_GET['id'] ])
               ->with('category','orderStatus','orderCity', 'orderCategory', 'orderPhotos', 'workForm', 'user')
               ->asArray()
               ->one();
+      //debug($orders_list);        
+      //Отзывы об Исполнителе 
+      $reviews=Review::find()->where([ 'for_user_id'=> $_GET['id'] ])
+                ->with('fromUser')->asArray()->all();
+      //debug($reviews); 
 
-      // вывести карточку заказа
-      return $this->render('execCard', ['exec' => $exec, 'order' => $order]); 
+      //Альбомы Исполнителя и их фотографии
+      $albums=Album::find()->where([ 'user_id'=> $_GET['id'] ])
+                ->with('albumPhotos')->orderBy('album_name ASC')->asArray()->all();
+      //debug($albums); 
+
+      // вывести карточку Исполнителя
+      return $this->render('execCard', compact('exec','orders_list','reviews', 'albums')); 
     }
 
-    // вывести карточку текущего Пользователя (Заказчика  или Исполнителя) *********
+    // вывести карточку Заказчика  **************************************************
     public function actionUserCard() {
+
+      // получить данные Заказчика из БД
+      $user = User::find()
+              ->Where(['id'=> $_GET['id']])
+              ->with('category', 'workForm', 'cities')
+              ->asArray()
+              ->one();
+      //debug($user);
+              
+      //Список заказов Заказчика
+      $orders_list=Order::find()->where([ 'user_id'=> $_GET['id'] ])
+                  ->with('category','orderStatus','orderCity')
+                  ->orderBy('added_time DESC')->asArray()->all();
+                 
+      //Отзывы о Заказчике 
+      $reviews=Review::find()->where([ 'for_user_id'=> $_GET['id'] ])
+                ->with('fromUser')->asArray()->all();
+      //debug($reviews); 
+
+      // вывести карточку Заказчика
+      return $this->render('userCard', compact('user','orders_list','reviews')); 
+    }
+
+    // вывести Профиль текущего Пользователя (Заказчика  или Исполнителя) *********
+    public function actionUserProfile() {
 
       // получить данные текущего Пользователя из БД
       $identity = Yii::$app->user->identity;
@@ -507,7 +544,7 @@ class CabinetController extends AppController {
 
       $user = User::find()
               ->Where([ 'id'=> $identity['id'] ]) 
-              ->with('category', 'workForm')
+              ->with('category', 'subcategory', 'workForm', 'cities', 'userEducations')
               ->asArray()
               ->one();
 
@@ -520,10 +557,15 @@ class CabinetController extends AppController {
       //Отзывов о пользователе оставлено
       $reviews=Review::find()->where([ 'for_user_id'=> $identity['id'] ])
                 ->with('fromUser')->asArray()->all();
-      //debug($reviews);  
+      //debug($reviews); 
+
+      //Альбомы Исполнителя и их фотографии
+      $albums=Album::find()->where([ 'user_id'=> $identity['id'] ])
+                ->with('albumPhotos')->orderBy('album_name ASC')->asArray()->all();
+      //debug($albums);  
         
-      // вывести карточку Юзера
-      return $this->render('userCard', compact('user', 'orders_list', 'reviews')); 
+      // вывести профиль Юзера
+      return $this->render('userProfile', compact('user', 'orders_list', 'reviews', 'albums')); 
     }
 
     // Настройка данных Текущего Юзера *******************************************************
@@ -733,38 +775,38 @@ class CabinetController extends AppController {
         }else echo "ПО Pjax не передалось";
     }    
 
-  // добавление вида услуг Исполнителя ************************************************
-  public function actionAddUserCategory()
-  {      
-    $model = new \app\models\UserCategory();
-    $category = Category::find()->orderBy('name ASC')->all();
+    // добавление вида услуг Исполнителя ************************************************
+    public function actionAddUserCategory() {      
+      $model = new \app\models\UserCategory();
+      $category = Category::find()->orderBy('name ASC')->all();
 
-    // если запрос пришел по Pjax
-    if (Yii::$app->request->isPjax) { 
-      $data = Yii::$app->request->post();
-      $model->load($data); 
-      debug($model);
-      //if ($model->validate()) {
-        $subcategory = Subcategory::find()->where(['category_id'=>$model['category_id']])->orderBy('name ASC')->asArray()->all();
-              // form inputs are valid, do something here
-            //debug($subcategory);
-        return $this->render('addUserCategory', compact('model','category', 'subcategory'));
-      //}
-    }
-
-      if ($model->load(Yii::$app->request->post())) {
-          if ($model->validate()) {
-            $subcategory = Subcategory::find()->where(['category_id'=>$model['category_id']])->orderBy('name ASC')->asArray()->all();
-              // form inputs are valid, do something here
-            //debug($subcategory);
-            return $this->render('addUserCategory', compact('model','subcategory'));
-            //return;
-          }
+      // если запрос пришел по Pjax
+      if (Yii::$app->request->isPjax) { 
+        $data = Yii::$app->request->post();
+        $model->load($data); 
+        debug($model);
+        //if ($model->validate()) {
+          $subcategory = Subcategory::find()->where(['category_id'=>$model['category_id']])->orderBy('name ASC')->asArray()->all();
+                // form inputs are valid, do something here
+              //debug($subcategory);
+          return $this->render('addUserCategory', compact('model','category', 'subcategory'));
+        //}
       }
 
-      
-      return $this->render('addUserCategory', compact('model','category'));
-  }
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+              $subcategory = Subcategory::find()->where(['category_id'=>$model['category_id']])->orderBy('name ASC')->asArray()->all();
+                // form inputs are valid, do something here
+              //debug($subcategory);
+              return $this->render('addUserCategory', compact('model','subcategory'));
+              //return;
+            }
+        }
+
+        
+        return $this->render('addUserCategory', compact('model','category'));
+    }  
+
 
 }  
 
