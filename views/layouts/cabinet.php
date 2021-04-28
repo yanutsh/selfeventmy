@@ -19,7 +19,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 //use yii\widgets\Menu;
 
-require_once('../libs/user_photo.php');
+//require_once('../libs/user_photo.php');
 
 //TemplateAsset::register($this);
 FontAsset::register($this);
@@ -27,7 +27,6 @@ AppAsset::register($this);
 CabinetAsset::register($this);
 
 $identity = Yii::$app->user->identity;
-//debug ($identity['avatar']);
 $username = $identity['username'];
 $avatar = $identity['avatar'];
 
@@ -39,9 +38,8 @@ $avatar = $identity['avatar'];
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <?= Html::csrfMetaTags() ?>
-        <title><?= Html::encode(Yii::$app->settings->get('name')) ?></title>
-        
+        <?= Html::csrfMetaTags() ?>      
+        <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
 
     </head>
@@ -148,16 +146,10 @@ $avatar = $identity['avatar'];
                 </div>   
             </div>            
         </header>
-        <!-- <?php 
-            $model=$this->params['model'] ;
-            $category=$this->params['category'] ;
-            $work_form=$this->params['work_form'];
-            $payment_form=$this->params['payment_form'];
-            $count=$this->params['count'];
-        ?> -->
-          
+                 
         <?= $content ?>
-                                
+         
+                         
         <footer>
         <section class="section__footer">
             <div class="wrapper">

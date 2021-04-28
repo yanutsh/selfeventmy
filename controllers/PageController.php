@@ -34,7 +34,7 @@ use yii\web\UploadedFile;
 /**
  * PageController implements the CRUD actions for Page model.
  */
-class PageController extends Controller
+class PageController extends AppController
 {
      /**
      * @inheritdoc

@@ -5,7 +5,6 @@ use yii\web\User;
 use app\assets\TemplateAsset;
 use app\components\page\PageAttributeWidget as PAW;
 
-require_once('../libs/time_ago.php');
 
 TemplateAsset::register($this);
 

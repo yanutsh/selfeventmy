@@ -14,11 +14,12 @@ use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
-require_once('../libs/time_ago.php');
+
 ?>
 <?php //Pjax::begin(); ?>
 
 <?php
+//debug($_SESSION['identity']);
 foreach ($orders_list as $ol) 
 { ?>
     <a href="/cabinet/order-card?id=<?= $ol['id']?>">
@@ -50,13 +51,14 @@ foreach ($orders_list as $ol)
         </div>
     </a>
 
+    <?php if ($_SESSION['identity']['isexec']) {?>
     <div class="answer">
         <div class="text">Ваше предложение будет Х в рейтинге заказа</div>
         <div class="otklic">Откликнуться за ХХХ ₽</div>
-    </div>           
+    </div>
+    <?php } ?>           
     <?php
-}
-?>
+} ?>
 <div class="paginat"> 
     <?php 
     //debug($model); 

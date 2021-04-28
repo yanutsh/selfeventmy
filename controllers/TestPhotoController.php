@@ -3,7 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 
-class TestPhotoController extends Controller {
+class TestPhotoController extends AppController {
 
 	public function actionIndex()
     {

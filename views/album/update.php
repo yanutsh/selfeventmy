@@ -13,6 +13,7 @@ $this->title = 'Update Album: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Albums', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
+//debug($album_photoes);
 ?>
 
 <div class="wrapper__addorder wrapper__addorder__card">
@@ -33,9 +34,7 @@ $this->params['breadcrumbs'][] = 'Update';
     <div class="order_content order_content__tuning">
     	<div class="order_content__subtitle">Редактирование альбома</div>  
 	    
-	    <?= $this->render('_form', [
-	        'model' => $model,
-	    ]) ?>
+	    <?= $this->render('_form', compact('model', 'album_photoes','id')) ?>
 	</div>    
 
 </div>

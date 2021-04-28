@@ -1508,6 +1508,36 @@ body{
 	    text-align: right;
 	    top: -33px;
 	}
+
+	.album_photo{
+	    display: flex;
+	    flex-wrap: wrap;
+	    justify-content: space-between;
+	    align-items: center;
+	}
+
+	.album_photo .photo_item{
+		width: unset;
+		height: unset;
+	}
+
+	.album_photo .photo_item img{
+		max-width: 200px;
+		max-height: 200px;
+	}
+
+	.photo_delete{
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+
+	img.del_icon{
+		width: 20px;
+	}	
+
+/*******************  Фотоальбомы Конец******************************************/
+
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{
 		position: relative;

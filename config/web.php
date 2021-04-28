@@ -123,7 +123,11 @@ $config = [
       ] */
     ],
 
+
     'modules'       => [
+        'gridview' =>  [
+        'class' => '\kartik\grid\Module',
+        ],
         'sitemap' => [
             'class'       => 'himiklab\sitemap\Sitemap',
             'models'      => [

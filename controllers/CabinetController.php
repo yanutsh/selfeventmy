@@ -29,16 +29,17 @@ use yii\web\UploadedFile;
 use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
 
-require_once('../libs/convert_date_ru_en.php');
-require_once('../libs/convert_date_en_ru.php');
-require_once('../libs/convert_datetime_en_ru.php');
-require_once('../libs/rdate.php');
-
-// Контроллер ЗАКАЗЧИКА - 
+// Контроллер Личного Кабинета ------------------------------------------- - 
 class CabinetController extends AppController {  
     
-    public $layout = 'cabinet';    // общий шаблон для всех видов контроллера
-   	
+    public $layout = 'cabinet';    // общий шаблон для всех видов контроллера 
+    // неизменные исходные данные, которые настраиваются в Админке и Кешируются
+    public $category;
+    public $city;
+    public $work_form;
+    public $payment_form;
+    public $order_status;  	
+    
     // ЛК - фильтр и список Заказов  ***********************************************
     public function actionIndex()	
     {
@@ -112,13 +113,8 @@ class CabinetController extends AppController {
             // debug( $pages);
             $orders_list = $query->orderBy('added_time DESC')->all();       
             $count=$query->count(); // найдено заказов Всего
-            //debug( $count);
-            $category = Category::find() ->orderBy('name')->all();
-            $city = City::find() ->orderBy('name')->all();
             
-            $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
-            $payment_form= PaymentForm::find() ->orderBy('payment_name')->all();
-            $order_status = OrderStatus::find() ->orderBy('name')->all();
+            //debug( $count);            
 
               // Фильтр по Формам работы
               // if (!$model->work_form_id == "") {  // если значение фильтра установлено
@@ -135,11 +131,10 @@ class CabinetController extends AppController {
                   "data" => $count,
                   "orders" => $this->render('@app/views/partials/orderslist.php', compact('orders_list')), //$html_list, 
                   "error" => null
-              ];  
+              ];             
+        } 
 
-           
-        } //else { //  первый раз открываем страницу - показываем все заказы
-          
+        //  первый раз открываем страницу - показываем все заказы
         $orders_list = Order::find()
                   ->filterWhere(['AND',                     
                     ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
@@ -152,11 +147,19 @@ class CabinetController extends AppController {
            
         //debug( $orders_list);
         
-        $category = Category::find() ->orderBy('name')->all();
-        $city = City::find() ->orderBy('name')->all();
-        $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
-        $payment_form= PaymentForm::find() ->orderBy('payment_name')->all();
-        $order_status = OrderStatus::find() ->orderBy('name')->all();
+        // получение неизменных исходные данные из кеша или БД 
+        $cache = \Yii::$app->cache;
+        $category = $cache->getOrSet('category',function()
+            {return Category::find() ->orderBy('name')->asArray()->all();});
+        $city = $cache->getOrSet('city',function()
+            {return City::find() ->orderBy('name')->asArray()->all();});
+        $work_form = $cache->getOrSet('work_form',function()
+            {return WorkForm::find() ->orderBy('work_form_name')->asArray()->all();});
+        $payment_form = $cache->getOrSet('payment_form',function()
+            {return PaymentForm::find() ->orderBy('payment_name')->asArray()->all();});
+        $order_status = $cache->getOrSet('order_status',function()
+            {return OrderStatus::find() ->orderBy('name')->asArray()->all();});
+          
         //debug( $order_status);
 
         return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats'));              

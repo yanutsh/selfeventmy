@@ -1,9 +1,6 @@
-<?php 
+<?php
+//<!-- Ввод и редактирование аватара --> 
 	require_once('user_photo.php') ?>
-<!-- Ввод и редактирование аватара -->
-	<!-- <div class="b-change_avatar">Выберите файл для аватара.</div> -->
-
-	<!-- <form action="functions/save_profile_customer.php" class="p-form" method="post" enctype="multipart/form-data"> -->
 
 		<div class="change_avatar">		    
 			

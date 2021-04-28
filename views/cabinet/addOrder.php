@@ -167,7 +167,7 @@ $city = City::find() ->orderBy('name')->all();
 
                     <!-------------------Добавить Фотографии заказа---------------------->
 
-                    <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+                    <?//= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
 
                     <?php  
                     $max_photos_order=6; 

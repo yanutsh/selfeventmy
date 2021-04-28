@@ -6,6 +6,12 @@ use Yii;
 class AppController extends \yii\web\Controller
 {
 
+
+    // public function __construct($id, $modul, $config){       
+        
+    //     parent::__construct($id, $modul, $config); 
+    // }
+
     public function beforeAction($action)
     {
         // считываем данные юзера из сессии

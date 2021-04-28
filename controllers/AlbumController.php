@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Album;
+use app\models\AlbumPhoto;
 use app\models\WorkForm;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -91,7 +92,23 @@ class AlbumController extends AppController
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        // ищем альбом         
+        $model = $this->findModel($id);        
+
+        // если пришел запрос на удаление фотки:
+        if (Yii::$app->request->isPjax) { // && isset($_GET['del_photo_id'])) {
+
+            // echo "del_photo_id=".$_GET['del_photo_id']."<br>";
+            // echo "id=".$_GET['id']."<br>";
+
+            //$res=AlbumPhoto::find()->where(['id'=>$_GET['del_photo_id']])->delete();
+            AlbumPhoto::deleteAll('id='.$_GET['del_photo_id']);
+            //echo "res=".$res;
+            $album_photoes = $this->findAlbumPhotoes($id);
+            //debug( $id);
+            
+            return $this->render('_form', compact('model', 'album_photoes','id'));
+        }   
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -99,9 +116,11 @@ class AlbumController extends AppController
 
         // СЧИТЫВАЕМ ДАННЫЕ ЮЗЕРА ИЗ СЕССИИ
         include_once('../libs/get_session.php');
+        // ищем фотографии этого альбома
+        $album_photoes = $this->findAlbumPhotoes($id);
+        //debug($album_photoes);
 
-        return $this->render('update', compact('dataProvider','model','identity','work_form_name'));
-        
+        return $this->render('update', compact('dataProvider','model','album_photoes','identity','work_form_name','id'));        
     }
 
     /**
@@ -111,9 +130,9 @@ class AlbumController extends AppController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($album_id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($album_id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -125,12 +144,22 @@ class AlbumController extends AppController
      * @return Album the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($album_id)
     {
-        if (($model = Album::findOne($id)) !== null) {
+        if (($model = Album::findOne($album_id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    // Поиск фотографий альбома с заданным $id
+    protected function findAlbumPhotoes($album_id)
+    {
+        if ( ($album_photoes = AlbumPhoto::find()->where(['album_id'=>$album_id])->asArray()->all()) !== null) {
+            return $album_photoes;
+        }
+
+        throw new NotFoundHttpException('The album_photoes does not exist.');
     }
 }

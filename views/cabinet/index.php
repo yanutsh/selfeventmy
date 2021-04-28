@@ -17,9 +17,8 @@ TemplateAsset::register($this);
 
 	<?php 
 		$identity = Yii::$app->user->identity;
-		//debug ($identity['avatar']);
-		$avatar = $identity['avatar'];
-		//debug($identity['isexec']);		
+		$avatar = $identity['avatar'];	
+		$this->title = 'Личный кабинет';	
 	?>
 	
 	
