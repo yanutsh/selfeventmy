@@ -7,14 +7,6 @@ use yii\web\User;
 use app\assets\TemplateAsset;
 use app\assets\RegistrationAsset;
 use app\components\page\PageAttributeWidget as PAW;
-// use app\models\WorkForm;
-// use app\models\Sex;
-// use app\models\Category;
-// use app\models\City;
-// use kartik\date\DatePicker;
-// use yii\widgets\Pjax;
-
-require_once('../libs/user_photo.php');
 
 TemplateAsset::register($this);
 RegistrationAsset::register($this);
@@ -38,9 +30,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
             <div class="checked">Профиль проверен</div>             
         <?php   } ?>
          
-    </div>
-
-    
+    </div>    
 
     <div class="order_content order_content__tuning">
     

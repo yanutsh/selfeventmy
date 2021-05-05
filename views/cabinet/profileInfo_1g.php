@@ -192,13 +192,13 @@ $identity = Yii::$app->user->identity;
         <!-- Города -Конец	---------------------------------------------- -->
 
         <!-- Категории услуг---------------------------------------------  -->
-        	<?php //Pjax::begin();?>
+        	<?php //Pjax::begin(); ?>
             <div class="order_content__subtitle">
             	<span>Сфера деятельности</span>
             	<?php 
 				// модальное окно - Добавить/Удалить Вид деятельности					
 				Modal::begin([
-					    'header' => '<h2>Редактирование деятельности</h2>',
+					    'header' => '<h2>Добавление деятельности</h2>',
 					    'id' => "action_win",	
 					    'toggleButton' => [
 					     	'label' => 'Редактировать',
@@ -240,83 +240,55 @@ $identity = Yii::$app->user->identity;
 					            ]); ?>				     
 
 					        <!-- Категории -->
-					        <input hidden type="text" name="field_name" value="category">
-					        <div class='subtitle'>Добавление услуги:</div> 
+					        <input hidden type="text" name="field_name" value="category"> 
 					        <?= $form->field($user_category, 'category_id')->dropDownList(	
 					            	ArrayHelper::map($category, 'id', 'name'),
-					            	 [  'prompt'=>'Выберите категорию услуги',
+					            	 [  'prompt'=>'Все категории',
 					                    'id'=>'category_id',
-					                 ])->label('') ?>
+					                 ])->label('Выберите категорию услуги') ?>
 					        
 					        <!-- Подкатегории          -->
 					        <?php if (!empty($subcategory)) {?>
 
-						        <?= $form->field($user_category, 'subcategory_id')->dropDownList(ArrayHelper::map($subcategory, 'id', 'name'),[
-							            'prompt'=>'Выберите вид услуги',
-							            'id'=>'subcategory_id',					            
-							             ])
-							            ->label(''); ?>
+					        <?= $form->field($user_category, 'subcategory_id[]')->dropDownList(ArrayHelper::map($subcategory, 'id', 'name'),[
+						            //'prompt'=>'Выберите услугу',
+						            'id'=>'subcategory_id',
+						            'class' => "js-chosen actionss",
+									'multiple' => "multiple",
+						             ])
+						            ->label('Добавьте вид услуги'); ?>
 
-							    <div class="flex_block">
-			                        <?= $form->field($user_category, 'price_from',['enableClientValidation' => true]) ?>
-			                        <?= $form->field($user_category, 'price_to') ?>
-			                    </div>
-
-		                    	<div class="choose_elements price">	                        
-			                        <!-- <div class="item_choose"> -->
-			                            <div class="form-group exactly price">
-			                                <div>
-			                                    <label class="control-label">Указать точную сумму</label>
-			                                </div>        
-			                                <div class="toggle-button-cover"> 
-			                                      <div class="button-cover">
-			                                        <div class="button r" id="button-1">
-			                                          <input type="checkbox" class="checkbox tuning" id="price_exactly">
-			                                          <div class="knobs"></div>
-			                                          <div class="layer"></div>
-			                                        </div>
-			                                      </div>
-			                                </div>
-			                            </div>
-
-			                            <?= $form->field($user_category, 'price')->label(false) ?>
-			                        <!-- </div>         -->
-			                    </div>    
-						    <?php } ?>
+					        <?php } ?>
 
 					        <div class="form-group">
 					            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary', 'name'=>'save_actions', 'id'=>'save_actions','value'=>'true']) ?>
 					        </div>
-						    <?php ActiveForm::end(); ?>
-						    <?php
-								$script = <<< JS
-									$('#category_id').on('change',function(event){
-										event.preventDefault(); 
-								        // признак отправки формы НЕ для сохранения данных
-								        $('#save_actions').val('false');              
-								        $('#add-category-form').submit();			        
-								    });
+					    <?php ActiveForm::end(); ?>
+					    <?php
+							$script = <<< JS
+								$('#category_id').on('change',function(event){
+									event.preventDefault(); 
+							        // признак отправки формы НЕ для сохранения данных
+							        $('#save_actions').val('false');              
+							        $('#add-category-form').submit();			        
+							    });
 
-								    $('#save_actions').on('click', function(event){
-								        // признак отправки формы ДЛЯ сохранения данных
-								        //event.preventDefault(); 
-								        $(this).val('true');
-								        //$('#add-category-form').submit();	
-								        //$('#action_win').modal('hide');					        
-								    })
-								    // Переключатель показа поля точного бюджета)
-								    $('#price_exactly').click(function(event) {
-								    	//alert ("Показать");
-								    	if ($("#price_exactly").prop("checked"))	$('#usercategory-price').show(1000);
-								    	else {
-								    		$('#usercategory-price').hide(1000);
-								    		$('#usercategory-price').val(null);
-								    		}
-								    })
-								JS;
-			                        //маркер конца строки, обязательно сразу, без пробелов и табуляции
-			                        $this->registerJs($script, yii\web\View::POS_READY);
-						    ?>
+							    $('#save_actions').on('click', function(e){
+							        // признак отправки формы ДЛЯ сохранения данных
+							        $(this).val('true');
+							        $('#action_win').modal('hide');					        
+							    })
+
+							    $('.js-chosen.actionss').chosen({
+							        width: '100%',
+							        no_results_text: 'Совпадений не найдено',
+							        placeholder_text_single: 'Выберите услугу',
+							        placeholder_text_multiple: 'Любая услуга',
+							    });
+							JS;
+		                        //маркер конца строки, обязательно сразу, без пробелов и табуляции
+		                        $this->registerJs($script, yii\web\View::POS_READY);
+					    ?>
 				    <?php Pjax::end(); ?>
 	    			<?php
 	    		Modal::end();?>
@@ -324,16 +296,23 @@ $identity = Yii::$app->user->identity;
 	    	</div>				
             <!-- цикл по услугам список--> 
             <?php
-            	//debug($user_subcategory);
-            	            	
-            	foreach($user_subcategory as $u_scat) { ?>
+            //Pjax::begin(); 
+				//debug($user_subcategory);
+            	$user_subcategory_names[]="";
+            	foreach($user_subcategory as $u_scat){
+            		$user_subcategory_names[]=$u_scat['subcategory']['name'];
+            	}
+            	$res = sort($user_subcategory_names);
+            	
+            	foreach($user_subcategory_names as $name) { ?>
 					<div class="text profile">
-	            		<span><?=$u_scat['subcategory']['name'] ?></span>
-	            		<div class="text_details profile"><span>от </span><?=$u_scat['price_from'] ?> Р</div>
+	            		<span><?=$name ?></span>
+	            		<div href="" class="text_details profile">от 1 000 Р</div>
 	            	</div>					
 				<?php 
 				}  ?> 					      		       
-	        <?php	        	 									
+	        <?php
+	        //Pjax::end(); 	 									
 			// модальное окно - Вид Деятельности -Конец	
 			?>			
 			

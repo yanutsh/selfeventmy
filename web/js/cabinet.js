@@ -158,12 +158,12 @@ $(document).ready(function() {
 
     // для выпадающего списка Город
     //$(document).ready(function(){
-    $('.js-chosen').chosen({
-        width: '100%',
-        no_results_text: 'Совпадений не найдено',
-        placeholder_text_single: 'Выберите город',
-        placeholder_text_multiple: 'Любой город',
-    });
+    // $('.js-chosen').chosen({
+    //     width: '100%',
+    //     no_results_text: 'Совпадений не найдено',
+    //     placeholder_text_single: 'Выберите город',
+    //     placeholder_text_multiple: 'Любой город',
+    // });
     //}); 
 
     // имитация клика на поле город при клике по gliphicon

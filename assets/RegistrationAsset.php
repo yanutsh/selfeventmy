@@ -22,7 +22,7 @@ class RegistrationAsset extends AssetBundle {
         'js/jquery.ui.touch-punch.min.js', 
         'js/chosen.jquery.js',
         'js/cabinet.js',
-        'js/app.js',
+        //'js/app.js',
         'js/slick.min.js',      
     ];
     public $depends = [

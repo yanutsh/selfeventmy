@@ -1423,7 +1423,7 @@ body{
 	.text_details.profile{
 		position: absolute;
 		top: 0;
-		right: 0;
+		right: 20px;
 		line-height: normal;
 		cursor: pointer;
 	}
@@ -1447,7 +1447,7 @@ body{
 	}
 
 	.modal-footer{
-		display: none;
+		/*display: none;*/
 	}
 	
 	.delete_account{
@@ -1496,8 +1496,38 @@ body{
 	}
 
 	a#modal_action {
-		position: static;
+		/*position: static;*/
 	}
+
+	#subcategory_id{
+		/*height: 0;*/
+	}
+
+	.modal-body .subtitle{
+		margin-bottom: 10px;
+	}
+
+	.text_details.profile {
+		width: 70px;
+		text-align: right;
+	} 
+
+	.text_details.profile span{
+		float: left;
+    }
+
+    .choose_elements.price	{
+    	width: 100%;
+    	justify-content: center;
+    }
+
+    .form-group.exactly.price {
+    	width: 80%;
+    }
+
+    #usercategory-price {
+    	display: none;
+    }
 /*******************  Редактирование профиля Конец******************************************/
 
 /*******************  Фотоальбомы ******************************************/

@@ -22,8 +22,13 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => $page->seo_keywords])
 $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_description]);
 
 // Получение исходных данных для формы
-$category = Category::find() ->orderBy('name')->asArray()->all();
-$city = City::find() ->orderBy('name')->all();
+//$category = Category::find() ->orderBy('name')->asArray()->all();
+//$city = City::find() ->orderBy('name')->all();
+// получение неизменных исходные данные из кеша или БД       
+$category = $cache->getOrSet('category', function()
+    {return Category::find() ->orderBy('name')->asArray()->all();});
+$city = $cache->getOrSet('city',function()
+    {return City::find() ->orderBy('name')->asArray()->all();});
 
 ?>
 <!-- <div class="page-main template-main page"> -->

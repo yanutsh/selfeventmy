@@ -23,6 +23,7 @@ use app\models\OrderCategory;
 use app\models\OrderStatus;
 use app\models\OrderPhoto;
 use app\models\UserCity;
+use app\models\UserEducation;
 use app\models\NotificationForm;
 use app\models\Album;
 use yii\web\UploadedFile;
@@ -633,6 +634,7 @@ class CabinetController extends AppController {
     // Страница Информация о Профиле   
     /* *******************************************************/
     public function actionProfileInfo() {
+      $cache = \Yii::$app->cache;
       $identity = Yii::$app->user->identity;      
       $user_id = $identity['id'];
 
@@ -642,22 +644,41 @@ class CabinetController extends AppController {
       $user_subcategory = UserCategory::find()
               ->where(['user_id'=>$user_id]) 
               ->with('subcategory')->asArray()->all();
-      //debug($user_subcategory);       
-      $category = Category::find()->orderBy('name ASC')->all();
-      $subcategory = ""; //Subcategory::find()->orderBy('name ASC')->all();
-      $city = City::find()->orderBy('name ASC')->asArray()->all();
+      //debug($user_subcategory); 
+
+      // получение неизменных исходные данные из кеша или БД       
+      $category = $cache->getOrSet('category', function()
+            {return Category::find() ->orderBy('name')->asArray()->all();});
+      $city = $cache->getOrSet('city',function()
+            {return City::find() ->orderBy('name')->asArray()->all();});
+      $user_education = $cache->getOrSet('user_education', function()
+            {return UserEducation::find()->where(['user_id'=>$user_id])->asArray()->all();});
+       
+      // if (!empty($cache->get('user_education'))) { // если есть - берем их кеша
+      //   $user_education = $cache->get('user_education');
+      // }else{  // или записываем в кеш
+      //   $user_education = UserEducation::find()->where(['user_id'=>$user_id])->asArray()->all();
+      //   $cache->set('user_education', $user_education);
+      // }  
+
+     //debug($user_education);
       
+      // подкатеагории первоначальо не показываются в модальном окне
+      $subcategory = ""; //Subcategory::find()->orderBy('name ASC')->all();
+
       $user_city = new UserCity();
       $user_category = new UserCategory();
       $category_model = new Category();
       //debug($user);
-
+   
       if (Yii::$app->request->isPjax) { 
         $data = Yii::$app->request->post();
+          
           //debug($data); 
 
           if ($data['field_name'] == 'myself'){
             $user->myself = $data['User']['myself']; 
+            $user->save();
             return $this->render('profileInfo', compact('user')); 
           }elseif ($data['field_name'] == 'contact'){
             $user->username = $data['User']['username'];            
@@ -684,44 +705,54 @@ class CabinetController extends AppController {
               return $this->render('profileInfo', compact('user','city','user_city')); 
             }  
           }
-          elseif ($data['field_name'] == 'add_category'){ //добавляем услуги
+          elseif ($data['field_name'] == 'category'){ //добавляем и сохраняем услуги
+            //debug($data); 
             
+            $user_category->load($data);
+            
+            // если нажали кнопку сохранить - сохраняем данные
+            if ($data['save_actions'] == 'true') {
+              //debug($data);
+              $user_cat = new UserCategory();
+              $user_cat->load($data);
+              //debug( $user_cat);
+              //Если добавляли подкатегорию - записываем в БД
+              if (!Empty($user_cat['subcategory_id'])) {                  
+                  //debug($user_category);
+                  $user_cat->user_id = $identity['id'];
+                  $user_cat->save();                                                 
+              }
+              // обновляем данные  
+              if (!empty($user_category->category_id)) {
+                $subcategory = Subcategory::find()->
+                    where(['category_id'=>$user_category->category_id ])-> 
+                    orderBy('name ASC')->asArray() ->all();
+              }
+                    
+              $user_subcategory = UserCategory::find()
+                    ->where(['user_id'=>$user_id]) 
+                    ->with('subcategory')->asArray()->all();      
+              
+              // возвращаемся в профиль  и обновляем не по Pjax!!!!!!!!!!.
+              return $this->refresh();      
+              //return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory')); 
 
-             $category_model->id = $data['Category']['id']; 
-             $category_id = $data['Category']['id'];
+            }
 
-             $user_category->load($data);
-             //Если ввели подкатегорию - записываем в БД
-             if (!Empty($user_category['subcategory_id'])) {
-                $user_category->user_id = $identity['id'];
-                $user_category->category_id = $category_id;
-               //debug($user_category);
+            // иначе - обновляем форму - список подкатегорий            
+            $category_id = $user_category->category_id;
+            $subcategory = Subcategory::find()->
+                    where(['category_id'=>$category_id ])-> 
+                    orderBy('name ASC')->asArray() ->all();
+            
+            // возвращаемся к форме           
+            return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory'));           
+          }        
 
-                $user_category->save();                
-             }  
+          
+      }      
 
-             $user_subcategory = UserCategory::find()->
-                where(['user_id'=>$identity['id'],'category_id'=>$category_id])-> 
-                with('subcategory')->
-                asArray()->
-                all();    
-                
-             $subcategory = Subcategory::find()->
-                where(['category_id'=>$category_id ])-> //$user_category['category_id']])->
-                orderBy('name ASC')
-                ->asArray()
-                ->all();
-
-                //debug($subcategory);
-          } 
-
-          $user->save(); // записать изменения в БД
-          //return $this->render('profileInfo', compact('user','city','user_city','category')); 
-          //return $this->render('profileInfo', compact('user')); 
-          return $this->render('profileInfo', compact('user','city','user_city', 'category', 'category_model','user_category','subcategory','user_subcategory')); 
-      }
-
-      return $this->render('profileInfo', compact('user','city','user_city', 'category', 'category_model', 'user_category','subcategory','user_subcategory')); 
+      return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory')); 
     }
 
     // Пополнение баланса
@@ -733,25 +764,27 @@ class CabinetController extends AppController {
 
     // Удаление города пользователя ***************************************************
     public function actionDeleteUserCity() {
-      $user_id = Yii::$app->user->identity->id;  
-      $city_id = $_GET['city_id'];
-      //echo "user_id=".$user_id." city_id=".$city_id;
+      if (Yii::$app->request->isPjax) { 
+        $user_id = Yii::$app->user->identity->id;  
+        $city_id = $_GET['city_id'];
+        //echo "user_id=".$user_id." city_id=".$city_id;
 
-      //$user_city = new UserCity();
-      $user_city = UserCity::find()->where(['user_id'=>$user_id, 'city_id'=>$city_id])->one();      
-      if ($user_city) $res = $user_city->delete(); 
+        //$user_city = new UserCity();
+        $user_city = UserCity::find()->where(['user_id'=>$user_id, 'city_id'=>$city_id])->one();      
+        if ($user_city) $res = $user_city->delete(); 
 
-      // обновляем информацию о пользователе и возвращаем в модальное окно Город (Pjax)
-      $user = User::find()->where(['id'=>$user_id])->one();
-      //debug($user);
+        // обновляем информацию о пользователе и возвращаем в модальное окно Город (Pjax)
+        $user = User::find()->where(['id'=>$user_id])->one();        //debug($user);
 
-      return $this->render('profileInfo', compact('user'));      
+        return $this->render('profileInfo', compact('user')); 
+
+      }else echo "нет запроса по Pjax";        
     }
 
     // Если есть запрос на удаление - удаляем подкатегорию услуги ***************************
     public function actionDeleteUserSubcategory() {     
       
-        $user_id = Yii::$app->user->identity->id; 
+        $user_id = Yii::$app->user->identity->id;
         $subcategory_id =$_GET['subcategory_id'];        
         //debug($user_id);
         $user_category = UserCategory::find()->
@@ -763,19 +796,20 @@ class CabinetController extends AppController {
           $category_id = $user_category['category_id']; // Вытаскиваем категорию  
           $res=$user_category->delete();                // Удаляем подкатегорию
         }
-            
+        
+        // новый список подкатегорий    
         $user_subcategory = UserCategory::find()->
-                where(['user_id'=>$user_id,'category_id'=>$category_id])-> 
-                with('subcategory')->
-                //asArray()->
-                all();
-         
-          //debug($user_subcategory) ;    
-          //return Yii::$app->response->redirect(['/cabinet/profile-info']);
-        if (Yii::$app->request->isPjax) {            
-          return $this->render('profileInfo', compact('user_subcategory'));
-          //return $this->render('profileInfo', compact('user'));  
-        }else echo "ПО Pjax не передалось";
+                //where(['user_id'=>$user_id,'category_id'=>$category_id])-> 
+                where(['user_id'=>$user_id])-> 
+                with('subcategory')->asArray()->all();       
+        
+          
+          $user = new User();
+          $user_city = new UserCity();
+          $city[]=null;
+          //debug($user);
+          return $this->render('profileInfo', compact('user_subcategory','user','user_city','city'));
+      
     }    
 
     // добавление вида услуг Исполнителя ************************************************
@@ -808,6 +842,11 @@ class CabinetController extends AppController {
 
         
         return $this->render('addUserCategory', compact('model','category'));
+    }
+
+    // Пользовательская функция Сортировки многомернго массива По возрастанию:
+    public function cmp_function($a, $b){
+      return ($a['name'] > $b['name']);
     }  
 
 

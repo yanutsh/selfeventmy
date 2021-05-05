@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 //use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
@@ -100,6 +101,11 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 	                  </div>
 	            </div>
 	        </div>
+
+	        <div class="order_buttons">
+	            <a href="<?= Url::to('/cabinet/user-tuning') ?>" class="register active">В настройки</a>          
+	        </div>        
+
 	        <?php 	
 			$script = <<< JS
 				$('input.checkbox').on('change', function(){

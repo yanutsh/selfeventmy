@@ -7,16 +7,13 @@ use Yii;
 /**
  * This is the model class for table "yii_user_category".
  *
+ * @property int $id
  * @property int $user_id
  * @property int $category_id
  * @property int $subcategory_id
- * @property int $price
- * @property int $price_from
- * @property int $price_to
  *
  * @property Category $category
  * @property Subcategory $subcategory
- * @property User $user
  */
 class UserCategory extends \yii\db\ActiveRecord
 {
@@ -34,13 +31,10 @@ class UserCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'category_id', 'subcategory_id', 'price_from'], 'required'],
-            [['user_id', 'category_id', 'subcategory_id', 'price', 'price_from', 'price_to'], 'integer'],
-            [['user_id', 'category_id', 'subcategory_id'], 'unique', 'targetAttribute' => ['user_id', 'category_id', 'subcategory_id']],
+            [['user_id', 'category_id'], 'required'],
+            [['user_id', 'category_id', 'subcategory_id'], 'integer'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['price', 'price_from', 'price_to'], 'default', 'value'=>0],
         ];
     }
 
@@ -50,12 +44,10 @@ class UserCategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'id' => 'ID',
             'user_id' => 'User ID',
             'category_id' => 'Category ID',
             'subcategory_id' => 'Subcategory ID',
-            'price' => 'Стоимость услуги',
-            'price_from' => 'Стоимость услуги от',
-            'price_to' => 'Стоимость услуги до',
         ];
     }
 
@@ -77,15 +69,5 @@ class UserCategory extends \yii\db\ActiveRecord
     public function getSubcategory()
     {
         return $this->hasOne(Subcategory::className(), ['id' => 'subcategory_id']);
-    }
-
-    /**
-     * Gets query for [[User]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
