@@ -1507,6 +1507,11 @@ body{
 		margin-bottom: 10px;
 	}
 
+	.modal-content {
+		width: 500px;
+		padding: 20px;
+	}
+
 	.text_details.profile {
 		width: 70px;
 		text-align: right;
@@ -1527,6 +1532,16 @@ body{
 
     #usercategory-price {
     	display: none;
+    }
+
+    .text_details.profile.dates {
+    	width: 200px;
+    }
+
+    #modal_add_education{
+    	position: relative;
+    	left: 0;
+    	font-weight: bold;
     }
 /*******************  Редактирование профиля Конец******************************************/
 

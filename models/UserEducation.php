@@ -48,10 +48,10 @@ class UserEducation extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'institute' => 'Учебное заведение',
+            'institute' => 'Учебное заведение *',
             'course' => 'Специальность',
-            'start_date' => 'Start Date',
-            'end_date' => 'End Date',
+            'start_date' => 'Дата начала обучения',
+            'end_date' => 'Дата окончания обучения',
         ];
     }
 

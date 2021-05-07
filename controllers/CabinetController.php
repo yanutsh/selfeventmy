@@ -585,7 +585,7 @@ class CabinetController extends AppController {
       return $this->render('userTuning', compact('identity', 'work_form_name')); 
     }
     
-    // Настройка Уведомлений Текущего Юзера *******************************************************
+    // Настройка Уведомлений Текущего Юзера *************************************
     public function actionNotificationsTuning() {
       // получить текущего Юзера
       $identity = Yii::$app->user->identity;
@@ -623,16 +623,14 @@ class CabinetController extends AppController {
       return $this->render('notificationsTuning', compact('model')); 
     }
 
-    // Страница Помощь   
-    /* *******************************************************/
+    // Страница Помощь  *******************************************************/
     public function actionHelp() {
            
       // вывести страницу help
       return $this->render('help'); 
     }
 
-    // Страница Информация о Профиле   
-    /* *******************************************************/
+    // Страница Информация о Профиле ******************************************/
     public function actionProfileInfo() {
       $cache = \Yii::$app->cache;
       $identity = Yii::$app->user->identity;      
@@ -644,52 +642,45 @@ class CabinetController extends AppController {
       $user_subcategory = UserCategory::find()
               ->where(['user_id'=>$user_id]) 
               ->with('subcategory')->asArray()->all();
-      //debug($user_subcategory); 
-
+     
+      $user_education = UserEducation::find()->where(['user_id'=>$user_id])->asArray()->all();
+      
       // получение неизменных исходные данные из кеша или БД       
       $category = $cache->getOrSet('category', function()
             {return Category::find() ->orderBy('name')->asArray()->all();});
       $city = $cache->getOrSet('city',function()
             {return City::find() ->orderBy('name')->asArray()->all();});
-      $user_education = $cache->getOrSet('user_education', function()
-            {return UserEducation::find()->where(['user_id'=>$user_id])->asArray()->all();});
-       
-      // if (!empty($cache->get('user_education'))) { // если есть - берем их кеша
-      //   $user_education = $cache->get('user_education');
-      // }else{  // или записываем в кеш
-      //   $user_education = UserEducation::find()->where(['user_id'=>$user_id])->asArray()->all();
-      //   $cache->set('user_education', $user_education);
-      // }  
-
-     //debug($user_education);
-      
+            
       // подкатеагории первоначальо не показываются в модальном окне
       $subcategory = ""; //Subcategory::find()->orderBy('name ASC')->all();
 
       $user_city = new UserCity();
       $user_category = new UserCategory();
-      $category_model = new Category();
+      //$category_model = new Category();
       //debug($user);
    
       if (Yii::$app->request->isPjax) { 
-        $data = Yii::$app->request->post();
-          
-          //debug($data); 
+        $data = Yii::$app->request->post();         
+        //debug($data); 
 
           if ($data['field_name'] == 'myself'){
             $user->myself = $data['User']['myself']; 
             $user->save();
             return $this->render('profileInfo', compact('user')); 
           }elseif ($data['field_name'] == 'contact'){
-            $user->username = $data['User']['username'];            
+            $user->username = $data['User']['username']; 
+            $user->save(); 
+            //return $this->render('profileInfo', compact('user'));
+            return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory', 'user_education'));            
           }elseif ($data['field_name'] == 'delеte'){      //удаление/блокировка эккаунта            
             $user->blk = 1; 
-            $user->blk_date=date('Y-m-d H:i:s');             
+            $user->blk_date=date('Y-m-d H:i:s'); 
+            $user->save(); 
+            return $this->render('profileInfo', compact('user'));             
           }elseif ($data['field_name'] == 'deleteinfo'){
             // сбросить сессии, куки, вывести модальное окно
             return $this->redirect('/page/logout',302); //
-          } 
-          elseif ($data['field_name'] == 'city'){   // добавляем города пользователя  БД
+          }elseif ($data['field_name'] == 'city'){   // добавляем города пользователя  БД
             //debug($data);
             if (!Empty($data['UserCity']['city_id'])){
               foreach($data['UserCity']['city_id'] as $uc_id) {
@@ -704,10 +695,8 @@ class CabinetController extends AppController {
                          
               return $this->render('profileInfo', compact('user','city','user_city')); 
             }  
-          }
-          elseif ($data['field_name'] == 'category'){ //добавляем и сохраняем услуги
-            //debug($data); 
-            
+          }elseif ($data['field_name'] == 'category'){ //добавляем и сохраняем услуги
+            //debug($data);            
             $user_category->load($data);
             
             // если нажали кнопку сохранить - сохраняем данные
@@ -736,9 +725,8 @@ class CabinetController extends AppController {
               // возвращаемся в профиль  и обновляем не по Pjax!!!!!!!!!!.
               return $this->refresh();      
               //return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory')); 
-
             }
-
+             
             // иначе - обновляем форму - список подкатегорий            
             $category_id = $user_category->category_id;
             $subcategory = Subcategory::find()->
@@ -747,12 +735,66 @@ class CabinetController extends AppController {
             
             // возвращаемся к форме           
             return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory'));           
-          }        
+          }elseif ($data['field_name'] == 'add_education'){ //добавляем образование  
+            
+            //debug($data,0);
+            $user_education = new UserEducation();           
+            $user_education->load($data);           
+            //debug($user_education);
 
-          
+            // если нажали кнопку сохранить - сохраняем данные
+            if ($data['add_education'] == 'true') { 
+              $user_education->user_id = $identity['id'];
+              if(!empty($user_education->start_date))               
+                $user_education->start_date = convert_date_ru_en($user_education->start_date);
+              else $user_education->start_date = null;  
+              //debug($user_education->start_date);
+              if(!empty($user_education->end_date))
+              $user_education->end_date=convert_date_ru_en($user_education->end_date);
+              else $user_education->end_date = null;  
+
+              $user_education->save();
+
+              // обновляем данные и заносим в кеш
+              $user_education = UserEducation::find()
+                    ->where(['user_id'=>$user_id])->asArray()->all();
+              $cache->set('user_education', $user_education);                           
+            }
+                          
+            // возвращаемся в профиль  и обновляем не по Pjax!!!!!!!!!!.
+            //return $this->refresh();      
+            return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory', 'user_education')); 
+          }elseif ($data['field_name'] == 'edit_education'){ //редактируем образование  
+            
+            //debug($data,0);
+            $user_education = UserEducation::findOne($data['UserEducation']['id']);          
+            $user_education->load($data);           
+            //debug($user_education);
+                       
+            // если нажали кнопку сохранить - сохраняем данные
+            if ($data['edit_education'] == 'true') { 
+              $user_education->user_id = $identity['id'];
+              if(!empty($user_education->start_date))
+              $user_education->start_date=convert_date_ru_en($user_education->start_date);
+              //debug($user_education->start_date);
+              if(!empty($user_education->end_date))
+              $user_education->end_date=convert_date_ru_en($user_education->end_date);
+                        
+              $user_education->save();
+              
+              // обновляем данные и заносим в кеш
+              $user_education = UserEducation::find()
+                    ->where(['user_id'=>$user_id])->asArray()->all();
+              $cache->set('user_education', $user_education);                           
+            }
+                          
+            // возвращаемся в профиль  и обновляем не по Pjax!!!!!!!!!!.
+            //return $this->refresh();      
+            return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory', 'user_education')); 
+          }            
       }      
 
-      return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory')); 
+      return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory', 'user_education')); 
     }
 
     // Пополнение баланса
@@ -844,6 +886,7 @@ class CabinetController extends AppController {
         return $this->render('addUserCategory', compact('model','category'));
     }
 
+    
     // Пользовательская функция Сортировки многомернго массива По возрастанию:
     public function cmp_function($a, $b){
       return ($a['name'] > $b['name']);

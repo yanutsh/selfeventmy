@@ -3,11 +3,13 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use app\models\UserEducation;
 
 use yii\bootstrap\Modal;
 use app\assets\TemplateAsset;
 use app\assets\RegistrationAsset;
 use yii\widgets\Pjax;
+use kartik\date\DatePicker;
 
 //use yii\widgets\Pjax;
 
@@ -192,13 +194,13 @@ $identity = Yii::$app->user->identity;
         <!-- Города -Конец	---------------------------------------------- -->
 
         <!-- Категории услуг---------------------------------------------  -->
-        	<?php //Pjax::begin(); ?>
+        	<?php //Pjax::begin();?>
             <div class="order_content__subtitle">
             	<span>Сфера деятельности</span>
             	<?php 
 				// модальное окно - Добавить/Удалить Вид деятельности					
 				Modal::begin([
-					    'header' => '<h2>Добавление деятельности</h2>',
+					    'header' => '<h2>Редактирование деятельности</h2>',
 					    'id' => "action_win",	
 					    'toggleButton' => [
 					     	'label' => 'Редактировать',
@@ -240,55 +242,82 @@ $identity = Yii::$app->user->identity;
 					            ]); ?>				     
 
 					        <!-- Категории -->
-					        <input hidden type="text" name="field_name" value="category"> 
+					        <input hidden type="text" name="field_name" value="category">
+					        <div class='subtitle'>Добавление услуги:</div> 
 					        <?= $form->field($user_category, 'category_id')->dropDownList(	
 					            	ArrayHelper::map($category, 'id', 'name'),
-					            	 [  'prompt'=>'Все категории',
+					            	 [  'prompt'=>'Выберите категорию услуги',
 					                    'id'=>'category_id',
-					                 ])->label('Выберите категорию услуги') ?>
+					                 ])->label('') ?>
 					        
 					        <!-- Подкатегории          -->
 					        <?php if (!empty($subcategory)) {?>
 
-					        <?= $form->field($user_category, 'subcategory_id[]')->dropDownList(ArrayHelper::map($subcategory, 'id', 'name'),[
-						            //'prompt'=>'Выберите услугу',
-						            'id'=>'subcategory_id',
-						            'class' => "js-chosen actionss",
-									'multiple' => "multiple",
-						             ])
-						            ->label('Добавьте вид услуги'); ?>
+						        <?= $form->field($user_category, 'subcategory_id')->dropDownList(ArrayHelper::map($subcategory, 'id', 'name'),[
+							            'prompt'=>'Выберите вид услуги',
+							            'id'=>'subcategory_id',					            
+							             ])
+							            ->label(''); ?>
 
-					        <?php } ?>
+							    <div class="flex_block">
+			                        <?= $form->field($user_category, 'price_from',['enableClientValidation' => true]) ?>
+			                        <?= $form->field($user_category, 'price_to') ?>
+			                    </div>
+
+		                    	<div class="choose_elements price">	                        
+			                        <!-- <div class="item_choose"> -->
+			                            <div class="form-group exactly price">
+			                                <div>
+			                                    <label class="control-label">Указать точную сумму</label>
+			                                </div>        
+			                                <div class="toggle-button-cover"> 
+			                                      <div class="button-cover">
+			                                        <div class="button r" id="button-1">
+			                                          <input type="checkbox" class="checkbox tuning" id="price_exactly">
+			                                          <div class="knobs"></div>
+			                                          <div class="layer"></div>
+			                                        </div>
+			                                      </div>
+			                                </div>
+			                            </div>
+
+			                            <?= $form->field($user_category, 'price')->label(false) ?>
+			                        <!-- </div>         -->
+			                    </div>    
+						    <?php } ?>
 
 					        <div class="form-group">
 					            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary', 'name'=>'save_actions', 'id'=>'save_actions','value'=>'true']) ?>
 					        </div>
-					    <?php ActiveForm::end(); ?>
-					    <?php
-							$script = <<< JS
-								$('#category_id').on('change',function(event){
-									event.preventDefault(); 
-							        // признак отправки формы НЕ для сохранения данных
-							        $('#save_actions').val('false');              
-							        $('#add-category-form').submit();			        
-							    });
+						    <?php ActiveForm::end(); ?>
+						    <?php
+								$script = <<< JS
+									$('#category_id').on('change',function(event){
+										event.preventDefault(); 
+								        // признак отправки формы НЕ для сохранения данных
+								        $('#save_actions').val('false');              
+								        $('#add-category-form').submit();			        
+								    });
 
-							    $('#save_actions').on('click', function(e){
-							        // признак отправки формы ДЛЯ сохранения данных
-							        $(this).val('true');
-							        $('#action_win').modal('hide');					        
-							    })
+								    $('#save_actions').on('click', function(event){
+								    	//alert("save_actions");
+								        // признак отправки формы ДЛЯ сохранения данных
+								        $(this).val('true');      				        
+								    })
 
-							    $('.js-chosen.actionss').chosen({
-							        width: '100%',
-							        no_results_text: 'Совпадений не найдено',
-							        placeholder_text_single: 'Выберите услугу',
-							        placeholder_text_multiple: 'Любая услуга',
-							    });
-							JS;
-		                        //маркер конца строки, обязательно сразу, без пробелов и табуляции
-		                        $this->registerJs($script, yii\web\View::POS_READY);
-					    ?>
+								    // Переключатель показа поля точного бюджета)
+								    $('#price_exactly').click(function(event) {
+								    	//alert ("Показать");
+								    	if ($("#price_exactly").prop("checked"))	$('#usercategory-price').show(1000);
+								    	else {
+								    		$('#usercategory-price').hide(1000);
+								    		$('#usercategory-price').val(null);
+								    		}
+								    })
+								JS;
+			                        //маркер конца строки, обязательно сразу, без пробелов и табуляции
+			                        $this->registerJs($script, yii\web\View::POS_READY);
+						    ?>
 				    <?php Pjax::end(); ?>
 	    			<?php
 	    		Modal::end();?>
@@ -296,23 +325,16 @@ $identity = Yii::$app->user->identity;
 	    	</div>				
             <!-- цикл по услугам список--> 
             <?php
-            //Pjax::begin(); 
-				//debug($user_subcategory);
-            	$user_subcategory_names[]="";
-            	foreach($user_subcategory as $u_scat){
-            		$user_subcategory_names[]=$u_scat['subcategory']['name'];
-            	}
-            	$res = sort($user_subcategory_names);
-            	
-            	foreach($user_subcategory_names as $name) { ?>
+            	//debug($user_subcategory);
+            	            	
+            	foreach($user_subcategory as $u_scat) { ?>
 					<div class="text profile">
-	            		<span><?=$name ?></span>
-	            		<div href="" class="text_details profile">от 1 000 Р</div>
+	            		<span><?=$u_scat['subcategory']['name'] ?></span>
+	            		<div class="text_details profile"><span>от </span><?=$u_scat['price_from'] ?> Р</div>
 	            	</div>					
 				<?php 
 				}  ?> 					      		       
-	        <?php
-	        //Pjax::end(); 	 									
+	        <?php	        	 									
 			// модальное окно - Вид Деятельности -Конец	
 			?>			
 			
@@ -320,28 +342,141 @@ $identity = Yii::$app->user->identity;
 		<!-- Категории услуг Конец---------------------------------------  -->        
 
 		<!-- Образование ------------------------------------------------  -->
-		        <div class="order_content__subtitle">
-	            	<span>Образование</span>            	
-	            </div>	
-	            <!-- организовать цикл по Курсам обучения-->           
-		            <div class="text profile">
-		            	<span>Название учебного заведения111</span>
-		            	<a href="" class="text_details profile">Редактировать</a>            	
-		            </div>
-		            <div class="text profile study">
-		            	<span>Курсы111 повышения квалификации</span>
-		            	<a href="" class="text_details profile">Даты</a>            	
-		            </div> 
-		            <div class="text profile">
-		            	<span>Название учебного заведения222</span>
-		            	<a href="" class="text_details profile">Редактировать</a>            	
-		            </div>
-		            <div class="text profile study">
-		            	<span>Курсы222 повышения квалификации</span>
-		            	<a href="" class="text_details profile">Даты</a>            	
-		            </div> 	                  
-		        <a href="" class="text_details">Добавить образование</a>
-		   
+	        <div class="order_content__subtitle">
+            	<span>Образование</span>            	
+            </div>
+            <!-- организовать цикл по Курсам обучения--> 
+            <?php 
+            foreach($user_education as $ue) { 
+            	//$model = new UserEducation() ?>
+                <?php //debug($ue,0) ?>         
+	            <div class="text profile">
+	            	<span><?= $ue['institute'] ?></span>
+	            	<?php 
+					//--модальное окно - Редактировать Образование					
+					Modal::begin([
+						    'header' => '<h2>Редактирование образования</h2>',
+						    'id' => "education_win",	
+						    'toggleButton' => [
+						     	'label' => 'Редактировать',
+						     	'tag' => "a",
+						     	'class' => 'text_details profile',
+						     	'id' => 'modal_education',
+						     ]
+						]); ?>
+										
+						<!-- Форма ввода Образования -->
+						<?php Pjax::begin(); ?>
+						    <?php 
+						    $form = ActiveForm::begin([
+						                'id' => 'edit-education-form',
+						                //'enableClientValidation' => true,
+						                'options' => [
+						                    'data-pjax' => true,                           
+						                ],
+						            ]); ?>				     
+
+						        <!-- Образование -->
+						        <input hidden type="text" name="field_name" value="edit_education">
+						        <div class='subtitle'>Добавление образования</div> 
+						        
+						        <?//= $form->field($model, 'institute') ?>
+						        <?//= $form->field($model, 'course') ?>
+						        <?//= $form->field($model, 'start_date') ?>
+						        <?//= $form->field($model, 'end_date') ?>
+						        
+						        
+						        <div class="form-group">
+						            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary', 'name'=>'save_education', 'id'=>'save_education','value'=>'true']) ?>
+						        </div>
+							<?php ActiveForm::end(); ?>
+							    <?php
+									$script = <<< JS
+										
+									JS;
+				                        //маркер конца строки, обязательно сразу, без пробелов и табуляции
+				                        $this->registerJs($script, yii\web\View::POS_READY);
+							    ?>
+					    <?php Pjax::end(); ?>
+		    			<?php
+		    		Modal::end();?>
+				</div>
+
+				<div class="text profile study">
+	            	<span><?php if(!empty($ue['course'])) echo($ue['course']); else echo "<br>" ?></span>
+	            	<div class="text_details profile dates">
+	            		<?php if(!empty($ue['start_date'])) echo('с '.convert_date_en_ru($ue['start_date'])) ?>
+	            		<?php  if(!empty($ue['end_date'])) echo(' по '.convert_date_en_ru($ue['end_date'])) ?>
+	            	</div>            	
+	            </div>
+            <?php } ?>           
+	                             
+	       	<?php 
+			// модальное окно - Добавить Образование
+				$model = new UserEducation();					
+				Modal::begin([
+				    'header' => '<h2>Добавление образования</h2>',
+				    'id' => "add_education_win",	
+				    'toggleButton' => [
+				     	'label' => 'Добавить образование',
+				     	'tag' => "a",
+				     	'class' => 'text_details profile',
+				     	'id' => 'modal_add_education',
+				     ]
+				]); ?>
+								
+				<!-- Форма ввода Образования -->
+				<?php Pjax::begin(); ?>
+				    <?php 
+				    $form = ActiveForm::begin([
+				                'id' => 'add-education-form',
+				                'enableClientValidation' => true,
+				                'options' => [
+				                    'data-pjax' => true,                           
+				                ],
+				            ]); ?>				     
+
+				        <!-- Образование -->
+				        <input hidden type="text" name="field_name" value="add_education">
+				        				        
+				        <?= $form->field($model, 'institute') ?>
+				        <?= $form->field($model, 'course') ?>
+				        
+				        <div class="form-group">
+                            <label class="control-label">Даты обучения</label>'
+                            <?php 
+                            echo DatePicker::widget([
+                                'name' => 'UserEducation[start_date]',                 
+                                'type' => DatePicker::TYPE_RANGE,
+                                'name2' => 'UserEducation[end_date]',
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+                                ]
+                            ]);
+                            ?>
+                        </div>  
+				        
+				        
+				        <div class="form-group">
+				            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary', 'name'=>'add_education', 'id'=>'add_education','value'=>'true']) ?>
+				        </div>
+					<?php ActiveForm::end(); ?>
+				    <?php
+						$script = <<< JS
+						//$('#add_education').on('click', function(event){
+							//alert("add_education");
+							// признак отправки формы ДЛЯ сохранения данных			
+							//$(this).val('true');
+						//})	
+						JS;
+						$this->registerJs($script, yii\web\View::POS_READY);
+				    ?>
+		    	<?php Pjax::end(); ?>
+    			<?php
+    			Modal::end();
+    			?>
+	    	
+		<!-- Образование Конец-------------------------------------------  -->  
 
 		<!-- Контактные данные -->
 	        <?php Pjax::begin(); ?>
