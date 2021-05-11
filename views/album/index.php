@@ -5,8 +5,9 @@ use yii\grid\GridView;
 use app\assets\TemplateAsset;
 use app\assets\RegistrationAsset;
 use app\models\WorkForm;
+use yii\widgets\Pjax;
 
-require_once('../libs/user_photo.php');
+//require_once('../libs/user_photo.php');
 
 
 $this->title = 'Albums';
@@ -37,25 +38,44 @@ RegistrationAsset::register($this);
         <div class="order_content__subtitle">Список альбомов</div>                    
         <div class="text">Отредактируйте альбомы или добавьте новый</div>
         
+       
         <p class="new_album">
             <?= Html::a('Добавить альбом', ['create'], ['class' => 'btn btn-success']) ?>
         </p>
+        <?php //debug($dataProvider) ?>
 
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                //'id',
-                //'user_id',
-                'album_name',
-                [
-                'class' => 'yii\grid\ActionColumn',
-                'headerOptions' => ['width' => '80'],
-                'template' => '{update} {delete}{link}',
-                //'template' => '{view} {update} {delete}{link}',
-                ],
-            ],
+        <?php  Pjax::begin([ 
+            'id' => 'album_list',
+            'timeout' => false, 
+            'enablePushState' => false
         ]); ?>
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+                    //'id',
+                    //'user_id',
+                    'album_name',
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'headerOptions' => ['width' => '80'],
+                        'template' => '{update} {delete}',
+                        //'template' => '{view} {update} {delete}{link}',
+                        'contentOptions' => ['class' => 'action-column'],
+                        'buttons' => [
+                            'delete' => function ($url, $model, $key) {
+                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                                    'title' => Yii::t('yii', 'Удалить альбом'),
+                                    'data-pjax' => '#album_list',
+                                ]);
+                            },
+                        ],
+                    ],
+                ],
+            ]); 
+        Pjax::end(); 
+        ?>
     </div>
+    
 
 </div>

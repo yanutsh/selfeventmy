@@ -24,7 +24,8 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 // Получение исходных данных для формы
 //$category = Category::find() ->orderBy('name')->asArray()->all();
 //$city = City::find() ->orderBy('name')->all();
-// получение неизменных исходные данные из кеша или БД       
+// получение неизменных исходные данные из кеша или БД 
+$cache = \Yii::$app->cache;     
 $category = $cache->getOrSet('category', function()
     {return Category::find() ->orderBy('name')->asArray()->all();});
 $city = $cache->getOrSet('city',function()
@@ -171,8 +172,6 @@ $city = $cache->getOrSet('city',function()
                     <?= $form->field($model, 'wishes')->textArea(['placeholder'=>'Ваши пожелания к проведению мероприятия']) ?>
 
                     <!-------------------Добавить Фотографии заказа---------------------->
-
-                    <?//= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
 
                     <?php  
                     $max_photos_order=6; 

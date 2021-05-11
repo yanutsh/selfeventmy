@@ -511,7 +511,7 @@ body{
 	    display: flex;
 	    flex-wrap: wrap;
 	    justify-content: center; ;
-	    /*margin-bottom: 30px;*/
+	    margin-bottom: 10px;
 	    align-items: center;
 	}
 
@@ -1271,6 +1271,12 @@ body{
 		height: 98px;
 	}
 
+	.register__user.active__button.save{
+		width: 300px;
+	    margin: 30px auto 0;
+	    display: block;
+	}
+
 /*******************  Профиль Юзера Конец*****************************/
 
 /*******************  Настройка уведомлений *****************************/
@@ -1515,6 +1521,7 @@ body{
 	.text_details.profile {
 		width: 70px;
 		text-align: right;
+		font-weight: bold;
 	} 
 
 	.text_details.profile span{

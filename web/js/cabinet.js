@@ -203,15 +203,20 @@ $(document).ready(function() {
     // })
    
 })
- 
-
 
 
 // Показываем загружаемые фотки
 function readmultifiles(files, max_photos) {
-  // превью нескольких картинок при вводе файлов    
-  // photo_qwt - сколько фоток уже есть
+  // превью нескольких картинок при вводе файлов  
   // max_photos - максим. кол. фоток передаем из order_edit.php 
+  // photo_qwt - сколько фоток уже есть
+    
+  if (files.length >= 1) { //меняем название кнопки button .save__photo
+     
+      if ($('button').is('.save__photo')) {         
+         $('button.save__photo').text('Добавить');
+      }
+  }
 
   // чистим предыдущие картинки
     var blok = document.querySelector ('.image-preview');

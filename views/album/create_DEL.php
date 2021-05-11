@@ -4,8 +4,6 @@ use yii\helpers\Html;
 use app\assets\TemplateAsset;
 use app\assets\RegistrationAsset;
 
-
-require_once('../libs/user_photo.php');
 TemplateAsset::register($this);
 RegistrationAsset::register($this);
 /* @var $this yii\web\View */

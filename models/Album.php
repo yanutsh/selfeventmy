@@ -30,7 +30,7 @@ class Album extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'album_name'], 'required'],
+            [['user_id'], 'required'],
             [['user_id'], 'integer'],
             [['album_name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],

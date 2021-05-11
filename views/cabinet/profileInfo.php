@@ -57,7 +57,7 @@ $identity = Yii::$app->user->identity;
 	    				
 						<div class="form-group">
 		        		 	<?= Html::submitButton('Сохранить', [
-		        				'class' => 'register__user active__button', 
+		        				'class' => 'register__user active__button save', 
 		        				'name' => 'myself-button',
 		        				'id'=> 'myself-button'
 		        			]) ?>
@@ -86,9 +86,9 @@ $identity = Yii::$app->user->identity;
 			?>
             <?php Pjax::end(); ?>
         <!-- О Себе -Конец	     -->
-           
-        <?php // Вывод данных только для Исполнителя ************************* **********************************************************************           
-        //if ($identity['isexec']) {?>        	
+        
+        <!-- Вывод данных только для Исполнителя ------------------------  -->
+        <?php if ($identity['isexec']) {?>        	
         
         <!-- Города------------------------------------------------------  -->    
             <?php Pjax::begin(); ?>
@@ -146,7 +146,7 @@ $identity = Yii::$app->user->identity;
 	    				
 						<div class="form-group">
 		        		 	<?= Html::submitButton('Сохранить изменения', [
-		        				'class' => 'register__user active__button', 
+		        				'class' => 'register__user active__button save', 
 		        				'name' => 'city-button',
 		        				'id'=> 'add-city-button'
 		        			]) ?>
@@ -286,7 +286,7 @@ $identity = Yii::$app->user->identity;
 
 					        <div class="form-group">
 					            <?= Html::submitButton('Сохранить', 
-					            	['class' => 'register__user active__button',
+					            	['class' => 'register__user active__button save',
 					            	 'name'=>'save_actions', 
 					            	 'id'=>'save_actions',
 					            	 'value'=>'true'
@@ -419,7 +419,7 @@ $identity = Yii::$app->user->identity;
 						        
 						        <div class="form-group">
 						            <?= Html::submitButton('Сохранить', 
-						            	['class' => 'register__user active__button', 
+						            	['class' => 'register__user active__button save', 
 						            	 'name'=>'edit_education', 
 						            	 'id'=>'edit_education_'.$i,
 						            	 'value'=>'true'
@@ -499,7 +499,7 @@ $identity = Yii::$app->user->identity;
 				        
 				        <div class="form-group">
 				            <?= Html::submitButton('Сохранить', 
-				            ['class' => 'register__user active__button',
+				            ['class' => 'register__user active__button save',
 				             'name'=>'add_education', 
 				             'id'=>'add_education',
 				             'value'=>'true'
@@ -521,6 +521,9 @@ $identity = Yii::$app->user->identity;
     			?>
 	    	<?php Pjax::end(); ?>
 		<!-- Образование Конец-------------------------------------------  -->  
+
+		<?php } ?>
+		<!-- Вывод данных только для Исполнителя Конец-------------------  -->
 
 		<!-- Контактные данные -->
 	        <?php Pjax::begin(); ?>
@@ -551,7 +554,7 @@ $identity = Yii::$app->user->identity;
 	    				
 						<div class="form-group">
 		        		<?= Html::submitButton('Сохранить', 
-		        			['class' => 'register__user active__button', 
+		        			['class' => 'register__user active__button save', 
 		        			 'name' => 'contact-button',
 		        			 'id'=> 'contact-button'
 		        			]) ?>
@@ -612,7 +615,7 @@ $identity = Yii::$app->user->identity;
 						</div>		    				
 						<div class="form-group">
 		        		<?= Html::submitButton('Удалить', [
-		        				'class' => 'register__user active__button', 
+		        				'class' => 'register__user active__button save', 
 		        				'name' => 'delete-button',
 		        				'id'=> 'delete-button'
 		        			]) ?>
@@ -643,9 +646,7 @@ $identity = Yii::$app->user->identity;
 			?>
 
             <?php Pjax::end(); ?>           
-        <!-- Удаление профиля Конец -->
-
-               					
+                      					
 	        <?php Pjax::begin();
 			// Скрытое модальное окно - Удаление - последнее инфо 					
 				Modal::begin([
@@ -684,14 +685,15 @@ $identity = Yii::$app->user->identity;
 
 				<?php 
 				Modal::end();					
-			// модальное окно - Удаление последнее инфо -Конец
+			// модальное окно - Удаление последнее инфо -Конец 
 			Pjax::end();	
 			?>
 
 			<div class="order_buttons">
-	            <a href="<?= Url::to('/cabinet/user-tuning') ?>" class="register active">В настройки</a>          
+	            <a href="<?= Url::to('/cabinet/user-tuning') ?>" class="register__user active__button save">В настройки</a>          
 	        </div>          
-        	  
+        <!-- Удаление профиля Конец -->
+
 		</div>
     </div>        
 </div>

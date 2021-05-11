@@ -26,7 +26,8 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
         <div class="b_text b_text__tuning">
             <span class="fio"><?= $work_form_name." - ".$identity['username'] ?></span>
         </div>
-        <?php   if ( $identity['isconfirm'] ){ //Если профиль проверен-показываем?>     
+        <?php   
+        if ( $identity['isconfirm'] && $identity['isexec']){ //Если Исполнитель и профиль проверен-показываем?>     
             <div class="checked">Профиль проверен</div>             
         <?php   } ?>
          
@@ -34,9 +35,10 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
     <div class="order_content order_content__tuning">
     
-        <?php   if ( $identity['isexec'] && $identity['isconfirm'] ){ //Если профиль проверен-показываем РЕЙТИНГ?> 
-
-        <?php   }else{ // Предупреждение о проверке документов ?>  
+        <?php   
+        if ( $identity['isexec'] && $identity['isconfirm'] ){ 
+        //Если профиль проверен-показываем РЕЙТИНГ> 
+        }elseif($identity['isexec']){ // Предупреждение о проверке документов ?>  
             <div class="check_need">
                 <div class="order_content__subtitle">Проверка данных</div>
                 <div class="text">Пройдите верификацию для подтверждения данных в профиле и получения статуса "проверенный профиль"</div>

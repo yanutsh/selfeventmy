@@ -37,16 +37,19 @@ class AlbumController extends AppController
      * @return mixed
      */
     public function actionIndex()
-    {    
-        $user_id = Yii::$app->user->identity->id;       
-        $dataProvider = new ActiveDataProvider([
-            'query' => Album::find()->where(['user_id'=>$user_id])->orderBy('album_name ASC'),
-        ]);
-
+    {   
         // СЧИТЫВАЕМ ДАННЫЕ ЮЗЕРА ИЗ СЕССИИ
         include_once('../libs/get_session.php');
 
-        return $this->render('index', compact('dataProvider','model','identity','work_form_name'));
+        //$identity = Yii::$app->user->identity; 
+        //$user_id = Yii::$app->user->identity->id; 
+        $user_id = $identity['id'];        
+                
+        $dataProvider = new ActiveDataProvider([
+            'query' => Album::find()->where(['user_id'=>$user_id])->orderBy('album_name ASC'),
+        ]);        
+
+        return $this->render('index', compact('dataProvider','identity','work_form_name'));
     }
 
     /**
@@ -73,13 +76,21 @@ class AlbumController extends AppController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             //return $this->redirect(['view', 'id' => $model->id]);
-            return $this->redirect(['index']);
+            $user_id = $identity['id']; 
+            $dataProvider = new ActiveDataProvider([
+            'query' => Album::find()->where(['user_id'=>$user_id])->orderBy('album_name ASC'),
+        ]); 
+
+            return $this->render('index', compact('dataProvider','model','identity','work_form_name'));
         }
 
         // СЧИТЫВАЕМ ДАННЫЕ ЮЗЕРА ИЗ СЕССИИ
         include_once('../libs/get_session.php');
 
-        return $this->render('create', compact('model','identity','work_form_name'));
+        $model->user_id = $identity->id;
+        $model->save(); // получаем id нового альбома
+
+        return $this->render('update', compact('model','identity','work_form_name'));
 
     }
 
@@ -90,37 +101,90 @@ class AlbumController extends AppController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id=null,$del_photo_id=null)
+    {   
+        // id - id альбома
+        // del_photo_id - id фото
+        $user_id = $identity['id']; 
+        $dataProvider = new ActiveDataProvider([
+            'query' => Album::find()->where(['user_id'=>$user_id])->orderBy('album_name ASC'),
+            ]); 
+        
         // ищем альбом         
-        $model = $this->findModel($id);        
+        $model = $this->findModel($id);
+        // echo "model-1";
+        // debug($model,0);
 
-        // если пришел запрос на удаление фотки:
+        // if ($model->load(Yii::$app->request->post())) {
+        //     //debug("POST - загрузка");          
+        //     $model->save();     // сохраняем имя альбома  
+        //     return $this->render('index', compact('dataProvider','model','identity','work_form_name','id'));  
+        // }
+             
+        // если пришел запрос Pjax
         if (Yii::$app->request->isPjax) { // && isset($_GET['del_photo_id'])) {
+            //$model = new Album();
+            $data = Yii::$app->request->post();
+            //debug($data);
+            if ( $data) {
+               
+                $model->album_name = $data['Album']['album_name'];         
+                $model->save();     // сохраняем имя альбома  
+                //echo "model-2";
+                //debug($model);
+                }//else debug ("Не save");
+            // если запрос на удаление фотки
+            if(!is_null($del_photo_id)) { 
+                
+                AlbumPhoto::deleteAll('id='.$del_photo_id);
 
-            // echo "del_photo_id=".$_GET['del_photo_id']."<br>";
-            // echo "id=".$_GET['id']."<br>";
+                // обновляем список фоток
+                $album_photoes = $this->findAlbumPhotoes($id); 
+                
+                return $this->render('_form', compact('model', 'album_photoes','id'));
+            }
+        
+            // если есть фотки для добавления
+            if(!empty($_FILES['AlbumPhoto']['name'][0])) {   
+                //echo "Альбом id=".$id."<br><br>";                 
+                //debug(sort_files($_FILES['AlbumPhoto']));
 
-            //$res=AlbumPhoto::find()->where(['id'=>$_GET['del_photo_id']])->delete();
-            AlbumPhoto::deleteAll('id='.$_GET['del_photo_id']);
-            //echo "res=".$res;
-            $album_photoes = $this->findAlbumPhotoes($id);
-            //debug( $id);
-            
-            return $this->render('_form', compact('model', 'album_photoes','id'));
+                $files = sort_files($_FILES['AlbumPhoto']);                      
+                //var_dump($_FILES['AlbumPhoto']['name']);      
+                
+                // залить файлы на сервер
+                $path_to_load = '/web/uploads/images/portfolio/'; 
+                require_once('../libs/upload_tmp_photo_u.php');
+
+                // записать наименования файлов в БД
+                foreach($files as $k=>$f) {
+                    $album_photoes = new AlbumPhoto();
+                    $album_photoes->album_id = $id;
+                    $album_photoes->photo_name =  $_SESSION['image_file'][$k];
+                    $album_photoes->save();
+                }
+                
+                // обновляем список фоток
+                $album_photoes = AlbumPhoto::find()->where(['album_id'=>$id])->
+                                    asArray()->all();
+
+                return $this->render('update', compact('model','identity','work_form_name','album_photoes')); 
+            }    
+            //debug($id);
+            return $this->redirect(['index']);
         }   
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        }
+        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //    return $this->redirect(['index']);
+        //}
 
         // СЧИТЫВАЕМ ДАННЫЕ ЮЗЕРА ИЗ СЕССИИ
         include_once('../libs/get_session.php');
         // ищем фотографии этого альбома
         $album_photoes = $this->findAlbumPhotoes($id);
-        //debug($album_photoes);
 
-        return $this->render('update', compact('dataProvider','model','album_photoes','identity','work_form_name','id'));        
+        return $this->render('update', compact('model','album_photoes','identity','work_form_name','id'));     
+        //debug($album_photoes);                    
     }
 
     /**
@@ -130,11 +194,16 @@ class AlbumController extends AppController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($album_id)
+    public function actionDelete($id) // $id - id альбома
     {
-        $this->findModel($album_id)->delete();
-
-        return $this->redirect(['index']);
+        $this->findModel($id)->delete();
+       
+        include_once('../libs/get_session.php');
+        $user_id = $identity['id']; 
+        $dataProvider = new ActiveDataProvider([
+            'query' => Album::find()->where(['user_id'=>$user_id])->orderBy('album_name ASC'),
+            ]); 
+        return $this->render('index', compact('dataProvider','identity','work_form_name','id')); 
     }
 
     /**

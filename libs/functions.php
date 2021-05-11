@@ -157,3 +157,15 @@ function user_photo($avatar) {
 	} 	
 	return "/web/uploads/images/users/nophoto.jpg";
 }
+
+
+function sort_files($files) {
+	$files_sort = array();
+	foreach($files as $k => $l) {
+		foreach($l as $i => $v) {
+			$files_sort[$i][$k] = $v;
+		}
+	}		
+	//$files = $files_sort;
+	return $files_sort;
+}	
