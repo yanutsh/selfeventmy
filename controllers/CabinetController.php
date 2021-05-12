@@ -766,30 +766,32 @@ class CabinetController extends AppController {
             return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory', 'user_education')); 
           }elseif ($data['field_name'] == 'edit_education'){ //редактируем образование  
             
-            //debug($data,0);
+            //debug($data);
             $user_education = UserEducation::findOne($data['UserEducation']['id']);          
-            $user_education->load($data);           
+            $user_education->load($data);
+            $user_education->user_id = $identity['id'];           
             //debug($user_education);
                        
             // если нажали кнопку сохранить - сохраняем данные
             if ($data['edit_education'] == 'true') { 
-              $user_education->user_id = $identity['id'];
+              //$user_education->user_id = $identity['id'];
               if(!empty($user_education->start_date))
               $user_education->start_date=convert_date_ru_en($user_education->start_date);
               //debug($user_education->start_date);
               if(!empty($user_education->end_date))
               $user_education->end_date=convert_date_ru_en($user_education->end_date);
                         
-              $user_education->save();
-              
-              // обновляем данные и заносим в кеш
+              $user_education->save(); 
+            }elseif ($data['delete_education'] == 'true') {
+              if ($user_education) $res = $user_education->delete(); 
+              else debug("Удалить education не удалось"); 
+            }
+            // обновляем данные и заносим в кеш
               $user_education = UserEducation::find()
                     ->where(['user_id'=>$user_id])->asArray()->all();
-              $cache->set('user_education', $user_education);                           
-            }
+              $cache->set('user_education', $user_education);   
                           
-            // возвращаемся в профиль  и обновляем не по Pjax!!!!!!!!!!.
-            //return $this->refresh();      
+            // возвращаемся в профиль и обновляем по Pjax!!!!!!!!!!.             
             return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory', 'user_education')); 
           }            
       }      
@@ -886,7 +888,7 @@ class CabinetController extends AppController {
         return $this->render('addUserCategory', compact('model','category'));
     }
 
-    
+        
     // Пользовательская функция Сортировки многомернго массива По возрастанию:
     public function cmp_function($a, $b){
       return ($a['name'] > $b['name']);

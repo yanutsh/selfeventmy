@@ -344,7 +344,10 @@ $identity = Yii::$app->user->identity;
 		<!-- Категории услуг Конец---------------------------------------  -->        
 
 		<!-- Образование ------------------------------------------------  -->
-			<?php Pjax::begin(); ?>
+			<?php Pjax::begin([
+		        'timeout' => false, 
+		        'enablePushState' => true,
+    		]); ?>
 	        <div class="order_content__subtitle">
             	<span>Образование</span>            	
             </div>
@@ -396,10 +399,9 @@ $identity = Yii::$app->user->identity;
 						        <?php   
 						        	if(!is_null($model[$i]->start_date))
 						        		$start_date = convert_date_en_ru($model[$i]->start_date);
-						        	else $start_date = null; 
+						        	
 						        	if(!is_null($model[$i]->end_date))
-						        		$end_date = convert_date_en_ru($model[$i]->end_date);
-						        	else $end_date = null; 
+						        		$end_date = convert_date_en_ru($model[$i]->end_date);						        	
 						        ?>
 						        <div class="form-group">
 		                            <label class="control-label">Даты обучения</label>'
@@ -416,7 +418,15 @@ $identity = Yii::$app->user->identity;
 		                            ]);
 		                            ?>
 		                        </div>
-						        
+														        
+						        <div class="form-group">
+						            <?= Html::submitButton('Удалить', 
+						            	['class' => 'register__user active__button save', 
+						            	 'name'=>'delete_education', 
+						            	 'id'=>'delete_education_'.$i,
+						            	 'value'=>'true',
+						            	]) ?>
+						        </div>
 						        <div class="form-group">
 						            <?= Html::submitButton('Сохранить', 
 						            	['class' => 'register__user active__button save', 
@@ -429,7 +439,7 @@ $identity = Yii::$app->user->identity;
 							    <?php
 									$script = <<< JS
 									// Закрытие фона модального окна
-									$('#edit_education_$i').click(function(e){			
+									$('#edit_education_$i, #delete_education_$i').click(function(e){			
 										// отправка формы-pjax и удаление фона:
 										$('.modal-backdrop.fade.in').css('display','none');
 										$('body').removeAttr('class');  	    	

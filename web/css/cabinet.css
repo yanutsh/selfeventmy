@@ -1277,6 +1277,13 @@ body{
 	    display: block;
 	}
 
+	.text_details.text_delete{
+		font-weight: bold;
+   		text-align: center;
+    	display: block;
+    	margin-top: 30px;
+	}
+
 /*******************  Профиль Юзера Конец*****************************/
 
 /*******************  Настройка уведомлений *****************************/
