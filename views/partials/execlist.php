@@ -14,8 +14,8 @@ use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
-require_once('../libs/time_ago.php');
-require_once('../libs/user_photo.php');
+//require_once('../libs/time_ago.php');
+//require_once('../libs/user_photo.php');
 
 //debug($model['only_top']);
 ?>

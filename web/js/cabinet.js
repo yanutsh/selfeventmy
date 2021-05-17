@@ -8,7 +8,6 @@ $(document).ready(function() {
     //    }
     // });
 
-
     // сброс фильтра заказов и вывод всех заказов
     $('#reset').click(function(event) {    
         //alert ('Reset');
@@ -157,14 +156,14 @@ $(document).ready(function() {
     // Сброс отдельных полей фильтра ИСПОЛНИТЕЛЕЙ КОНЕЦ 
 
     // для выпадающего списка Город
-    //$(document).ready(function(){
-    // $('.js-chosen').chosen({
-    //     width: '100%',
-    //     no_results_text: 'Совпадений не найдено',
-    //     placeholder_text_single: 'Выберите город',
-    //     placeholder_text_multiple: 'Любой город',
-    // });
-    //}); 
+    $(document).ready(function(){
+        $('.js-chosen.city').chosen({
+            width: '100%',
+            no_results_text: 'Совпадений не найдено',
+            placeholder_text_single: 'Выберите город',
+            placeholder_text_multiple: 'Любой город',
+        });
+    }); 
 
     // имитация клика на поле город при клике по gliphicon
     $('.glyphicon.glyphicon-chevron-down').on('click', function(){        
@@ -204,7 +203,6 @@ $(document).ready(function() {
    
 })
 
-
 // Показываем загружаемые фотки
 function readmultifiles(files, max_photos) {
   // превью нескольких картинок при вводе файлов  
@@ -213,7 +211,7 @@ function readmultifiles(files, max_photos) {
     
   if (files.length >= 1) { //меняем название кнопки button .save__photo
      
-      if ($('button').is('.save__photo')) {         
+      if ($('button').is('.save__photo')) {  // если есть такая кнопка       
          $('button.save__photo').text('Добавить');
       }
   }

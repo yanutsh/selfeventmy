@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
@@ -50,7 +51,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
         <?php   if ( $identity['isexec'] ){ // Абонементы показываем Исполнителям?>     
             <div class="order_content__subtitle">Абонементы
-                <a href="#!">
+                <a href="<?=Url::to(['/cabinet/abonement-choose']) ?>">
                     <i class="fas fa-chevron-right"></i>
                 </a>
             </div>        
@@ -84,7 +85,9 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
         <div class="order_content__subtitle">
             <img src="/web/uploads/images/envelope.png" alt="">
-            <div class="text text__anketa">Просмотр анкеты</div>
+            <a href="/cabinet/<?php
+                if($identity['isexec']) echo"exec-card?id=".$identity['id']; 
+                else echo"user-card?id=".$identity['id'];?>" class="text text__anketa">Просмотр анкеты</a>
         </div>    
             
          

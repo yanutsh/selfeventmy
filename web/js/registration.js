@@ -30,7 +30,7 @@ $(document).ready(function() {
 });
 
  function ShowAvatar (files) {
-  //чтение и превье аватара 
+  //чтение и превью аватара 
    
     var reader = new FileReader(); 
     readFile(0); 
@@ -71,7 +71,8 @@ $(document).ready(function() {
     $('#avatar').prop('value', null);  // сбрасываем выбранное фото в input 
     
     $.ajax({
-      url         : 'page/regcust',
+      //url         : 'page/regcust',
+      url         : 'registration',
       type        : 'POST', 
       data        :  data,
       cache       :  false,
@@ -82,8 +83,8 @@ $(document).ready(function() {
       // функция успешного ответа сервера
       success     : function(msg){   // возвращает ориентацию фото.
         //alert('Ajax - success - msg='+msg);
-        //if (!msg=="")  $('#image').attr('data-orientation', msg);
-          //console.log ("Ориентация:"+msg);  
+        // if (!msg=="")  $('#image').attr('data-orientation', msg);
+        //   console.log ("Ориентация:"+msg);  
         },
       error: function(msg) { // Данные не отправлены
         console.log ("Ошибка загрузки tmp_photo-"+msg); 

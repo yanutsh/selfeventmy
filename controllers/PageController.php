@@ -415,11 +415,9 @@ class PageController extends AppController
       if (Yii::$app->request->isAjax) {
         if(isset($_FILES[0]['name']) && !empty($_FILES[0]['name'])) 
           {
-            //print_r($_FILES);
             require_once('../libs/upload_tmp_photo.php');             
            } 
-        //debug($model);
-             
+        
         //return 'Загрузили аватар';
       }
 

@@ -74,7 +74,7 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                         <a href="#!" id="register_reset_city">Cбросить</a>
                         <label class='control-label'>Город (города)</label>
 
-                        <select name="RegForm[city_id][]" id="regform-city_id" class="js-chosen" multiple="multiple">
+                        <select name="RegForm[city_id][]" id="regform-city_id" class="js-chosen city" multiple="multiple">
                             <?php foreach($city as $c) {?>
                                 <option value=<?= $c['id']?>><?= $c['name']?></option>   
                             <?php } ?>                                  

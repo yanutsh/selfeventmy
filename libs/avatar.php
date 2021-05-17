@@ -1,11 +1,12 @@
 <?php
+use yii\helpers\Url;
 //<!-- Ввод и редактирование аватара --> 
-	require_once('user_photo.php') ?>
+	//require_once('user_photo.php') ?>
 
 		<div class="change_avatar">		    
 			
 			<div class="preview_avatar">
-				<?php //debug (user_photo($_SESSION['avatar'])) ?>
+				<?php //debug (Url::to([user_photo($_SESSION['avatar'])] )) ?>
 
 		    	<img id="preview_avatar" src="<?= user_photo($_SESSION['avatar']) ?>" alt="Аватар" title="Выберите файл для аватара.">
 		    	 <p>Кликните и выберите фотографию для профиля</p>

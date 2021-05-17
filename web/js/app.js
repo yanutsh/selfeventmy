@@ -283,12 +283,12 @@ function Save(old_name)
         if (msg != "" ) // возвращает имя файла с расширением
 			 {	
 			 	//alert("msg="+msg);
-				$('#preview_avatar').attr('src','web/uploads/images/users/'+ msg);		      
+				$('#preview_avatar').attr('src','/web/uploads/images/users/'+ msg);		      
 
 				$('div.preview_avatar').css('display','block');
 				//$('div.preview_avatar').animate({display:'block'},{duration: 3000});
 				$('.wrapper.wrapper__avatar').css('display','none');
-				$('img.user_photo').attr('src','web/uploads/images/users/'+ msg);  //old_name);
+				$('img.user_photo').attr('src','/web/uploads/images/users/'+ msg);  //old_name);
 				
 				//console.log("msg2: " + msg);
 			}

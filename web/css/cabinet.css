@@ -1286,7 +1286,7 @@ body{
 
 /*******************  Профиль Юзера Конец*****************************/
 
-/*******************  Настройка уведомлений *****************************/
+/*******************  Настройка уведомлений *********8888********************/
 	.notifications_content{
 		width: 435px;
 		margin: 0 auto;
@@ -1299,9 +1299,9 @@ body{
 	div.text.text__push{
 		width: 60%;
 	}
-/*******************  Настройка уведомлений Конец **********************/	
+/*******************  Настройка уведомлений Конец **88888********************/	
 
-/*******************  Страница Баланс**********************************/
+/*******************  Страница Баланс *********88888*************************/
 
 	.balance_content{
 		width: 590px;
@@ -1331,7 +1331,113 @@ body{
 	}
 /*******************  Страница Баланс Конец**********************************/
 
-/*******************  Помощь  ***************************************************/
+/*******************  Страница Абонемент **********88************************/
+	.notifications_content.__abonement{
+		width: 441px;
+	}
+
+	.abonement_block{
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		height: 65px;
+		background-color: #AE4A84;
+		border-radius: 10px;		
+	}
+
+	.abonement_block .text{
+		margin-left: 15px;
+		font-size: 16px;
+		font-weight: bold;
+		letter-spacing: -0.165px;
+		color: #fff;
+	}
+
+	.abonement_block img{
+		height: 26px;
+		margin-right: 15px;
+	}
+
+	.__abonement .descript{
+		font-size: 14px;
+		line-height: 18px;
+		letter-spacing: -0.165px;
+		margin-top: 24px;
+
+	}
+
+	.__abonement .title{
+		margin-top: 16px;
+		margin-bottom: 16px;
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	.__abonement .text.text__push{
+		font-size: 18px;
+	}
+
+	.__abonement .subtitle{
+		text-align: center;
+	    font-size: 28px;
+	    font-weight: bold;
+	    /*margin-top: 40px;*/
+	    margin-bottom: 30px;
+	}
+
+	.__abonement .messages{
+		height: 40px;
+	}
+
+	.__abonement .alert{
+		padding: 5px 15px;
+	}
+
+	.text.text__abonement{
+		margin-top: 30px;
+		text-align: center;
+	}
+
+	.tarif_box{
+		width: 100%;
+		height: 62px;
+		border-radius: 5px;
+		box-shadow: 0px 2px 8px rgba(0,0,0,0.25);
+		margin-top: 18px;
+		padding: 12px;
+	}
+
+	.flex_sp_bw {
+		display: flex;
+    	justify-content: space-between;
+	}
+
+	.flex_sp_bw.row1{
+		margin-bottom: 6px;
+	}
+
+	.flex_sp_bw.row1 .text1,
+	.flex_sp_bw.row2 .text2{
+		font-size: 18px;
+		font-weight: bold;
+		color: #ae4a84;
+	}
+
+	.flex_sp_bw.row1 .text2,
+	.flex_sp_bw.row2 .text1{
+		font-size: 14px;
+		font-weight: normal;		
+	}
+
+  	.flex_sp_bw.row1 .text2{
+  		text-decoration: line-through;
+  	}	
+
+
+/*******************  Страница Абонемент Конец ******************************/
+
+
+/*******************  Помощь  ***********************************************/
 	.help_content{
 		width: 343px;
 		margin:0 auto;
@@ -1360,7 +1466,7 @@ body{
 		width: 150px;
 		height: auto;
 	}
-/*******************  Помощь  Конец***************************************************/	
+/*******************  Помощь  Конец *****************************************/	
 
 /*******************  Чат - главная ******************************************/
 

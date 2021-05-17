@@ -5,13 +5,16 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use app\assets\TemplateAsset;
+use app\assets\RegistrationAsset;
 use app\assets\CabinetAsset;
 use kartik\date\DatePicker;
 use app\components\page\PageAttributeWidget as PAW;
 use yii\widgets\Pjax;
 
+
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
+RegistrationAsset::register($this);
 
 ?>
 
@@ -56,12 +59,13 @@ TemplateAsset::register($this);
 				                <div class="input__block">
 					                <a href="#!" id="order_reset_category">Cбросить</a>
 					                <?= $form->field($model, 'category_id')->dropDownList (ArrayHelper::map($category, 'id', 'name'),['prompt'=>'Все категории']) ?>
-					            </div>    
+					            </div> 
 
+					            
 				                <div class="input__block field-orderfiltrform-city_id">
 				                	<a href="#!" id="order_reset_city">Cбросить</a>       	
 				                	<label class='control-label'>Город (города)</label>
-					                <select name="OrderFiltrForm[city_id][]" id="orderfiltrform-city_id" class="js-chosen" multiple="multiple">
+					                <select name="OrderFiltrForm[city_id][]" id="orderfiltrform-city_id" class="js-chosen city" multiple="multiple">
 					                	<?php foreach($city as $c) {?>
 					                		<option value=<?= $c['id']?>><?= $c['name']?> </option>
 					                	<?php } ?>				                	
@@ -69,6 +73,7 @@ TemplateAsset::register($this);
 					                <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 				                </div>
 
+				                
 				                <div class="form-group">
 					                <label class='control-label'>Дата от</label>
 					                <?php echo DatePicker::widget([                		
@@ -127,9 +132,7 @@ TemplateAsset::register($this);
                     			</div>
 			                    <?php ActiveForm::end(); ?>
 			                    <?php Pjax::end(); ?>
-			                    <!-- Ответ сервера будем выводить сюда -->
-								<!-- <p id="output"></p> -->
-
+			                   
 			    			</div>
 			    		 </div>
 			    	</div>

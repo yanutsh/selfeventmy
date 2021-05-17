@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use app\components\page\PageAttributeWidget as PAW;
 use yii\widgets\Pjax;
 
-require_once('../libs/days_from.php');
-require_once('../libs/user_photo.php');
-require_once('../libs/convert_date_en_ru.php');
+//require_once('../libs/days_from.php');
+//require_once('../libs/user_photo.php');
+//require_once('../libs/convert_date_en_ru.php');
 
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
@@ -153,7 +153,10 @@ TemplateAsset::register($this);
 		           					</p>
 		           					<p class="text_slow">
 		           						<?=$ue['course'] ?>
-		           						<span>окончил <?= convert_date_en_ru($ue['end_date'])?></span>	
+		           						<span> <?php 
+		           						if(!is_null($ue['end_date'])) 
+		           							echo("окончил ".convert_date_en_ru($ue['end_date'])); ?>
+		           						</span>	
 		           					</p>
 		           				<?php } ?>			           					
 	           					</div>

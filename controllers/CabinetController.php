@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use app\models\Album;
+use app\models\Abonement;
 use app\models\OrderFiltrForm;
 use app\models\ExecFiltrForm;
 use app\models\ExecCategory;
@@ -25,7 +27,7 @@ use app\models\OrderPhoto;
 use app\models\UserCity;
 use app\models\UserEducation;
 use app\models\NotificationForm;
-use app\models\Album;
+
 use yii\web\UploadedFile;
 use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
@@ -160,8 +162,9 @@ class CabinetController extends AppController {
             {return PaymentForm::find() ->orderBy('payment_name')->asArray()->all();});
         $order_status = $cache->getOrSet('order_status',function()
             {return OrderStatus::find() ->orderBy('name')->asArray()->all();});
-          
-        //debug( $order_status);
+        $abonement = $cache->getOrSet('abonement',function()
+            {return Abonement::find() ->orderBy('price ASC')->asArray()->all();});  
+        //debug( $abonement);
 
         return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats'));              
     }
@@ -482,9 +485,9 @@ class CabinetController extends AppController {
       return $this->render('orderCard', ['order' => $order]); 
     }
 
-    // вывести карточку Исполнителя  ***********************************************
+    // вывести карточку Исполнителя  Заказчику****************************************
     public function actionExecCard() {
-
+      // отображение карточки Исполнителя для Заказчика
       // получить данные Исполнителя из БД
       $exec = User::find()
               ->Where(['id'=> $_GET['id']])
@@ -514,7 +517,7 @@ class CabinetController extends AppController {
       return $this->render('execCard', compact('exec','orders_list','reviews', 'albums')); 
     }
 
-    // вывести карточку Заказчика  **************************************************
+    // вывести карточку Заказчика  Исполнителю ***************************************
     public function actionUserCard() {
 
       // получить данные Заказчика из БД
@@ -825,7 +828,7 @@ class CabinetController extends AppController {
       }else echo "нет запроса по Pjax";        
     }
 
-    // Если есть запрос на удаление - удаляем подкатегорию услуги ***************************
+    // Если есть запрос на удаление - удаляем подкатегорию услуги  ********************
     public function actionDeleteUserSubcategory() {     
       
         $user_id = Yii::$app->user->identity->id;
@@ -856,7 +859,7 @@ class CabinetController extends AppController {
       
     }    
 
-    // добавление вида услуг Исполнителя ************************************************
+    // добавление вида услуг Исполнителя *********************************************
     public function actionAddUserCategory() {      
       $model = new \app\models\UserCategory();
       $category = Category::find()->orderBy('name ASC')->all();
@@ -865,7 +868,7 @@ class CabinetController extends AppController {
       if (Yii::$app->request->isPjax) { 
         $data = Yii::$app->request->post();
         $model->load($data); 
-        debug($model);
+        //debug($model);
         //if ($model->validate()) {
           $subcategory = Subcategory::find()->where(['category_id'=>$model['category_id']])->orderBy('name ASC')->asArray()->all();
                 // form inputs are valid, do something here
@@ -888,7 +891,67 @@ class CabinetController extends AppController {
         return $this->render('addUserCategory', compact('model','category'));
     }
 
+    // Выбор абонемента для Исполнителя *********************************************
+    public function actionAbonementChoose() {
+      //$model = new Abonement();
+      $cache = \Yii::$app->cache;
+      $abonement = $cache->getOrSet('abonement',function()
+            {return Abonement::find()->where(['freeze_days'=>'0']) 
+                  ->orderBy('price ASC')->asArray()->all();}); 
+
+      if (Yii::$app->request->isPjax) { 
+          $data = Yii::$app->request->post();
+          // debug($data);
+          if($data['freeze']) {
+              $abonement = Abonement::find()->where(['>','freeze_days','0'])
+                  ->orderBy('price ASC')->asArray()->all();
+          }
         
+        $freeze = $data['freeze'];
+        return $this->render('abonementChoose',compact('abonement','freeze'));
+      }
+
+      return $this->render('abonementChoose',compact('abonement'));
+    }  
+
+  // Оплата выбранного абонемента для Исполнителя *********************************************  
+  public function actionAbonementPayment($id = null) { 
+    
+    // если запрос пришел по Pjax
+    if (Yii::$app->request->isPjax) {
+        $data = Yii::$app->request->post();
+        //if (!Empty($data)) debug($data); 
+
+        if ($data['abonement-pay-button']=='true') { // нажато подтверждение оплаты
+          //echo"id=".$id;
+          //debug("Нет денег для оплаты этого абонемента",0);
+          if(-1>0) // оплата прошла
+            Yii::$app->session->setFlash('msg_error', "Не хватает денег для оплаты этого абонемента.");
+          else {  // оплата прошла
+            // записываем абонемент в БД
+
+            // выводим страницу об успешной покупке
+            debug("Успешная покупка абонемета");
+            //return $this->redirect('abonement-pay-success');
+          }
+
+
+        }elseif($data['abonement-choose-button']=='true') { // выбрать другой абонемент
+          return $this->redirect('abonement-choose');
+        }       
+
+    }
+
+    // переходим к странице оплаты абонемента
+    if(!is_null($id)) {
+      $abonement = Abonement::find()->where(['id'=>$id])
+                  ->asArray()->one();
+      //debug($abonement);       
+      return $this->render('abonementPayment',compact('abonement'));
+    } 
+     
+    
+  }      
     // Пользовательская функция Сортировки многомернго массива По возрастанию:
     public function cmp_function($a, $b){
       return ($a['name'] > $b['name']);
