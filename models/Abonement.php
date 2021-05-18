@@ -12,7 +12,6 @@ use Yii;
  * @property string $description
  * @property int $duration Срок действия
  * @property int $price
- * @property int $price_with_freez Стоимость с заморозкой
  * @property int|null $price_old
  * @property int $freeze_days Длительность заморозки
  * @property int $best
@@ -35,8 +34,8 @@ class Abonement extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'description', 'duration', 'price', 'price_with_freez', 'freeze_days'], 'required'],
-            [['duration', 'price', 'price_with_freez', 'price_old', 'freeze_days', 'best'], 'integer'],
+            [['name', 'description', 'duration', 'price'], 'required'],
+            [['duration', 'price', 'price_old', 'freeze_days', 'best'], 'integer'],
             [['name', 'description'], 'string', 'max' => 255],
         ];
     }
@@ -52,7 +51,6 @@ class Abonement extends \yii\db\ActiveRecord
             'description' => 'Description',
             'duration' => 'Срок действия',
             'price' => 'Price',
-            'price_with_freez' => 'Стоимость с заморозкой',
             'price_old' => 'Price Old',
             'freeze_days' => 'Длительность заморозки',
             'best' => 'Best',

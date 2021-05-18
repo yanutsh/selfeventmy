@@ -1389,60 +1389,21 @@ body{
 		height: 40px;
 	}
 
-	.tarif_box.frosen .flex_sp_bw.row1 > div,
-	.tarif_box.frosen .flex_sp_bw.row2 > div {
-		color: #828282;
-	}
-
 	.best_choice{
-		display: inline-block;
-		width: 85px;
-    	height: 25px;
-    	border-radius: 5px;
+		width: 100px;
+    	height: 18px;
+    	border-radius: 3px;
     	/*margin-top: 18px;*/
     	position: relative;
     	top: 3px;
     	left: 0;
     	background-color: #ae4a84;
     	color: #fff;
-    	font-size: 14px;
     	/*z-index: 10;*/
 	}
 
-	.best_choice.active{
-		width: 115px;
-	}
-
-	.best_choice span{
-		line-height: 22px;
-		margin-left: 16px;
-	}
-
 	.__abonement .alert{
-		/*padding: 5px 15px;*/
-	}
-
-	.__abonement .duration{
-		margin-top: 16px;
-    	text-align: center;
-    	font-size: 14px;
-	}
-
-	.__abonement a.freeze_days,
-	.frozen {
-		display: block;
-		margin: 10px auto 0;
-    	text-align: center;
-    	font-size: 14px;
-    	color: #ae4a84;
-	}
-
-	.frozen{
-		font-weight: bold;
-	}
-
-	.order_buttons.abonement a.register.active{
-		margin-left: 0;
+		padding: 5px 15px;
 	}
 
 	.text.text__abonement{
@@ -1456,14 +1417,15 @@ body{
 	}
 
 	.tarif_box{
-		position: relative;		
+		position: relative;
 		width: 100%;
 		height: 62px;
 		border-radius: 5px;
-		box-shadow: 0px 2px 8px rgba(0,0,0,0.25);		
+		box-shadow: 0px 2px 8px rgba(0,0,0,0.25);
+		/*margin-top: 18px;*/
 		padding: 12px;
 		/*z-index: 30;*/
-		background-color: #fff;
+		background-color: beige;
 	}
 
 	.flex_sp_bw {

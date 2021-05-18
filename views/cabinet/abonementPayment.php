@@ -37,7 +37,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 			//debug($model);
             ?>
             <?php $form = ActiveForm::begin([
-            	'action'  => '/cabinet/abonement-payment?id='.$abonement['id'],
+            	'action'  => '/cabinet/abonement-payment?id='.$abonement['id']."&duration=".$abonement['duration'],
                 'options' => [
                 	'id' => 'abonement-form',
                     'data-pjax' => true,                    
