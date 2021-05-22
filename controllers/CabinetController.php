@@ -42,7 +42,9 @@ class CabinetController extends AppController {
     public $city;
     public $work_form;
     public $payment_form;
-    public $order_status;  	
+    public $order_status; 
+    public $abonement_freeze;
+    public $abonement_nofreeze; 	
     
     // ЛК - фильтр и список Заказов  ***********************************************
     public function actionIndex()	
@@ -147,10 +149,8 @@ class CabinetController extends AppController {
                 ->orderBy('added_time DESC')
                 ->asArray()->all();  //count();
 
-        $count= count($orders_list); 
-           
-        //debug( $orders_list);
-        
+        $count= count($orders_list);            
+               
         // получение неизменных исходные данные из кеша или БД 
         $cache = \Yii::$app->cache;
         $category = $cache->getOrSet('category',function()
@@ -287,7 +287,7 @@ class CabinetController extends AppController {
         // Если пришёл AJAX запрос
         if (Yii::$app->request->isAjax) { 
           // Устанавливаем формат ответа JSON
-          //debug('Еесть Ajax');
+          
           Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
           $data = Yii::$app->request->post();
           //debug($data);
@@ -857,7 +857,6 @@ class CabinetController extends AppController {
           $city[]=null;
           //debug($user);
           return $this->render('profileInfo', compact('user_subcategory','user','user_city','city'));
-      
     }    
 
     // добавление вида услуг Исполнителя *********************************************
@@ -893,46 +892,48 @@ class CabinetController extends AppController {
     }
 
     // Выбор абонемента для Исполнителя *********************************************
-    public function actionAbonementChoose() {
-      //$model = new Abonement();
-      $cache = \Yii::$app->cache;
-      $abonement = $cache->getOrSet('abonement',function()
-            {return Abonement::find()->where(['freeze_days'=>'0']) 
-                  ->orderBy('price ASC')->asArray()->all();});
-      $user_abonement = UserAbonement::find()->where(['user_id' => Yii::$app->user->identity->id              ]) ->asArray()->one();  
-      //debug($user_abonement);                             
-
+    public function actionAbonementChoose($freeze = null) {
+     
+      $cache_data = Yii::$app->runAction('cabinet/get-data-from-cache'); 
+      
+      $user_abonement = UserAbonement::find()->where(
+              ['and','user_id' => Yii::$app->user->identity->id,
+              ['>','end_date', date('Y-m-d H:i:s')] ]) ->asArray()->one(); 
+      
+      //if($freeze) $abonement = $cache_data['abonement_freeze'];          
+      //else        $abonement = $cache_data['abonement_nofreeze'];
+      
       if (Yii::$app->request->isPjax) { 
           $data = Yii::$app->request->post();
-          // debug($data);
-          if($data['freeze']) {
-              $abonement = Abonement::find()->where(['>','freeze_days','0'])
-                  ->orderBy('price ASC')->asArray()->all();
-          }
-        
-        $freeze = $data['freeze'];
-        return $this->render('abonementChoose',compact('abonement','freeze','user_abonement'));
+          $freeze = $data['freeze'];
+          //debug($data);
+          if($freeze) $abonement = $cache_data['abonement_freeze'];          
+          else        $abonement = $cache_data['abonement_nofreeze'];
+      
+          return $this->render('abonementChoose',compact('abonement','freeze','user_abonement'));
       }
 
-      return $this->render('abonementChoose',compact('abonement','user_abonement'));
+      if($freeze) $abonement = $cache_data['abonement_freeze'];          
+      else        $abonement = $cache_data['abonement_nofreeze'];
+      return $this->render('abonementChoose',compact('abonement','freeze','user_abonement'));
     }  
 
-  // Оплата выбранного абонемента для Исполнителя *********************************************  
-  public function actionAbonementPayment($id = null, $duration = 0) { 
-    
-    // проверяем наличие действующего абонемента
+  // Оплата выбранного абонемента для Исполнителя *************************************  
+  public function actionAbonementPayment($id = null, $duration = 0, $freeze = null) { 
+    // получить данные из кеша
+    $cache_data = Yii::$app->runAction('cabinet/get-data-from-cache'); 
+
+    // проверяем наличие действующего абонемента - оплата нового невозможна
     $user_id = Yii::$app->user->identity->id;
     $res = UserAbonement::find()->where(['and','user_id'=>$user_id, 'abonement_id'=>$id,
                                         ['>','end_date', date('Y-m-d H:i:s')] 
                                         ])->asArray()->one();
-    if ($res) {      
-      //debug("Есть абонемент");
+    if ($res) { //debug("Есть абонемент");
       Yii::$app->session->setFlash('msg_error', "У вас есть действующий абонемент.");
-      $cache = \Yii::$app->cache;
-      $abonement = $cache->getOrSet('abonement',function()
-            {return Abonement::find()->where(['freeze_days'=>'0']) 
-                  ->orderBy('price ASC')->asArray()->all();});
-      $user_abonement = UserAbonement::find()->where(['user_id' => Yii::$app->user->identity->id              ]) ->asArray()->one();  
+      
+      if($freeze) $abonement = $cache_data['abonement_freeze'];          
+      else        $abonement = $cache_data['abonement_nofreeze'];
+
       return $this->render('abonementChoose',compact('abonement','freeze','user_abonement'));
     }
 
@@ -943,9 +944,8 @@ class CabinetController extends AppController {
         //if (!Empty($data)) debug($data); 
 
         if ($data['abonement-pay-button']=='true') { // нажато подтверждение оплаты
-          //echo"id=".$id;
-          //debug("Нет денег для оплаты этого абонемента",0);
-          if(-1>0) // оплата прошла
+          
+          if(-1>0) // оплата не прошла
             Yii::$app->session->setFlash('msg_error', "Не хватает денег для оплаты этого абонемента.");
           else {  // оплата прошла
             $identity = Yii::$app->user->identity;      
@@ -953,8 +953,7 @@ class CabinetController extends AppController {
 
             $end_date = strtotime('+'.$duration.' days');
             $end_date = date('Y-m-d H:i:s',$end_date);
-            //debug( $stop_date);
-
+            
             // записываем абонемент в БД
             $user_abonement = new UserAbonement();
             $user_abonement->user_id = $user_id;
@@ -963,8 +962,13 @@ class CabinetController extends AppController {
 
             if ($user_abonement->save()) {
               // выводим страницу об успешной покупке
-              Yii::$app->session->setFlash('msg_success', "Вы успешно приобрели абонемент."); 
-              return $this->redirect('abonement-choose');
+              Yii::$app->session->setFlash('msg_success', "Вы успешно приобрели абонемент.");              
+
+              if ($freeze) $abonement = $cache_data['abonement_freeze'];
+              else         $abonement = $cache_data['abonement_nofreeze'];
+
+              return $this->redirect(Url::to(['abonement-choose', 'freeze'=>$freeze]) );
+              //return $this->redirect('abonement-choose');
             }
           }
 
@@ -978,47 +982,50 @@ class CabinetController extends AppController {
       $abonement = Abonement::find()->where(['id'=>$id])
                   ->asArray()->one();
       //debug($abonement);       
-      return $this->render('abonementPayment',compact('abonement'));
+      return $this->render('abonementPayment',compact('abonement','freeze'));
     }else debug(" Абонемент не выбран");     
-    
   }
 
   // заморозка абонемента
   public function actionAbonementFreeze($id=null, $user_id=null, $freeze_days=0) {
-      $user_abonement = UserAbonement::find()->where(['abonement_id'=>$id, 'user_id'=>$user_id])
-            ->one();
-      //echo "id=".$id." user_id=".$user_id;;    
-      //debug($user_abonement); 
-
+      $user_abonement = UserAbonement::find()->where(
+            ['and','abonement_id'=>$id, 'user_id'=>$user_id,
+            ['>', 'end_date', date('Y-m-d H:i:s')]
+            ]) ->one();
+      
       // расчет новой даты окончания      
       $end_date_1 = strtotime($user_abonement->end_date); 
-      //echo "Конец1=".date('Y-m-d H:i:s',$end_date_1)."<br>";
+      
       $end_date_2 = strtotime('+'.$freeze_days.' days', $end_date_1 );
-      //echo "Мороз на ".$freeze_days.' days <br>';
-      //echo "Конец2=".date('Y-m-d H:i:s',$end_date_2)."<br>";
-
+     
       $user_abonement->abonement_status = "заморожен";
       $user_abonement->freeze_date = date('Y-m-d H:i:s');      
-      $user_abonement->end_date = date('Y-m-d H:i:s',$end_date_2);  
+      $user_abonement->end_date = date('Y-m-d H:i:s',$end_date_2);       
       
-      //debug ($user_abonement->end_date,0);
       $user_abonement->save();
+      
+      // получить данные из кеша
+      $cache_data = Yii::$app->runAction('cabinet/get-data-from-cache');
+        
+      $abonement = $cache_data['abonement_freeze'];
+      $user_abonement = UserAbonement::find()->where(['and','user_id' => $user_id,
+                        ['>', 'end_date', date('Y-m-d H:i:s')] ])
+                        ->asArray()->one();
 
-      $cache = \Yii::$app->cache;
-      $abonement = $cache->getOrSet('abonement',function()
-            {return Abonement::find()->where(['freeze_days'=>'0']) 
-                  ->orderBy('price ASC')->asArray()->all();});
-      $user_abonement = UserAbonement::find()->where(['user_id' => $user_id ])
-                        ->asArray()->one(); 
-
+      $freeze = 'on';   // показываем только абонементы с заморозкой               
       return $this->render('abonementChoose',compact('abonement','freeze','user_abonement'));     
-  }  
+  }
 
-    // Пользовательская функция Сортировки многомернго массива По возрастанию:
-    public function cmp_function($a, $b){
+  // добавление паспортных данных Исполнителя
+  // public function actionAddPassport(){
+    
+  //   return $this->render('addPassport');
+  // }  
+
+  // Пользовательская функция Сортировки многомерного массива По возрастанию:
+  public function cmp_function($a, $b){
       return ($a['name'] > $b['name']);
-    }  
-
+  } 
 
 }  
 

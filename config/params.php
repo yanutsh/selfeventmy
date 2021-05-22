@@ -1,4 +1,9 @@
 <?php
+use app\models\Category;
+
+$cache = \Yii::$app->cache;
+//$category = $cache->getOrSet('category', function(){
+//             return Category::find()->orderBy('name')->asArray()->all();});
 
 return [
     //'adminEmail'      => 'mail@v-stepanov.ru',
@@ -36,5 +41,8 @@ return [
 
     // Предустановленные даты мероприятия         
     'event_date_from' => date('d.m.Y', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))), 
-    'event_date_to' => date('d.m.Y', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))),    
+    'event_date_to' => date('d.m.Y', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))), 
+
+    
+    //'category' => [0,10,20,30], //$category,
 ];

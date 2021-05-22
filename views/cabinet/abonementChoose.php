@@ -87,11 +87,13 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                     <?php 
                     $tarif_box_class = "";
                     if ($ab['id'] == $user_abonement['abonement_id'] &&                    $user_abonement['end_date'] > date('Y-m-d H:i:s')) { 
-                        $tarif_box_class = "frosen"?>
+                        if($user_abonement['abonement_status']=='заморожен') 
+                                $tarif_box_class = "frosen";
+                    ?>
 		                <div class="best_choice active"><span>Действующий</span></div>
                     <?}?>
 
-					<a href="<?= Url::to(['abonement-payment','id'=> $ab['id']]) ?>"  data-pjax = '0' title="Купить этот абонемент">
+					<a href="<?= Url::to(['abonement-payment','id'=> $ab['id'],'freeze'=>$freeze]) ?>"  data-pjax = '0' title="Купить этот абонемент">
 			            <div class="tarif_box <?= $tarif_box_class ?>">
 			            	<div class="flex_sp_bw row1">
 			            		<div class="text1"><?= $ab['name'] ?></div>

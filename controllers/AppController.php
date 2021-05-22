@@ -30,7 +30,10 @@ class AppController extends \yii\web\Controller
         	// получение списка новых сообщений текущего юзера
         	'get-new-mess' => [
         		'class' => 'app\controllers\actions\GetNewMessAction',              
-        	],           
+        	],
+            'get-data-from-cache' => [
+                'class' => 'app\controllers\actions\GetDataFromCacheAction',    
+            ]          
             
         ];
     }

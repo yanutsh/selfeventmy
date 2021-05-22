@@ -1394,6 +1394,10 @@ body{
 		color: #828282;
 	}
 
+	.tarif_block a{
+		color: #828282;
+	}
+
 	.best_choice{
 		display: inline-block;
 		width: 85px;
@@ -1490,11 +1494,17 @@ body{
 
   	.flex_sp_bw.row1 .text2{
   		text-decoration: line-through;
-  	}	
-
+  	}
 
 /*******************  Страница Абонемент Конец ******************************/
 
+/*******************  Страница Ввода фоток документов ***********************/
+.wrapper.wrapper__doc{
+	margin-top: 150px;
+	margin-bottom: 50px;
+}
+
+/*******************  Страница Ввода фоток документов Конец *****************/
 
 /*******************  Помощь  ***********************************************/
 	.help_content{
@@ -1736,7 +1746,7 @@ body{
 	.album_photo{
 	    display: flex;
 	    flex-wrap: wrap;
-	    justify-content: space-between;
+	    justify-content: space-around;
 	    align-items: center;
 	}
 
@@ -1761,6 +1771,31 @@ body{
 	}	
 
 /*******************  Фотоальбомы Конец******************************************/
+
+/*******************  Cтраница добавления документов ******************************/
+.subtitle__doc{
+	text-align: left;
+    font-size: 18px;
+    line-height: 21px;
+    color: #424242;
+    width: 75%;
+    margin: 24px auto
+}
+
+.require_list{
+	margin-top: 24px;
+}
+
+.b-add-item.add__docs{
+	width: 35%;
+	margin: 30px auto 0;
+}
+
+.b-add-item.add__docs .add-photo{
+	font-size: 18px;
+}
+
+/*******************  Cтраница добавления документов Конец ************************/
 
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{

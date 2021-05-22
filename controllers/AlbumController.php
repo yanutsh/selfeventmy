@@ -32,10 +32,7 @@ class AlbumController extends AppController
         ];
     }
 
-    /**
-     * Lists all Album models.
-     * @return mixed
-     */
+    //********* Список всех альбомов **************************************************/
     public function actionIndex()
     {   
         // СЧИТЫВАЕМ ДАННЫЕ ЮЗЕРА ИЗ СЕССИИ
@@ -65,11 +62,7 @@ class AlbumController extends AppController
         ]);
     }
 
-    /**
-     * Creates a new Album model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+    //********* Создание нового альбома *********************************************/
     public function actionCreate()
     {
         $model = new Album();
@@ -94,13 +87,7 @@ class AlbumController extends AppController
 
     }
 
-    /**
-     * Updates an existing Album model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    //********* Обновление  альбома - добавление фотографий *************************/
     public function actionUpdate($id=null,$del_photo_id=null)
     {   
         // id - id альбома
@@ -174,17 +161,12 @@ class AlbumController extends AppController
             return $this->redirect(['index']);
         }   
 
-        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        //    return $this->redirect(['index']);
-        //}
-
         // СЧИТЫВАЕМ ДАННЫЕ ЮЗЕРА ИЗ СЕССИИ
         include_once('../libs/get_session.php');
         // ищем фотографии этого альбома
         $album_photoes = $this->findAlbumPhotoes($id);
 
-        return $this->render('update', compact('model','album_photoes','identity','work_form_name','id'));     
-        //debug($album_photoes);                    
+        return $this->render('update', compact('model','album_photoes','identity','work_form_name','id'));                            
     }
 
     /**

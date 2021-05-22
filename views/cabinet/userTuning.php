@@ -44,7 +44,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                 <div class="order_content__subtitle">Проверка данных</div>
                 <div class="text">Пройдите верификацию для подтверждения данных в профиле и получения статуса "проверенный профиль"</div>
                 <div class="text text_moon">Проверка не займет более 5 минут. 
-                    <a href="#!">Пройти проверку</a>
+                    <a href="<?=url::to('/doc/update')?>">Пройти проверку</a>
                 </div>
             </div>
         <?php } ?> 

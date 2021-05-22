@@ -245,11 +245,14 @@ function readmultifiles(files, max_photos) {
         console.log("Index="+index);
         if( (index+1) > num_files ) return;
         
-        var file = files[index];
+        console.log(files);
+        if (!empty(files[index])) 
+            file = files[index];
+        else return;
         
         reader.onload = function(e) { 
           
-          // ищем свободное место дл я превью и определяем номер форки
+          // ищем свободное место для превью и определяем номер фотки
           for (n=1; n<=max_photos; n++) {
             console.log("n="+n);
             if (!$("#preview"+n).length) { // длина 0 - место свободно          
@@ -258,7 +261,8 @@ function readmultifiles(files, max_photos) {
               if (add_new_order==0) { // фотки с возможностью удаления
                 var image = $("<div class='photo_item'><img id='preview"+n+"' src='' alt='Фото задания'>"+                       
                           "<div class='imgdelete'>"+
-                              "<img src='img/icon_delete48x48.png' alt='Удалить' title='Удалить фото' onclick='delete_photo()'>"+
+                              //"<img src='/web/uploads/images/icon_delete48x48.png' alt='Удалить' title='Удалить фото' onclick='delete_photo()'>"+
+                              "<img src='/web/uploads/images/delete_icon_32px.png' alt='Удалить' title='Удалить фото' onclick='delete_photo()'>"+
                           "</div>"+
                           "</div>");
               }else { // фотки БЕЗ возможности удаления
@@ -277,11 +281,13 @@ function readmultifiles(files, max_photos) {
         reader.readAsDataURL(file);        
     }
 
-    var i=1;
+    //var i=1;
+    //var index = 0;
     readFile(0);
 }
 
-
-
-
-
+function empty( mixed_var ) {   // Determine whether a variable is empty
+    //
+    // +   original by: Philippe Baumann
+    return ( mixed_var === "" || mixed_var === 0   || mixed_var === "0" || mixed_var === null  || mixed_var === false  ||  ( Array.isArray(mixed_var) && mixed_var.length === 0 ) );
+}

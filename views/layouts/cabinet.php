@@ -107,7 +107,7 @@ $avatar = $identity['avatar'];
                                             //['label' => 'Баланс', 'url' =>'/cabinet/balance'],
                                             ['label' => 'Помощь', 'url' =>'/cabinet/help'],
                                             ['label' => 'Настройки', 'url' => '/cabinet/user-tuning'],
-                                            ['label' => 'Абонемент', 'url' => '#!'], 
+                                            ['label' => 'Абонемент', 'url' => '/cabinet/abonement-choose'], 
                                             ['label' => 'Выход', 'url' => '/page/logout'],         
                                         ]],
                                     ],
