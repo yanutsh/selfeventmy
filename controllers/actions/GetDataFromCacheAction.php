@@ -17,6 +17,9 @@ class GetDataFromCacheAction extends Action
 	        $cache = \Yii::$app->cache;
 	        $cache_data=array();
 
+	        // удаление эл-та кеша для отладки
+	        //$cache->delete('abonement_nofreeze');
+
 	        // категории услуг
 	        $cache_data['category'] = $cache->getOrSet('category',function()
 	             {return Category::find()->orderBy('name')->all();});
@@ -33,7 +36,7 @@ class GetDataFromCacheAction extends Action
 	        $cache_data['payment_form'] = $cache->getOrSet('payment_form',function()
 	             {return PaymentForm::find() ->orderBy('payment_name')->all();});
 
-	        // выбираем только абонементы без заморозки
+	        // выбираем только абонементы без заморозки	              
 	        $cache_data['abonement_nofreeze'] = $cache->getOrSet('abonement_nofreeze',function()
 	             {return Abonement::find()->where(['=','freeze_days','0']) 
 	                   ->orderBy('price ASC')->asArray()->all();});
@@ -43,6 +46,8 @@ class GetDataFromCacheAction extends Action
 	             {return Abonement::find()->where(['>','freeze_days','0']) 
 	                   ->orderBy('price ASC')->asArray()->all();});
 
+	        // debug($cache_data['abonement_nofreeze']);
+	        
 	        return $cache_data; 
 	                    
         }

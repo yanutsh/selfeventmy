@@ -846,6 +846,11 @@ body{
 		margin-left: 20px;
 	}
 
+	.text.text_danger{
+		color: #ae4a84;
+		font-weight: bold;
+	}
+
 	.check_need {
 		width: 661px;
     	/*height: 120px;*/
@@ -1773,27 +1778,40 @@ body{
 /*******************  Фотоальбомы Конец******************************************/
 
 /*******************  Cтраница добавления документов ******************************/
-.subtitle__doc{
-	text-align: left;
-    font-size: 18px;
-    line-height: 21px;
-    color: #424242;
-    width: 75%;
-    margin: 24px auto
-}
+	.subtitle__doc,
+	.text__doc {	
+	    font-size: 18px;
+	    line-height: 21px;
+	    color: #424242;
+	    width: 75%;
+	    margin: 24px auto
+	}
 
-.require_list{
-	margin-top: 24px;
-}
+	.subtitle__doc {
+		text-align: center;
+	}
 
-.b-add-item.add__docs{
-	width: 35%;
-	margin: 30px auto 0;
-}
+	.text__doc{
+		text-align: left;
+	}
 
-.b-add-item.add__docs .add-photo{
-	font-size: 18px;
-}
+	.require_list{
+		margin-top: 24px;
+	}
+
+	.b-add-item.add__docs{
+		width: 35%;
+		margin: 30px auto 0;
+	}
+
+	.b-add-item.add__docs .add-photo{
+		font-size: 18px;
+	}
+
+	.doc_received {	
+	    margin: 30px auto;
+	    display: block;
+	}
 
 /*******************  Cтраница добавления документов Конец ************************/
 

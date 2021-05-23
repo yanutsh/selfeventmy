@@ -28,7 +28,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
             <span class="fio"><?= $work_form_name." - ".$identity['username'] ?></span>
         </div>
         <?php   
-        if ( $identity['isconfirm'] && $identity['isexec']){ //Если Исполнитель и профиль проверен-показываем?>     
+        if ( $identity['isconfirm']==1 && $identity['isexec']){ //Если Исполнитель и профиль проверен-показываем?>     
             <div class="checked">Профиль проверен</div>             
         <?php   } ?>
          
@@ -37,26 +37,42 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
     <div class="order_content order_content__tuning">
     
         <?php   
-        if ( $identity['isexec'] && $identity['isconfirm'] ){ 
-        //Если профиль проверен-показываем РЕЙТИНГ> 
-        }elseif($identity['isexec']){ // Предупреждение о проверке документов ?>  
-            <div class="check_need">
-                <div class="order_content__subtitle">Проверка данных</div>
-                <div class="text">Пройдите верификацию для подтверждения данных в профиле и получения статуса "проверенный профиль"</div>
-                <div class="text text_moon">Проверка не займет более 5 минут. 
-                    <a href="<?=url::to('/doc/update')?>">Пройти проверку</a>
+        if ( $identity['isexec'] ) {
+            if( $identity['isconfirm']==1 ){ 
+            //Если профиль проверен-показываем РЕЙТИНГ>
+            }elseif($identity['isconfirm']== -1) {
+            // Предупреждение об ошибках в документах ?> 
+                <div class="check_need">
+                    <div class="order_content__subtitle">Проверка данных</div>
+                    <div class="text text_danger"><?= Yii::$app->params['docs_error'] ?></div>               
                 </div>
-            </div>
-        <?php } ?> 
-
-        <?php   if ( $identity['isexec'] ){ // Абонементы показываем Исполнителям?>     
+            <?php      
+            }elseif( $identity['isnewdocs'] == 0){ 
+            // Предупреждение о проверке документов ?>  
+                <div class="check_need">
+                    <div class="order_content__subtitle">Проверка данных</div>
+                    <div class="text"><?= Yii::$app->params['docs_check_1'] ?></div>
+                    <div class="text text_moon"><?= Yii::$app->params['docs_check_2'] ?>
+                        <a href="<?=url::to('/doc/update')?>">Пройти проверку</a>
+                    </div>
+                </div>
+            <?php } 
+            elseif ( $identity['isnewdocs'] == 1){ 
+            // Предупреждение о документf[  на проверке] ?> 
+                <div class="check_need">
+                    <div class="order_content__subtitle">Проверка данных</div>
+                    <div class="text"><?= Yii::$app->params['docs_checking_1'] ?></div>
+                    <div class="text text_moon"><?= Yii::$app->params['docs_checking_2'] ?></div>
+                </div>
+            <?php } ?>    
+                
             <div class="order_content__subtitle">Абонементы
                 <a href="<?=Url::to(['/cabinet/abonement-choose']) ?>">
                     <i class="fas fa-chevron-right"></i>
                 </a>
             </div>        
             <div class="text">Приобретите или посмотрите информацию о <br>действующих абонементах</div>
-        <?php   } ?>
+        <?php  } ?>
 
         <div class="order_content__subtitle">Настройки уведомлений
             <a href="/cabinet/notifications-tuning">

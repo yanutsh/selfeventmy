@@ -230,22 +230,24 @@ function readmultifiles(files, max_photos) {
   // определяем количество существующих фоток в задании
   elements = $("[id^='preview']");
   photo_qwt = elements.length;
+
+  //console.log('photo_qwt='+photo_qwt);
      
     // ограничиваемся max_photos файлами
     // определяем сколько фоток еще можно добавить  
         if (files.length<=(max_photos-photo_qwt)) num_files = files.length;
         else num_files=max_photos-photo_qwt;
 
-        //console.log("добавляем "+num_files+" файлов");        
+        console.log("добавляем "+num_files+" файлов");        
 
     var reader = new FileReader();  
 
     function readFile(index) {
 
-        console.log("Index="+index);
+        //console.log("Index="+index);
         if( (index+1) > num_files ) return;
         
-        console.log(files);
+        //console.log(files);
         if (!empty(files[index])) 
             file = files[index];
         else return;
@@ -254,7 +256,7 @@ function readmultifiles(files, max_photos) {
           
           // ищем свободное место для превью и определяем номер фотки
           for (n=1; n<=max_photos; n++) {
-            console.log("n="+n);
+            //console.log("n="+n);
             if (!$("#preview"+n).length) { // длина 0 - место свободно          
               console.log("Есть место-"+n);
               // создаем элемент DOM

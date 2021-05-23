@@ -593,6 +593,13 @@ $identity = Yii::$app->user->identity;
             <?php Pjax::end(); ?>
         <!-- Контактные данные Конец-->
 
+        <!-- Редактирование документов -->
+	        <div class="order_content__subtitle">
+            	<span>Редактирование документов</span>
+            	<a href="<?= Url::to('/doc/update')?>" class="text_details profile">Редактировать</a>
+            </div>	
+        <!-- Редактирование документов  Конец-->    	
+
         <!-- Удаление профиля-->
         	<?php Pjax::begin(); ?>
             <div class="order_content__subtitle">

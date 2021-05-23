@@ -81,7 +81,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 				<div class="tarif_block">
 					<!-- Отметка лучший выбор -->
 			        <?php if ($ab['best'])  { ?>
-		            	<div class="best_choice"><span>Выгодно</span></div>		            	
+		            	<div class="best_choice"><span>Выгодно</span></div>	            	
 		            <?}?>
 
                     <?php 

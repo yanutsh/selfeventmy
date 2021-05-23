@@ -19,9 +19,27 @@ function confirm_code($len=6){
 }
 
 // отправка email
-function send_email($email,$text){	
-	// отправка смс на email с текстом  $text
+function send_email($email,$email_subject,$text){	
+	// отправка смс OT Aдмина на email Юзера с текстом  $text
 	$email_from = \Yii::$app->params['adminEmail'];
+	//$email_subject = \Yii::$app->params['email_subject'];	
+	
+	Yii::$app->mailer->compose()
+	    ->setFrom($email_from)
+	    ->setTo($email)
+	    ->setSubject($email_subject)
+	    ->setTextBody($text)
+	    ->setHtmlBody($text)
+	    ->send();	
+
+	    Yii::$app->session->setFlash('send_code', $text. ' Письмо отправлено');
+	    //return true;	 
+}
+
+function send_email_to_admin($email_subject,$text){	
+	// отправка смс Aдминy от Админа с текстом  $text
+	$email_from = \Yii::$app->params['adminEmail'];
+	$email      = \Yii::$app->params['adminEmail'];
 	$email_subject = \Yii::$app->params['email_subject'];	
 	
 	Yii::$app->mailer->compose()
