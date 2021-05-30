@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\web\User;
 use app\assets\TemplateAsset;
 use app\assets\RegistrationAsset;
+use app\assets\CanvasAsset;
 use app\components\page\PageAttributeWidget as PAW;
 use app\models\WorkForm;
 use app\models\Sex;
@@ -14,6 +15,7 @@ use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
 RegistrationAsset::register($this);
+CanvasAsset::register($this);
 
 $this->title = $page->seo_title;
 $this->registerMetaTag(['name' => 'keywords', 'content' => $page->seo_keywords]);
@@ -156,11 +158,13 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                     } ?>
 
                     <p class='doc_list'>Необходимые документы дл Юр. лиц:</p>
+                    <!-- <p class='require_list'>Необходимые документы для физ. лиц:</p> -->
                     <ul>
-                        <li>ИНН организации</li>
-                        <li>ИНН организации</li>
-                        <li>ИНН организации</li>
-                    </ul>      
+                        <?php 
+                        foreach($doc_list as $dl) { ?>                  
+                            <li><?= $dl['doc_name']?></li>                
+                        <?php } ?>
+                    </ul>     
                     <!-----------Добавить Фотографии документов КОНЕЦ---------------> 
 
                     <div class="personal_check">

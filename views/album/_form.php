@@ -34,7 +34,9 @@ use yii\widgets\Pjax;
         if(!empty($album_photoes)) {
     	    foreach($album_photoes as $photo) {?>
     	    	<div class="photo_item">
-    	    		<img src="/web/uploads/images/portfolio/<?= $photo['photo_name']?>" alt="">
+                    <a href="/web/uploads/images/portfolio/<?= $photo['photo_name']?>" class="highslide" onclick="return hs.expand(this)" >
+    	    		     <img src="/web/uploads/images/portfolio/<?= $photo['photo_name']?>" alt="">
+                    </a>     
     	    		<a href="?id=<?=$id?>&del_photo_id=<?=$photo['id']?>" class="photo_delete">
     	    			<img class="del_icon" src="/web/uploads/images/delete_icon_32px.png" alt="Удалить" title="Удалить фото">
     	    		</a>

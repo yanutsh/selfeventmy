@@ -75,7 +75,11 @@ $city = City::find() ->orderBy('name')->all();
 
         <div class="slider">
             <?php foreach($order['orderPhotos'] as $photo){ ?>}
-                <div><img src="/web/uploads/images/orders/<?= $photo['photo']?>" alt=""></div>
+                <div>
+                    <a href="/web/uploads/images/orders/<?= $photo['photo']?>" class="highslide" onclick="return hs.expand(this)" >
+                        <img src="/web/uploads/images/orders/<?= $photo['photo']?>" alt="">
+                    </a>
+                </div>
             <?php } ?>
         </div>
 

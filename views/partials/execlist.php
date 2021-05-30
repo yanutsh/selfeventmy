@@ -23,10 +23,17 @@ TemplateAsset::register($this);
 <div class="top100">Исполнители ТОП 100</div>
 
 <?php
+//debug($min_price);
+
+$city_new = change_key_new($city, 'id');
+//debug($city_new);    
+$min_price_new = change_key_new($min_price, 'user_id');
+//debug($min_price_new);   
+
 foreach ($exec_list as $el) 
-{ 
-    //print_r ($el)?>
-    <a class="block" href="/cabinet/exec-card?id=<?= $el['id'] ?>">
+{   //debug($el,0);
+    ?>
+    <a class="block" href="/cabinet/user-card?id=<?= $el['id'] ?>">
         <!-- <div class="order_item"> -->
         <div class="order_item execlist">
             <!-- <div class="b_header"> -->
@@ -50,8 +57,18 @@ foreach ($exec_list as $el)
                 </div>  
 
                 <!-- <div class="item_footer"> -->
-                    <div class="city">Москва</div>
-                    <div class="price">10000 ₽</div>
+                    <div class="city">                        
+                        <?php 
+                        $cities=""; 
+                        foreach($el['userCities'] as $id=>$uc) {
+                            if( $cities=="") $cities = $city_new[$uc['city_id']]['name'];
+                            else $cities .= ", ".$city_new[$uc['city_id']]['name'];          
+                        } 
+                        echo $cities; ?>
+                    </div>
+                    <div class="price">от <?=
+                        $min_price_new[$el['id']]['min_price_from']; ?> ₽
+                    </div>
                 <!-- </div>   -->
             <!-- </div> -->
         </div>    
@@ -66,8 +83,8 @@ foreach ($exec_list as $el)
     <div class="top100">Все исполнители</div>
 <?php
     foreach ($exec_list as $el) 
-    { ?>
-        <a href="/cabinet/order-card?id=<?= $el['id'] ?>">
+    {   //debug ($el); ?>
+        <a href="/cabinet/user-card?id=<?= $el['id'] ?>">
             <!-- <div class="order_item"> -->
             <div class="order_item execlist">
                 <!-- <div class="b_header"> -->
@@ -91,8 +108,18 @@ foreach ($exec_list as $el)
                     </div>  
 
                     <!-- <div class="item_footer"> -->
-                        <div class="city">Москва</div>
-                        <div class="price">10000 ₽</div>
+                        <div class="city">                        
+                        <?php 
+                        $cities=""; 
+                        foreach($el['userCities'] as $id=>$uc) {
+                            if( $cities=="") $cities = $city_new[$uc['city_id']]['name'];
+                            else $cities .= ", ".$city_new[$uc['city_id']]['name'];          
+                        } 
+                        echo $cities; ?>
+                    </div>
+                    <div class="price">от <?=
+                        $min_price_new[$el['id']]['min_price_from']; ?> ₽
+                    </div>
                     <!-- </div>   -->
                 <!-- </div> -->
             </div>    

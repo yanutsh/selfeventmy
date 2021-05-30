@@ -176,6 +176,25 @@ function user_photo($avatar) {
 	return "/web/uploads/images/users/nophoto.jpg";
 }
 
+// функция замены ключей массива
+function change_key($key, $new_key, &$arr, $rewrite=true){
+    if(!array_key_exists($new_key,$arr) || $rewrite){
+        $arr[$new_key]=$arr[$key];
+        unset($arr[$key]);
+        return true;
+    }
+        return false;
+}
+
+// функция формирования нового массива с заменой ключей
+function change_key_new($arr,$field_id_name){
+	$arr_new=array();
+	foreach($arr as $key=>$v) {
+       $arr_new[$v[$field_id_name]] = $arr[$key];
+	}	
+	return $arr_new;
+}
+
 
 function sort_files($files) {
 	$files_sort = array();

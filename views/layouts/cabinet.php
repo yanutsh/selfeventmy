@@ -40,8 +40,7 @@ $avatar = $identity['avatar'];
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <?= Html::csrfMetaTags() ?>      
         <title><?= Html::encode($this->title) ?></title>
-        <?php $this->head() ?>
-
+        <?php $this->head() ?>        
     </head>
     <body>
         <?php $this->beginBody() ?>
@@ -135,7 +134,7 @@ $avatar = $identity['avatar'];
 
                         <div class="header_item">
                             <div class="navbar_img">
-                                <a href="<?=Url::to('/cabinet/user-profile')?>">
+                                <a href="<?=Url::to(['/cabinet/user-card','id' => $identity['id']])?>">
                                     <img src="<?= user_photo($avatar)?>" alt="Аватар">
                                 </a>
                             </div>

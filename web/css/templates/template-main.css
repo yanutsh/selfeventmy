@@ -1899,6 +1899,8 @@ footer {
 .regcust p,
 .regcust li{
   font-size: 14px;
+  line-height: 18px;
+  margin-top: 5px;
 }
 
 .b-add-item.registration{
@@ -1911,7 +1913,7 @@ footer {
 }
 
 .regcust ul{ 
-  list-style-type:disc;
+  /*list-style-type:disc;*/
   margin-left: 20px;
   margin-bottom: 30px;
 }

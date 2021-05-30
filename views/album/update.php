@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = 'Update';
             <img src="<?= user_photo($identity['avatar'])?>" alt="">
         </div>
 
-       <!--  <div class="clearfix"></div> -->
         <div class="b_text b_text__tuning">
             <span class="fio"><?= $work_form_name." - ".$identity['username'] ?></span>
         </div>

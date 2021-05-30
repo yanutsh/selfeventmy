@@ -185,7 +185,8 @@ AppAsset::register($this);
 						        <!-- модальное окно Регистрация Конец    -->            
 					        <?php 
 					        } else {?>  <!--  не гость -->
-					            <a href="/logout" class="register active">Выход</a>
+                                <a href="/cabinet" class="register active">В кабинет</a>
+					            <a href="/logout" class="register">Выход</a>
 					        <?php } ?>                            
 					    </div> 
 

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use app\models\AddOrderForm;
 use app\models\Album;
 use app\models\Abonement;
 use app\models\OrderFiltrForm;
@@ -13,25 +14,27 @@ use app\models\Category;
 use app\models\UserCategory;
 use app\models\Subcategory;
 use app\models\City;
-use app\models\User;
 use app\models\Chat;
 use app\models\Dialog;
+use app\models\DocList;
 use app\models\WorkForm;
 use app\models\PaymentForm;
-use app\models\AddOrderForm;
 use app\models\Order;
 use app\models\Review;
 use app\models\OrderCategory;
 use app\models\OrderStatus;
 use app\models\OrderPhoto;
+use app\models\User;
 use app\models\UserCity;
 use app\models\UserEducation;
 use app\models\UserAbonement;
 use app\models\NotificationForm;
+use app\models\VisitLog;
 
 use yii\web\UploadedFile;
 use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
+use yii\db\Query; 
 
 // Контроллер Личного Кабинета ------------------------------------------- - 
 class CabinetController extends AppController {  
@@ -50,9 +53,10 @@ class CabinetController extends AppController {
     public function actionIndex()	
     {
       // получить число новых сообщений из БД по заказам текущего Юзера
-        Yii::$app->runAction('cabinet/get-new-mess');            
-      // запомнили в сессию 
-        
+        Yii::$app->runAction('cabinet/get-new-mess'); 
+      // получить информацию из БД и записать в кеш
+        Yii::$app->runAction('cabinet/get-data-from-cache');            
+              
         $model = new OrderFiltrForm();
       // Если пришёл AJAX запрос
         if (Yii::$app->request->isAjax) { 
@@ -167,7 +171,41 @@ class CabinetController extends AppController {
             {return Abonement::find() ->orderBy('price ASC')->asArray()->all();});  
         //debug( $abonement);
 
-        return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats'));              
+        return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats'));
+
+      echo("<script>
+                $(window).unload(function(){ 
+                alert('Пока, пользователь!''); 
+      }); 
+      </script>");             
+    }
+
+    // Запись посещения юзера в журнал *********************************************
+    public function actionLogUser() {
+        $session = Yii::$app->session;
+        
+        // проверяем наличие в логе пары user_id  и session_id
+        $visitlog = VisitLog::find()->where(['and', ['user_id'=>Yii::$app->user->id, 'session_id'=>Yii::$app->session->id]])->one();
+        
+        if($visitlog) {  //"Есть запись в Логе" - пишем время обновления);
+            $visitlog->update_time = date('Y-m-d H:i:s');
+            $visitlog->save();
+            debug('Обновление update_time записан',0);
+        }
+
+        else {  //"НЕТ запись в Логе" - делаем новую запись);            
+            $visitlog = new VisitLog;
+            $visitlog->user_id = Yii::$app->user->id;
+            $visitlog->session_id = Yii::$app->session->id;
+            if ($visitlog->save()) echo('Log записан');
+            else debug('Log НЕ записан');
+        }
+
+        $min_date = VisitLog::find()->min('enter_time');  // первый вход юзера
+        $max_date = VisitLog::find()->max('update_time'); // последняя активность юзера
+        
+        debug($max_date,0);
+        debug($min_date);
     }
 
     // ЛК - список Чатов  ********************************************
@@ -284,6 +322,15 @@ class CabinetController extends AppController {
     public function actionExecutiveList() {
         $model = new ExecFiltrForm();
         
+        // определяем минимальные цены по исполнителям
+        $min_price  = (new Query())
+            ->select(['user_id', 'MIN(price_from) as min_price_from'])
+            ->from(UserCategory::tableName('yii_user_category'))            
+            ->groupBy(['user_id'])
+            ->all();
+
+        //debug($min_price);    
+
         // Если пришёл AJAX запрос
         if (Yii::$app->request->isAjax) { 
           // Устанавливаем формат ответа JSON
@@ -334,8 +381,8 @@ class CabinetController extends AppController {
                   ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
                   ['<=', 'budget_from', $model->budget_to],
                   ['work_form_id' => $model->work_form_id],
-                 // ['in','city_id', $model->city_id],
-                 // [$prep_compare, 'prepayment', $prep_value],
+                  //['in','city_id', $model->city_id],
+                  // [$prep_compare, 'prepayment', $prep_value],
                                       
                             ])
               ->orderBy('reyting '.$reyting_order);
@@ -370,24 +417,27 @@ class CabinetController extends AppController {
                     
 
               $count= count($exec_list); 
-              //debug($count) ;            
+              //debug($count) ; 
+
+              $cache = \Yii::$app->cache;
+              $city = $cache->get('city');           
 
               $this->layout='contentonly';
               return [
                   "data" => $count,
-                  "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model')),  
+                  "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model', 'min_price','city')),  
                   "error" => null
               ];  
 
            
-        } //else { //  первый раз открываем страницу - показываем все заказы
+        } //else { //  первый раз открываем страницу - показываем всех исполнителей
           
         $exec_list = User::find()
                 ->Where(['isexec' => 1])
                 //  ->filterWhere(['AND',                     
                 //    ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
                               //])
-                ->with('workForm', 'category')
+                ->with('workForm', 'category', 'userCities')
                 ->orderBy( 'reyting DESC')
                 // ->orderBy('added_time DESC')
                 ->asArray()->all();  //count();
@@ -395,12 +445,13 @@ class CabinetController extends AppController {
         $count= count($exec_list);            
         //debug( $exec_list);
         
-        $category = Category::find() ->orderBy('name')->all();
-        $city = City::find() ->orderBy('name')->all();
-        $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
-        $payment_form= PaymentForm::find() ->orderBy('payment_name')->all();
+        $cache = \Yii::$app->cache;
+        $category = $cache->get('category');
+        $city = $cache->get('city');
+        $work_form = $cache->get('work_form');
+        $payment_form = $cache->get('payment_form');
         
-        return $this->render('execList', compact('exec_list','model', 'category', 'city', 'work_form', 'payment_form', 'count'));              
+        return $this->render('execList', compact('exec_list','model', 'category', 'city', 'work_form', 'payment_form', 'count', 'min_price'));              
     }
 
     // Добавление нового заказа  *****************************************************
@@ -487,10 +538,12 @@ class CabinetController extends AppController {
     }
 
     // вывести карточку Исполнителя  Заказчику****************************************
-    public function actionExecCard() {
-      // отображение карточки Исполнителя для Заказчика
-      // получить данные Исполнителя из БД
-      $exec = User::find()
+    //public function actionExecCard() {
+    // вывести карточку Исполнителя или Заказчика ************************************ 
+    public function actionUserCard() {  
+      // отображение карточки Исполнителя или Заказчика
+      // получить данные Юзера из БД
+      $user = User::find()
               ->Where(['id'=> $_GET['id']])
               ->with('category', 'subcategory', 'workForm', 'cities', 'userEducations')
               ->asArray()
@@ -502,7 +555,7 @@ class CabinetController extends AppController {
               ->Where([ 'user_id'=> $_GET['id'] ])
               ->with('category','orderStatus','orderCity', 'orderCategory', 'orderPhotos', 'workForm', 'user')
               ->asArray()
-              ->one();
+              ->all();
       //debug($orders_list);        
       //Отзывы об Исполнителе 
       $reviews=Review::find()->where([ 'for_user_id'=> $_GET['id'] ])
@@ -515,11 +568,11 @@ class CabinetController extends AppController {
       //debug($albums); 
 
       // вывести карточку Исполнителя
-      return $this->render('execCard', compact('exec','orders_list','reviews', 'albums')); 
+      return $this->render('userCard', compact('user','orders_list','reviews', 'albums')); 
     }
 
     // вывести карточку Заказчика  Исполнителю ***************************************
-    public function actionUserCard() {
+    public function actionUserCardOldddd() {
 
       // получить данные Заказчика из БД
       $user = User::find()
@@ -741,7 +794,7 @@ class CabinetController extends AppController {
             return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory'));           
           }elseif ($data['field_name'] == 'add_education'){ //добавляем образование  
             
-            //debug($data,0);
+            //debug($data);
             $user_education = new UserEducation();           
             $user_education->load($data);           
             //debug($user_education);
@@ -793,8 +846,8 @@ class CabinetController extends AppController {
             // обновляем данные и заносим в кеш
               $user_education = UserEducation::find()
                     ->where(['user_id'=>$user_id])->asArray()->all();
-              $cache->set('user_education', $user_education);   
-                          
+              $cache->set('user_education', $user_education);                
+
             // возвращаемся в профиль и обновляем по Pjax!!!!!!!!!!.             
             return $this->render('profileInfo', compact('user','city','user_city', 'category', 'user_category','subcategory','user_subcategory', 'user_education')); 
           }            
@@ -1016,11 +1069,22 @@ class CabinetController extends AppController {
       return $this->render('abonementChoose',compact('abonement','freeze','user_abonement'));     
   }
 
-  // добавление паспортных данных Исполнителя
-  // public function actionAddPassport(){
-    
-  //   return $this->render('addPassport');
-  // }  
+  // Установка режима предоплаты Исполнителя
+  public function actionSetPrepayment(){
+    if (Yii::$app->request->isAjax) { 
+        $data = Yii::$app->request->post();
+        $identity = Yii::$app->user->identity;
+        //debug($identity);
+        if ($data['status']==1) {
+          $identity['isprepayment'] = 1;         
+        }else{
+          $identity['isprepayment'] = 0;          
+        } 
+        $identity->save();
+        return "Установлена предоплата";          
+    }
+    return"НЕ Установлена предоплата";    
+  }  
 
   // Пользовательская функция Сортировки многомерного массива По возрастанию:
   public function cmp_function($a, $b){

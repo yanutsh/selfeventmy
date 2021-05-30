@@ -392,16 +392,19 @@ $identity = Yii::$app->user->identity;
 
 						        <!-- Образование -->
 						        <input hidden type="text" name="field_name" value="edit_education">
-						        						        
+
+						       								        
 						        <?= $form->field($model[$i], 'id')->hiddenInput()->label(false) ?>
 						        <?= $form->field($model[$i], 'institute') ?>
 						        <?= $form->field($model[$i], 'course') ?>
 						        <?php   
 						        	if(!is_null($model[$i]->start_date))
 						        		$start_date = convert_date_en_ru($model[$i]->start_date);
+						        	else $start_date = null;
 						        	
 						        	if(!is_null($model[$i]->end_date))
-						        		$end_date = convert_date_en_ru($model[$i]->end_date);						        	
+						        		$end_date = convert_date_en_ru($model[$i]->end_date);
+						        	else $end_date = null;					        	
 						        ?>
 						        <div class="form-group">
 		                            <label class="control-label">Даты обучения</label>'
@@ -594,11 +597,61 @@ $identity = Yii::$app->user->identity;
         <!-- Контактные данные Конец-->
 
         <!-- Редактирование документов -->
-	        <div class="order_content__subtitle">
-            	<span>Редактирование документов</span>
-            	<a href="<?= Url::to('/doc/update')?>" class="text_details profile">Редактировать</a>
-            </div>	
-        <!-- Редактирование документов  Конец-->    	
+          	<?php if ($identity['isexec']) {?>
+
+		        <div class="order_content__subtitle">
+	            	<span>Редактирование документов</span>
+	            	<a href="<?= Url::to('/doc/update')?>" class="text_details profile">Редактировать</a>
+	            </div>
+
+	            
+		<!-- Редактирование документов  Конец-->
+
+		<!-- Установка предоплаты Конец-->
+				<div class="order_content__subtitle">              	
+	            	<div class="form-group exactly">                    
+		                <span class="prepayment"><?php if ($identity['isprepayment']) echo 'Работаю по предоплате'; else echo 'Работаю без предоплаты';?></span>                         
+		                <div class="toggle-button-cover"> 
+		                      <div class="button-cover">
+		                        <div class="button r" id="button-1">
+		                          <input type="checkbox" class="checkbox tuning" name= 'isprepayment' 
+			                      <?php if ($identity['isprepayment']) echo 'checked';?>>
+		                          <div class="knobs"></div>
+		                          <div class="layer"></div>
+		                        </div>
+		                      </div>
+		                </div>
+	            	</div>  
+            	</div>
+            <?php 	
+			$script = <<< JS
+				$('input.checkbox.tuning').on('change', function(){					
+					if ($('input.checkbox').is(':checked')){
+						$('.prepayment').text('Работаю по предоплате.');
+						status=1;
+					} else {						
+						$('.prepayment').text('Работаю без предоплаты.'); 
+						status=0; 
+					}
+					$.ajax({
+					  type: 'POST',
+					  url: '/cabinet/set-prepayment?action=sample2',
+					  data: 'status='+status,
+					  success: function(data){
+					    console.log(data);
+					  }
+
+					});
+					
+				})
+			JS;
+			//маркер конца строки, обязательно сразу, без пробелов и табуляции
+			$this->registerJs($script, yii\web\View::POS_READY);
+			?>	
+        <!-- Установка предоплаты Конец-->
+
+        	<?php } ?>    	
+           	
 
         <!-- Удаление профиля-->
         	<?php Pjax::begin(); ?>
@@ -619,7 +672,7 @@ $identity = Yii::$app->user->identity;
 					]);
             		
 					$form = ActiveForm::begin([
-						'id' => 'delete-form',
+						'id' => 'delete-form-profile',
 						'options' => [
 	                        'data-pjax' => true,	                       
 	                        ],
@@ -679,7 +732,7 @@ $identity = Yii::$app->user->identity;
 				]);
 	    		
 				$form = ActiveForm::begin([
-					'id' => 'delete-form',
+					'id' => 'delete-form-last',
 					'options' => [
 	                    'data-pjax' => true,	                       
 	                    ],
@@ -705,11 +758,12 @@ $identity = Yii::$app->user->identity;
 			// модальное окно - Удаление последнее инфо -Конец 
 			Pjax::end();	
 			?>
-
+		<!-- Удаление профиля Конец -->
+		
 			<div class="order_buttons">
 	            <a href="<?= Url::to('/cabinet/user-tuning') ?>" class="register__user active__button save">В настройки</a>          
 	        </div>          
-        <!-- Удаление профиля Конец -->
+        
 
 		</div>
     </div>        

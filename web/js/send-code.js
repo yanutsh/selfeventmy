@@ -31,7 +31,8 @@ $(document).on('pjax:success', function() {
 /**
 * Set timer countdown in seconds with callback
  */ 
-function runCountdown(timer=60){	 
+function runCountdown(timer=60){
+	// timer задается в yii params	 
 	console.log ('timer='+timer);
 	$('#countdown-1').timeTo( 
 	    timer,             

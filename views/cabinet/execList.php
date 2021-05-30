@@ -87,7 +87,7 @@ TemplateAsset::register($this);
 				                <div class="input__block field-orderfiltrform-city_id">
 				                	<a href="#!" id="exec_reset_city">Cбросить</a>
 				                	<label class='control-label'>Город (города)</label>
-					                <select name="ExecFiltrForm[city_id][]" id="execfiltrform-city_id" class="js-chosen" multiple="multiple">
+					                <select name="ExecFiltrForm[city_id][]" id="execfiltrform-city_id" class="js-chosen city" multiple="multiple">
 					                	<?php foreach($city as $c) {?>
 					                		<option value=<?= $c['id']?>><?= $c['name']?> </option>
 					                	<?php } ?>				                	
@@ -190,7 +190,8 @@ TemplateAsset::register($this);
 
 										    				
 			    				<?php  	
-									echo $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model'));
+			    				//debug($model);
+									echo $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model','city', 'min_price'));
 								?>	
 			    			</div>
 			    			

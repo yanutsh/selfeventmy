@@ -636,7 +636,7 @@ body{
 		line-height: 18px;
 	}
 
-	.b_text p.check{
+	.b_text.b_text__exec p.check{
 		font-size: 14px;
 		line-height: 14px;
 		color: #4cd964;
@@ -837,6 +837,10 @@ body{
     	color: #4cd964;
 	}
 
+	.personal_check .checked{
+		top: 0;
+	}
+
 	.text.text_moon{
 		margin-top: 10px;
 	}
@@ -900,6 +904,11 @@ body{
         position: relative;
     	top: -3px;
     	margin-left: 10px;
+	}
+
+	.statistic.statistic__tuning{
+		width: 50%;
+        margin: 32px auto;
 	}
 /*******************  Настройки Юзера  Конец **********************************/
 
@@ -979,6 +988,11 @@ body{
 	    text-decoration: none;
 	    color: #AE4A84;
 	}
+
+	.order_item.execlist .city{
+		display: inline-block;
+    	width: 85%;
+	}
 /*******************  Лента исполнителей ExecList  Конец  ********************/
 
 /*******************  Карточка исполнителя **********************************/
@@ -1044,8 +1058,8 @@ body{
 		text-align: center;
 	}
 
-	p.top100{
-		font-size: 12px;
+	.filtr.filtr_exec p.top100{
+		font-size: 14px;
 		color: #AE4A84;
 		margin-bottom: 32px;
 	}
@@ -1084,8 +1098,8 @@ body{
 		width: 	70%;
 		font-size: 24px;
 	    font-weight: bold;    
-	    color: #AE4A84
-
+	    color: #AE4A84;
+	    margin-bottom: 20px;
 	}
 
 	.lk__main__exec div{
@@ -1095,7 +1109,7 @@ body{
 	.b-right{
 		position: absolute;
 	    right: 74px;
-	    top: 24px;
+	    top: 18px;  /*24px;*/
 	}
 
 	.b-right .letter div{
@@ -1287,6 +1301,11 @@ body{
    		text-align: center;
     	display: block;
     	margin-top: 30px;
+	}
+
+	#modal_delete.text_details.profile{
+		position: absolute;
+		right: 0
 	}
 
 /*******************  Профиль Юзера Конец*****************************/

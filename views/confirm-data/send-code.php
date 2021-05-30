@@ -48,8 +48,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                         <div class="resend">
                             <div class="count__caption">Повторно выслать через - </div>
                             <div id="countdown-1"></div>
-                        </div>
-                        <!-- <p><button id="reset-1" type="button">Reset this timer</button></p>  -->                   
+                        </div>                                       
                     </div>
 
                 <?php ActiveForm::end(); ?>

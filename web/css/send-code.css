@@ -3,6 +3,15 @@
     display: inline-block;
 }
 
+#countdown-1{
+    position: relative;
+    top: 5px;
+}
+
+#countdown-1 > div{
+    height: 18px!important;
+}
+
 .count__caption{
 	font-size: 12px;
 }

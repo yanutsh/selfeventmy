@@ -25,7 +25,8 @@ if(isset($files[0]['name']) && !empty($files[0]['name']))
     $filename=date('YmdHis').rand(100,1000) . '.' . $imageFormat;    
     
     $imageFullName = $_SERVER['DOCUMENT_ROOT'].$path_to_load.$filename;
-   
+    //debug($imageFullName);
+
     // Сохраняем тип изображения в переменную
     $imageType = $image['type'];
     $imageSize = $image['size'];

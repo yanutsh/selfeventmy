@@ -26,7 +26,7 @@ class TemplateAsset extends AssetBundle {
         'css/templates/template-main.css'        
     ];
     public $js = [
-        //'js/script.js',
+        'js/script.js',
         //'js/fonts.js',
     ];
     public $depends = [

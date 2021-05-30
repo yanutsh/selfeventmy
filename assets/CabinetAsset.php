@@ -23,16 +23,20 @@ class CabinetAsset extends AssetBundle {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/cabinet.css',
+        'css/highslide.css',        
         'css/chosen.min.css', 
         'css/slick.css', 
         'css/slick-theme.css',
+        'css/cabinet.css',
+        
     ];
     public $js = [
         //'js/bootstrap.3.4.min.js',
-        'js/cabinet.js',
+        'js/highslide-with-gallery.js',        
         'js/chosen.jquery.js',
         'js/slick.min.js',
+        'js/cabinet.js',
+        
     ];
     public $depends = [
         'app\assets\AppAsset',

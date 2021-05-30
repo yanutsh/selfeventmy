@@ -20,6 +20,7 @@ use app\models\City;
  * @property string $email E-mail
  * @property int $email_confirm 1-подтвержден
  * @property int $isexec
+ * @property int $isprepayment
  * @property string $password Пароль
  * @property string|null $auth_key
  * @property string|null $password_reset_token

@@ -416,13 +416,16 @@ class PageController extends AppController
         if(isset($_FILES[0]['name']) && !empty($_FILES[0]['name'])) 
           {
             require_once('../libs/upload_tmp_photo.php');             
-           } 
+          } 
         
         //return 'Загрузили аватар';
       }
 
       $model = new RegForm();
-      $city = City::find()->asArray()->orderBy('name Asc')->all();                
+      //$city = City::find()->asArray()->orderBy('name Asc')->all(); 
+      $cache = \Yii::$app->cache;
+      $city =  $cache->get('city');              
+      $doc_list = $cache->get('doc_list');
 
       if (Yii::$app->request->isPjax && $model->load(Yii::$app->request->post()) && $model->check_validate())
       {  
@@ -478,6 +481,10 @@ class PageController extends AppController
                   // записываем фотографии в БД  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                   $user_doc = new UserDoc();
                   $user_doc->saveUserDoc($new_id);
+
+                  // Записываем Юзеру признак ввода документов
+                  $user->isnewdocs = 1;
+                  $user->save();
                   
                 } else debug("Ошибка - Фотографии не загружены");
               }
@@ -491,7 +498,8 @@ class PageController extends AppController
                   $user_city->save();
                 }
               }  
-            //echo "В БД записано";         
+            //echo "В БД записано"; 
+
             
             // перейти к подтверждению данных  
             Yii::$app->getResponse()->redirect(
@@ -503,7 +511,7 @@ class PageController extends AppController
           }else echo "Не записано в БД";     
       }    
 
-      return $this->render('regUser', compact('model','city'));
+      return $this->render('regUser', compact('model','city','doc_list'));
     }
 
     public function actionEditavatar()

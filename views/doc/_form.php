@@ -4,10 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\Album */
-/* @var $form yii\widgets\ActiveForm */
-//debug($doc_photoes);
 ?>
 
 <div class="album-form">
@@ -34,9 +30,9 @@ use yii\widgets\Pjax;
                 $i = 1;
                 foreach($doc_photoes as $photo) {?>
         	    	<div class="photo_item">
-                        <!-- <a href="/web/uploads/images/docs/<?= $photo['photo']?>" onclick="return hs.expand(this)" > -->
+                        <a href="/web/uploads/images/docs/<?= $photo['photo']?>" class="highslide" onclick="return hs.expand(this)" >
         	    		     <img id="preview<?= $i ?>" src="/web/uploads/images/docs/<?= $photo['photo']?>" alt="">
-                        <!-- </a> -->
+                        </a>
         	    		<a href="?del_photo_id=<?=$photo['id']?>&photo_name=<?= $photo['photo']?>" class="photo_delete">
         	    			<img class="del_icon" src="/web/uploads/images/delete_icon_32px.png" alt="Удалить" title="Удалить фото">
         	    		</a>

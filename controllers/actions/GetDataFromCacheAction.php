@@ -7,6 +7,7 @@ use yii\base\Action;
 use app\models\Abonement;
 use app\models\Category;
 use app\models\City;
+use app\models\DocList;
 use app\models\WorkForm;
 use app\models\PaymentForm;
 
@@ -45,6 +46,9 @@ class GetDataFromCacheAction extends Action
 	        $cache_data['abonement_freeze'] = $cache->getOrSet('abonement_freeze',function()
 	             {return Abonement::find()->where(['>','freeze_days','0']) 
 	                   ->orderBy('price ASC')->asArray()->all();});
+
+	        $cache_data['doc_list'] = $cache->getOrSet('doc_list',function()
+	             {return DocList::find()->orderBy('doc_name ASC')->asArray()->all();});
 
 	        // debug($cache_data['abonement_nofreeze']);
 	        

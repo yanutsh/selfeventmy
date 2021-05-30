@@ -1,14 +1,12 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use app\assets\TemplateAsset;
 use app\assets\RegistrationAsset;
 use app\models\WorkForm;
 use yii\widgets\Pjax;
-
-//require_once('../libs/user_photo.php');
-
 
 $this->title = 'Albums';
 $this->params['breadcrumbs'][] = $this->title;
@@ -75,7 +73,12 @@ RegistrationAsset::register($this);
             ]); 
         Pjax::end(); 
         ?>
+    <div class="order_buttons">
+        <a href="<?= Url::to('/cabinet/user-tuning') ?>" class="register__user active__button save">В настройки</a>          
+    </div>  
+
     </div>
+    
     
 
 </div>

@@ -29,6 +29,10 @@ class DocController extends AppController
         //include_once('../libs/get_session.php');
         $identity = Yii::$app->user->identity;
         $user_id = $identity['id'];
+        $cache = \Yii::$app->cache;
+        $doc_list = $cache->get('doc_list');
+        //debug ($doc_list);
+        
 
         // если пришел запрос Pjax
         if (Yii::$app->request->isPjax) { // && isset($_GET['del_photo_id'])) {
@@ -53,7 +57,9 @@ class DocController extends AppController
             // если есть фотки для добавления
             $max_doc_photos=5;
             if(!empty($_FILES['DocPhoto']['name'][0])) {  
-            	//debug($data['save_docs']);
+            	
+                if(empty($data['save_docs'])) $data['save_docs']=0;
+                //debug("data['save_docs']=".$data['save_docs']);
             	$kol_to_add = $max_doc_photos - $data['save_docs'];  
                 // сортировка файловых данных к удобному формату
                 $files = sort_files($_FILES['DocPhoto']);                      
@@ -61,6 +67,7 @@ class DocController extends AppController
                 
                 // залить файлы на сервер
                 $path_to_load = '/web/uploads/images/docs/'; 
+                //$path_to_load = $_SERVER["DOCUMENT_ROOT"]. '/web/uploads/images/docs/'; 
                 require_once('../libs/upload_tmp_photo_u.php');
 
                 // записать наименования файлов в БД
@@ -98,7 +105,7 @@ class DocController extends AppController
         render_docs:        
         $doc_photoes = UserDoc::find()->where(['user_id'=>$user_id])->asArray()->all(); 
 
-        return $this->render('update', compact('doc_photoes','identity'));     
+        return $this->render('update', compact('doc_photoes','identity','doc_list'));     
     } 
 
     public function actionDocreceived(){

@@ -13,6 +13,7 @@ $( ".polzunok" ).slider({
 const canvas = document.getElementById("canvas");
 const wrapper = document.getElementById("wrapper");
 const ctx = canvas.getContext("2d");
+	
 
 //Поля ввода
 const widthBox = document.getElementById("widthBox");    	// 150
@@ -86,7 +87,6 @@ image.addEventListener("load", function () { Init(); });
 //image.src = "images/photo.jpg";
 
 window.addEventListener("resize", function () { Init(); });
-
 
 //}
 

@@ -38,8 +38,36 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
     
         <?php   
         if ( $identity['isexec'] ) {
-            if( $identity['isconfirm']==1 ){ 
-            //Если профиль проверен-показываем РЕЙТИНГ>
+            if( $identity['isconfirm']==1 ){  ?>
+                <!-- Если профиль проверен-показываем РЕЙТИНГ> -->
+                <div class="statistic statistic__tuning">
+                    <div class="st-item">
+                        <div class="b_stat">
+                            <p class="reiting_num first">5.0</p>
+                            <p class="reiting_text">Рейтинг</p>
+                        </div>
+                    </div>
+                    <div class="st-item">
+                        <div class="b_stat">
+                            <p class="reiting_num"><?php 
+                            if($orders_list) echo count($orders_list);
+                            else echo("0"); ?>                          
+                            </p>
+                            <p class="reiting_text">Заказы</p>
+                        </div>
+                    </div>
+                    <div class="st-item">
+                        <div class="b_stat">
+                            <p class="reiting_num"><?php 
+                            if($reviews) echo count($reviews);
+                            else echo "0";
+                                ?>
+                            </p>
+                            <p class="reiting_text">Отзывы</p>
+                        </div>
+                    </div>
+                </div>
+            <?php    
             }elseif($identity['isconfirm']== -1) {
             // Предупреждение об ошибках в документах ?> 
                 <div class="check_need">
@@ -101,9 +129,10 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
         <div class="order_content__subtitle">
             <img src="/web/uploads/images/envelope.png" alt="">
-            <a href="/cabinet/<?php
-                if($identity['isexec']) echo"exec-card?id=".$identity['id']; 
-                else echo"user-card?id=".$identity['id'];?>" class="text text__anketa">Просмотр анкеты</a>
+            <!-- <a href="/cabinet/<?php
+                //if($identity['isexec']) echo"exec-card?id=".$identity['id']; 
+                //else echo"user-card?id=".$identity['id'];?>" class="text text__anketa">Просмотр анкеты</a> -->
+                <a href="/cabinet/user-card?id=<?= $identity['id'] ?>" class="text text__anketa">Просмотр анкеты</a>
         </div>    
             
          

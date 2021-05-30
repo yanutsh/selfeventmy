@@ -26,7 +26,7 @@ class AlbumController extends AppController
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['POST','GET'],
                 ],
             ],
         ];
@@ -178,6 +178,7 @@ class AlbumController extends AppController
      */
     public function actionDelete($id) // $id - id альбома
     {
+        //debug("Удаляем альбом");
         $this->findModel($id)->delete();
        
         include_once('../libs/get_session.php');
@@ -198,6 +199,7 @@ class AlbumController extends AppController
     protected function findModel($album_id)
     {
         if (($model = Album::findOne($album_id)) !== null) {
+            //debug($model);
             return $model;
         }
 

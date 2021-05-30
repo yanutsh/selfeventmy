@@ -50,8 +50,9 @@ foreach ($orders_list as $ol)
             </div>
         </div>
     </a>
-
-    <?php if ($_SESSION['identity']['isexec']) {?>
+    
+    <?php if (yii::$app->user->identity->isexec && 
+              yii::$app->user->identity->isconfirm) {?>
     <div class="answer">
         <div class="text">Ваше предложение будет Х в рейтинге заказа</div>
         <div class="otklic">Откликнуться за ХХХ ₽</div>

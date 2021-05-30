@@ -13,7 +13,7 @@ use app\models\User;
 class ExecFiltrForm extends Model
 {
     public  $category_id;       // Категория услуг
-    public  $city_id;           // Городния
+    public  $city_id;           // Города
     public  $date_from;         // Дата от       
     public  $date_to;           // Дата до
     public  $budget_from ;      // Бюджет от
