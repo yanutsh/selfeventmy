@@ -54,7 +54,7 @@ class CabinetController extends AppController {
     {
       // получить число новых сообщений из БД по заказам текущего Юзера
         Yii::$app->runAction('cabinet/get-new-mess'); 
-      // получить информацию из БД и записать в кеш
+      // получить информацию из БД и записать в кеш         
         Yii::$app->runAction('cabinet/get-data-from-cache');            
               
         $model = new OrderFiltrForm();
@@ -321,6 +321,14 @@ class CabinetController extends AppController {
     // ЛК - фильтр и список Исполнителей ********************************************
     public function actionExecutiveList() {
         $model = new ExecFiltrForm();
+
+        // данные из кеша (БД)
+        $cache = \Yii::$app->cache;
+        $category = $cache->get('category');
+        $city = $cache->get('city');
+        $work_form = $cache->get('work_form');
+        $payment_form = $cache->get('payment_form');
+        //debug($payment_form); 
         
         // определяем минимальные цены по исполнителям
         $min_price  = (new Query())
@@ -328,9 +336,10 @@ class CabinetController extends AppController {
             ->from(UserCategory::tableName('yii_user_category'))            
             ->groupBy(['user_id'])
             ->all();
-
-        //debug($min_price);    
-
+        //debug($min_price); 
+        $min_price_new = change_key_new($min_price,'user_id');
+        //debug($min_price_new); 
+        
         // Если пришёл AJAX запрос
         if (Yii::$app->request->isAjax) { 
           // Устанавливаем формат ответа JSON
@@ -340,11 +349,11 @@ class CabinetController extends AppController {
           //debug($data);
 
           if ($data['data']=='reset'){ // сброс фильтра = модель не загружаем
-            $date_from = convert_date_ru_en(Yii::$app->params['date_from']);
-            $date_to = convert_date_ru_en(Yii::$app->params['date_to']);  
+          //   $date_from = convert_date_ru_en(Yii::$app->params['date_from']);
+          //   $date_to = convert_date_ru_en(Yii::$app->params['date_to']);  
           }elseif ($model->load($data)) { // Получаем данные модели из запроса
-            $date_from = convert_date_ru_en($model->date_from);
-            $date_to = convert_date_ru_en($model->date_to);
+          //   $date_from = convert_date_ru_en($model->date_from);
+          //   $date_to = convert_date_ru_en($model->date_to);
           }else {
               // Если нет, отправляем ответ с сообщением об ошибке
               return [
@@ -360,17 +369,17 @@ class CabinetController extends AppController {
           //debug ($reyting_order);
 
           // фильтрация и определение количества заказов 
-          // астройки фильтра по предоплате
-          if ( $model->prepayment == 1)  {      // без предоплаты
-              $prep_compare = "=";
-              $prep_value = '0';
-          }elseif ( $model->prepayment == 2) {  // c предоплатoй
-              $prep_compare = ">=";
-              $prep_value = '100';
-          }else{
-              $prep_compare = ">=";             // любой вариант
-              $prep_value = '0';
-          } 
+          // настройки фильтра по предоплате
+          // if ( $model->prepayment == 0)  {      // без предоплаты
+          //     $prep_compare = "=";
+          //     $prep_value = '0';
+          // }elseif ( $model->prepayment == 1) {  // c предоплатoй
+          //     $prep_compare = ">=";
+          //     $prep_value = '100';
+          // }else{
+          //     $prep_compare = ">=";             // любой вариант
+          //     $prep_value = '0';
+          // } 
 
             //debug ($model); 
 
@@ -378,33 +387,32 @@ class CabinetController extends AppController {
               ->filterWhere(['AND',
                   ['isexec' => 1],                       
                   //['between', 'added_time', $date_from, $date_to],
-                  ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
-                  ['<=', 'budget_from', $model->budget_to],
-                  ['work_form_id' => $model->work_form_id],
-                  //['in','city_id', $model->city_id],
-                  // [$prep_compare, 'prepayment', $prep_value],
-                                      
+                  // ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
+                  //['<=', 'budget_from', $model->budget_to],
+                  ['work_form_id' => $model->work_form_id],     // по форме работы
+                  ['isprepayment' => $model->prepayment],       // по предоплате
                             ])
               ->orderBy('reyting '.$reyting_order);
+               
+            // Фильтр исполнителей по категориям услуг 
+            if ($model->category_id)                    
+                $query->andWhere(['id' => UserCategory::find()->select('user_id')->andWhere(['category_id'=>  $model->category_id])]);
 
-               /////->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');
+            // Фильтр исполнителей по городам  
+            if ($model->city_id)                    
+                $query->andWhere(['id' => UserCity::find()->select('user_id')->andWhere(['city_id'=>  $model->city_id])]); 
 
-              //debug($query, false);
+            // Фильтр исполнителей по стоимости            
+            if ($model->budget_from)              
+              $query->andWhere(['id' => UserCategory::find()->select('user_id')->andWhere([
+                '>=', 'price_from', $model->budget_from]) ]);
 
-            if ($model->category_id)  
-                $query->andWhere(['id' => ExecCategory::find()->select('user_id')->andWhere(['category_id'=>  $model->category_id])]);                 
-              
-            // debug( $pages);
-            $exec_list = $query->all();       
-            $count=$query->count(); // найдено заказов Всего
-            //debug( $count);
+            if ($model->budget_to)              
+              $query->andWhere(['id' => UserCategory::find()->select('user_id')->andWhere([
+                '<=', 'price_to', $model->budget_to]) ]);
 
-            $category = Category::find()->orderBy('name')->all();
-            $city = City::find() ->orderBy('name')->all();
             
-            $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
-            $payment_form= PaymentForm::find() ->orderBy('payment_name')->all();
-            //$order_status = OrderStatus::find() ->orderBy('name')->all();
+
 
               // Фильтр по Формам работы
               // if (!$model->work_form_id == "") {  // если значение фильтра установлено
@@ -414,22 +422,19 @@ class CabinetController extends AppController {
               //     }                  
               //   }                  
               // }
-                    
 
-              $count= count($exec_list); 
-              //debug($count) ; 
+              
+              $exec_list = $query->all();       
+              $count = $query->count(); // найдено исполнителей Всего              
 
-              $cache = \Yii::$app->cache;
-              $city = $cache->get('city');           
+              //debug($model);          
 
               $this->layout='contentonly';
               return [
                   "data" => $count,
-                  "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model', 'min_price','city')),  
+                  "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model', 'city', 'min_price')),  
                   "error" => null
-              ];  
-
-           
+              ]; 
         } //else { //  первый раз открываем страницу - показываем всех исполнителей
           
         $exec_list = User::find()
@@ -443,13 +448,7 @@ class CabinetController extends AppController {
                 ->asArray()->all();  //count();
 
         $count= count($exec_list);            
-        //debug( $exec_list);
-        
-        $cache = \Yii::$app->cache;
-        $category = $cache->get('category');
-        $city = $cache->get('city');
-        $work_form = $cache->get('work_form');
-        $payment_form = $cache->get('payment_form');
+        //debug( $exec_list);        
         
         return $this->render('execList', compact('exec_list','model', 'category', 'city', 'work_form', 'payment_form', 'count', 'min_price'));              
     }

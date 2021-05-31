@@ -187,7 +187,7 @@ function change_key($key, $new_key, &$arr, $rewrite=true){
 }
 
 // функция формирования нового массива с заменой ключей
-function change_key_new($arr,$field_id_name){
+function change_key_new($arr, $field_id_name){
 	$arr_new=array();
 	foreach($arr as $key=>$v) {
        $arr_new[$v[$field_id_name]] = $arr[$key];

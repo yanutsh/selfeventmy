@@ -964,6 +964,9 @@ body{
 
 	.execlist p.check{
 		margin-top: 6px;
+	    color: #4cd964;
+	    font-weight: bold;
+	    font-size: 14px;
 	}
 
 	.exec_details p {

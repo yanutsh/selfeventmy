@@ -14,10 +14,6 @@ use yii\widgets\Pjax;
 
 TemplateAsset::register($this);
 //CabinetAsset::register($this);
-//require_once('../libs/time_ago.php');
-//require_once('../libs/user_photo.php');
-
-//debug($model['only_top']);
 ?>
 
 <div class="top100">Исполнители ТОП 100</div>
@@ -28,7 +24,9 @@ TemplateAsset::register($this);
 $city_new = change_key_new($city, 'id');
 //debug($city_new);    
 $min_price_new = change_key_new($min_price, 'user_id');
-//debug($min_price_new);   
+//debug($min_price_new); 
+  
+//debug("only_top=".$model['only_top'],0);
 
 foreach ($exec_list as $el) 
 {   //debug($el,0);
@@ -44,7 +42,9 @@ foreach ($exec_list as $el)
                 <div class="b_text">
                     <span class="fio"><?= $el['username']." - ".$el['workForm']['work_form_name'] ?></span>
                     <p class="title">Услуги: <?= $el['category'][0]['name'] ?></p>
-                    <p  class="check"><span>Проверенный сполнитель</span></p>                        
+                    <?php if($el['isconfirm']) { ?>                    
+                        <p  class="check"><span>Проверенный исполнитель</span></p>
+                    <?php }?>                            
                 </div>
 
                 <div class="b_right">
@@ -95,7 +95,9 @@ foreach ($exec_list as $el)
                     <div class="b_text">
                         <span class="fio"><?= $el['username']." - ".$el['workForm']['work_form_name'] ?></span>
                         <p class="title">Услуги: <?= $el['category'][0]['name'] ?></p>
-                        <p  class="check"><span>Проверенный сполнитель</span></p>                        
+                        <?php if($el['isconfirm']) { ?>                    
+                            <p  class="check"><span>Проверенный исполнитель</span></p>
+                        <?php }?>                        
                     </div>
 
                     <div class="b_right">

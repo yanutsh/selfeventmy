@@ -95,38 +95,38 @@ TemplateAsset::register($this);
 					                <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 				                </div>
 
-				                <div class="form-group">
+				                <!-- <div class="form-group">
 					                <label class='control-label'>Дата от</label>
-					                <?php echo DatePicker::widget([                		
-									    'name' => 'ExecFiltrForm[date_from]',
-									    'type' => DatePicker::TYPE_COMPONENT_APPEND,
-									    'removeButton' => false,
-									    //'value' => date('d.m.Y', mktime(0, 0, 0, date("m")  , date("d")-365, date("Y"))),
-									    'value' => Yii::$app->params['date_from'], 
-									    'pluginOptions' => [
-									        'autoclose'=>true,
-									        'orientation' => 'center left',
-			                                'todayHighlight' => true,
-			                                'todayBtn' => true,				     
-									    ]
-									]); ?>
-								</div>	
+					                <?php //echo DatePicker::widget([                		
+									    // 'name' => 'ExecFiltrForm[date_from]',
+									    // 'type' => DatePicker::TYPE_COMPONENT_APPEND,
+									    // 'removeButton' => false,
+									    // //'value' => date('d.m.Y', mktime(0, 0, 0, date("m")  , date("d")-365, date("Y"))),
+									    // 'value' => Yii::$app->params['date_from'], 
+									    // 'pluginOptions' => [
+									    //     'autoclose'=>true,
+									    //     'orientation' => 'center left',
+			          					//     'todayHighlight' => true,
+			          					//     'todayBtn' => true,				     
+									    //]
+									//]); ?>
+								</div> -->	
 				               
-								<div class="input__block">
+								<!-- <div class="input__block">
 				                    <label class='control-label'>Дата до</label>
-					                <?php echo DatePicker::widget([
-									    'name' => 'ExecFiltrForm[date_to]',
-									    'type' => DatePicker::TYPE_COMPONENT_APPEND,
-									    'removeButton' => false,
-									    'value' => Yii::$app->params['date_to'],
-									    'pluginOptions' => [
-									        'autoclose'=>true,
-									        'orientation' => 'center left',
-			                                'todayHighlight' => true,
-			                                'todayBtn' => true,				     
-									    ]
-									]); ?>
-								</div>	
+					                <?php //echo DatePicker::widget([
+									    // 'name' => 'ExecFiltrForm[date_to]',
+									    // 'type' => DatePicker::TYPE_COMPONENT_APPEND,
+									    // 'removeButton' => false,
+									    // 'value' => Yii::$app->params['date_to'],
+									    // 'pluginOptions' => [
+									    //     'autoclose'=>true,
+									    //     'orientation' => 'center left',
+			          					//     'todayHighlight' => true,
+			          					//     'todayBtn' => true,				     
+									    //]
+									//]); ?>
+								</div> -->	
 		                        
 			                    <div class="input__block">
 			                    	<?= $form->field($model, 'budget_from') ?>
@@ -141,11 +141,9 @@ TemplateAsset::register($this);
 			                    <?= $form->field($model, 'prepayment')->dropDownList (ArrayHelper::map($payment_form, 'id', 'payment_name'),['prompt'=>'Все формы оплаты']) ?>
 
 			                    <?= $form->field($model, 'work_form_id')->dropDownList (ArrayHelper::map($work_form, 'id', 'work_form_name'),['prompt'=>'Все формы работы']) ?>
-
-			                    <?//= $form->field($model, 'order_status_id')->dropDownList (ArrayHelper::map($order_status, 'id', 'name'),['prompt'=>'Любой статус заказа']) ?>
 			                    	
 			                    <div class="form-group"> 
-			                    	<div class='register__user active__button'>Показано исполнителей - <span><?= $count ?></span> шт.</div>
+			                    	<div class='register__user active__button'>Показано исполнителей - <span><?= $count ?></span></div>
                     			</div>
 
 <?php
@@ -190,7 +188,7 @@ TemplateAsset::register($this);
 
 										    				
 			    				<?php  	
-			    				//debug($model);
+			    				//debug($model);			    				
 									echo $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model','city', 'min_price'));
 								?>	
 			    			</div>

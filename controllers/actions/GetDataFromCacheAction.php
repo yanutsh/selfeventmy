@@ -16,10 +16,10 @@ class GetDataFromCacheAction extends Action
         public function run()   
         {   
 	        $cache = \Yii::$app->cache;
-	        $cache_data=array();
+	        // Обнуляем кеш - ТЕХНОЛОГИЯ ДЛЯ ОТЛАДКИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        	Yii::$app->cache->flush();    
 
-	        // удаление эл-та кеша для отладки
-	        //$cache->delete('abonement_nofreeze');
+	        $cache_data=array();
 
 	        // категории услуг
 	        $cache_data['category'] = $cache->getOrSet('category',function()
@@ -35,7 +35,7 @@ class GetDataFromCacheAction extends Action
 
 	        // формы оплаты
 	        $cache_data['payment_form'] = $cache->getOrSet('payment_form',function()
-	             {return PaymentForm::find() ->orderBy('payment_name')->all();});
+	             {return PaymentForm::find()->orderBy('payment_name')->asArray()->all();});
 
 	        // выбираем только абонементы без заморозки	              
 	        $cache_data['abonement_nofreeze'] = $cache->getOrSet('abonement_nofreeze',function()
