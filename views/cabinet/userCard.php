@@ -34,15 +34,34 @@ CabinetAsset::register($this);
 		    				
 		    				<div class="b_avatar b_avatar__exec">   					
 					            <img src="<?= user_photo($user['avatar'])?>" alt="">
-					        </div>						        
+					        </div>
+
+					        <!-- star rating data-id="user_id" **************************-->
+								<script>  
+								  	localStorage.removeItem('star_rating');
+								  	localStorage.removeItem('star_rating_get'); 
+								</script>
+
+								<?php 
+								// только для отображения рейтинга:
+								require_once($_SERVER['DOCUMENT_ROOT'].'/libs/star_reting_get_html.php') 
+
+								// для установки рейтинга:
+								//require_once($_SERVER['DOCUMENT_ROOT'].'/libs/star_reting_html.php') ?>
+
+							<!-- star rating data-id="page-1" Конец ********************-->
+		        
 
 					       <!--  <div class="clearfix"></div> -->
 					        <div class="b_text b_text__exec">
 					            <span class="fio"><?= $user['workForm']['work_form_name']." - ".$user['username'] ?></span>
+					            
 					            <?php // профиль проверен?
 					            if($user['isconfirm']) {?>					            
-					            	<p  class="check"><span>Профиль проверен</span></p>
-					            <?php } ?>	 
+					            	<p  class="checked"><span>Профиль проверен</span></p>
+					            <?php }else{ ?>
+					            	<p  class="checked checked__no"><span>Профиль не проверен</span></p>
+					            <?php } ?>		 
 					        </div>
 
 					        <div class="statistic">
@@ -88,7 +107,12 @@ CabinetAsset::register($this);
 		    		<div class="lk__left">
 		    			<div class="filtr filtr_exec ">
 		    				<p>Форма работы - <?= $user['workForm']['work_form_name']?></p>
-		    				<p>Последний визит - ХХ мин назад</p>
+		    				<p>Последний визит - <?php
+		    					$tfrom = time_from($max_date['update_time']);
+		    					if($tfrom['days'] > 0) echo $tfrom['days']." дн. назад"; 
+		    					elseif($tfrom['hours'] > 0) echo $tfrom['hours']." час. назад";
+		    					else echo $tfrom['minutes']." мин. назад" 
+		    					?></p>
 		    				<?php if($user['isexec']) {?>
 		    					<p>Сегодня - ?Свободен?</p>
 		    				<?php } ?>	
@@ -269,6 +293,7 @@ $script = <<< JS
 			$('.review_list').css('display','none');			
 		}	
 	})
+
 JS;
 //маркер конца строки, обязательно сразу, без пробелов и табуляции
 $this->registerJs($script, yii\web\View::POS_READY);

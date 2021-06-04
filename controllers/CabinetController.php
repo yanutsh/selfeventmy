@@ -179,35 +179,7 @@ class CabinetController extends AppController {
       }); 
       </script>");             
     }
-
-    // Запись посещения юзера в журнал *********************************************
-    public function actionLogUser() {
-        $session = Yii::$app->session;
-        
-        // проверяем наличие в логе пары user_id  и session_id
-        $visitlog = VisitLog::find()->where(['and', ['user_id'=>Yii::$app->user->id, 'session_id'=>Yii::$app->session->id]])->one();
-        
-        if($visitlog) {  //"Есть запись в Логе" - пишем время обновления);
-            $visitlog->update_time = date('Y-m-d H:i:s');
-            $visitlog->save();
-            debug('Обновление update_time записан',0);
-        }
-
-        else {  //"НЕТ запись в Логе" - делаем новую запись);            
-            $visitlog = new VisitLog;
-            $visitlog->user_id = Yii::$app->user->id;
-            $visitlog->session_id = Yii::$app->session->id;
-            if ($visitlog->save()) echo('Log записан');
-            else debug('Log НЕ записан');
-        }
-
-        $min_date = VisitLog::find()->min('enter_time');  // первый вход юзера
-        $max_date = VisitLog::find()->max('update_time'); // последняя активность юзера
-        
-        debug($max_date,0);
-        debug($min_date);
-    }
-
+    
     // ЛК - список Чатов  ********************************************
     public function actionChatList() {
         //$model = new ExecFiltrForm();
@@ -532,8 +504,13 @@ class CabinetController extends AppController {
               ->one();
 
       //debug($order);
+
+      //Время последней активности заказчика         
+      $max_date = VisitLog::find()->select(['max(update_time) as update_time'])
+                    ->where(['user_id' => $order['user_id']])
+                    ->asArray()->one();  // последняя активность юзера 
       // вывести карточку заказа
-      return $this->render('orderCard', ['order' => $order]); 
+      return $this->render('orderCard', compact('order', 'max_date')); 
     }
 
     // вывести карточку Исполнителя  Заказчику****************************************
@@ -566,8 +543,14 @@ class CabinetController extends AppController {
                 ->with('albumPhotos')->orderBy('album_name ASC')->asArray()->all();
       //debug($albums); 
 
-      // вывести карточку Исполнителя
-      return $this->render('userCard', compact('user','orders_list','reviews', 'albums')); 
+      //Время последней активности          
+      $max_date = VisitLog::find()->select(['max(update_time) as update_time'])
+                    ->where(['user_id' => $_GET['id']])
+                    ->asArray()->one();  // последняя активность юзера           
+      //debug($max_date);
+                    
+      // вывести карточку Юзера
+      return $this->render('userCard', compact('user','orders_list','reviews', 'albums','max_date')); 
     }
 
     // вывести карточку Заказчика  Исполнителю ***************************************
@@ -1083,7 +1066,11 @@ class CabinetController extends AppController {
         return "Установлена предоплата";          
     }
     return"НЕ Установлена предоплата";    
-  }  
+  } 
+
+  public function actionProcessStarRating(){
+    require_once($_SERVER['DOCUMENT_ROOT']."/libs/process_star_rating.php");
+  } 
 
   // Пользовательская функция Сортировки многомерного массива По возрастанию:
   public function cmp_function($a, $b){

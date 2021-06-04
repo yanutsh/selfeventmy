@@ -636,12 +636,14 @@ body{
 		line-height: 18px;
 	}
 
-	.b_text.b_text__exec p.check{
+	.b_text.b_text__exec p.check{		
 		font-size: 14px;
 		line-height: 14px;
 		color: #4cd964;
 		margin-top: 12px;
 		margin-bottom: 0;
+		font-weight: bold;
+		font-weight: bold;
 	}
 
 	.b_right {
@@ -940,6 +942,10 @@ body{
 		padding: 0;
 	}
 
+	p.checked.checked__no{
+		color: #ae4a84;
+	}
+
 	.execlist .b_text{
 		top: 15px;
 		left: 10px;	
@@ -968,6 +974,9 @@ body{
 	    font-weight: bold;
 	    font-size: 14px;
 	}
+	.execlist p.check.check__no{
+		color: #ae4a84;
+	}	
 
 	.exec_details p {
 		font-size: 12px;
@@ -1217,8 +1226,12 @@ body{
 /*******************  Профиль Юзера **********************************/
 	.b_text.b_text__exec p.checked{
 		color: #4cd964;
-		margin-top: 12px;
+		margin-top: 22px;
+		font-weight: bold;
 	}
+	.b_text.b_text__exec p.checked.checked__no{
+		color: #ae4a84;
+	}	
 
 	.filtr.filtr_exec  p.rose{
 		color: #AE4A84;

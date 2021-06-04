@@ -4,6 +4,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\User;
+use app\models\WorkForm;
 
 class ConfirmDataController extends Controller {
 
@@ -74,7 +75,15 @@ class ConfirmDataController extends Controller {
                 $user->save();                               
 
              	// авторизуем пользователя.	
-                Yii::$app->user->login($user);
+                Yii::$app->user->login($user); 
+                // Запоминаем данные в сессию
+                $session = Yii::$app->session;
+                $identity = Yii::$app->user->identity;
+                //debug( $identity);
+                $session['identity'] = $identity;
+                $wfn = WorkForm::find()->select('work_form_name')->where(['id'=>$identity['work_form_id']])->asArray()->one();
+                $session['work_form_name'] = $wfn['work_form_name'];
+
 
                 // показываем страницу успешного подтверждения
                 Yii::$app->getResponse()->redirect(

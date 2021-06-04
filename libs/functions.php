@@ -118,6 +118,17 @@ function days_from($str_date) {
 	return floor(($today - $timeunix) / 86400);
 }
 
+function time_from($str_date) {
+	// $str_date в формате YYYY-mm-dd H:s:i
+	$spend_time=array();
+	$today = time();
+	$timeunix = strtotime($str_date);
+	$spend_time['days'] = floor(($today - $timeunix) / 86400);
+	$spend_time['hours'] = floor(($today - $timeunix) / 3600);
+	$spend_time['minutes'] = floor(($today - $timeunix) / 60);
+	return $spend_time;
+}
+
 // Вывод даты с месяцем на русском языке
 function rdate($param, $time=0) {
 	// $param - формат вывода

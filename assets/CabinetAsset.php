@@ -28,6 +28,7 @@ class CabinetAsset extends AssetBundle {
         'css/slick.css', 
         'css/slick-theme.css',
         'css/cabinet.css',
+        'css/star_rating.css',
         
     ];
     public $js = [
@@ -36,6 +37,7 @@ class CabinetAsset extends AssetBundle {
         'js/chosen.jquery.js',
         'js/slick.min.js',
         'js/cabinet.js',
+        'js/star_rating.js',
         
     ];
     public $depends = [

@@ -44,7 +44,9 @@ foreach ($exec_list as $el)
                     <p class="title">Услуги: <?= $el['category'][0]['name'] ?></p>
                     <?php if($el['isconfirm']) { ?>                    
                         <p  class="check"><span>Проверенный исполнитель</span></p>
-                    <?php }?>                            
+                    <?php }else{ ?>
+                        <p  class="check check__no"><span>Профиль не проверен</span></p>
+                    <?php } ?>                                
                 </div>
 
                 <div class="b_right">
@@ -97,7 +99,9 @@ foreach ($exec_list as $el)
                         <p class="title">Услуги: <?= $el['category'][0]['name'] ?></p>
                         <?php if($el['isconfirm']) { ?>                    
                             <p  class="check"><span>Проверенный исполнитель</span></p>
-                        <?php }?>                        
+                        <?php }else{ ?>
+                            <p  class="check check__no"><span>Профиль не проверен</span></p>
+                        <?php } ?>                         
                     </div>
 
                     <div class="b_right">

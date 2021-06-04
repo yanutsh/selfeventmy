@@ -469,7 +469,7 @@ class PageController extends AppController
             $new_id = $user->getId(); //получили id нового юзера
             $_SESSION['user_id'] = $new_id;
 
-            //вытаскиваем веденные фотографии
+            //вытаскиваем введенные фотографии
               $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
               if (isset($model->imageFiles)) { 
                 
@@ -499,7 +499,6 @@ class PageController extends AppController
                 }
               }  
             //echo "В БД записано"; 
-
             
             // перейти к подтверждению данных  
             Yii::$app->getResponse()->redirect(

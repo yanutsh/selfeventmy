@@ -36,10 +36,10 @@ class AlbumController extends AppController
     public function actionIndex()
     {   
         // СЧИТЫВАЕМ ДАННЫЕ ЮЗЕРА ИЗ СЕССИИ
-        include_once('../libs/get_session.php');
-
-        //$identity = Yii::$app->user->identity; 
+        include_once('../libs/get_session.php');        
+        $identity = Yii::$app->user->identity; 
         //$user_id = Yii::$app->user->identity->id; 
+        //debug($identity);
         $user_id = $identity['id'];        
                 
         $dataProvider = new ActiveDataProvider([

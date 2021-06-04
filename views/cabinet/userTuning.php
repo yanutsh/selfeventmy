@@ -116,6 +116,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
         </div>
         <div class="text">E-mail и смена пароля, обновление информации <br>о себе и опыта работы
         </div>
+        
 
          <?php   if ( $identity['isexec'] ){ // Абонементы показываем Исполнителям?>     
             <div class="order_content__subtitle">Портфолио

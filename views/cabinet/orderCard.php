@@ -43,7 +43,14 @@ $city = City::find() ->orderBy('name')->all();
                 </span>
             </p>
             
-            <p><span>в сети - 2 часа назад</span><p>        
+            <p><span>в сети - 
+                <?php
+                    $tfrom = time_from($max_date['update_time']);
+                    if($tfrom['days'] > 0) echo $tfrom['days']." дн. назад"; 
+                    elseif($tfrom['hours'] > 0) echo $tfrom['hours']." час. назад";
+                    else echo $tfrom['minutes']." мин. назад" 
+                    ?>
+            </span><p>        
 
         </div>
         <div class="b_right">
