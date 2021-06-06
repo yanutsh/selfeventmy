@@ -125,6 +125,7 @@ class RegForm extends Model
     {            
         //if ($this->validate()) { 
            // debug($this->imageFiles);
+        if(!empty($this->imageFiles)) {
             $_SESSION['doc_photo'] = array();
             foreach ($this->imageFiles as $file) {
                 $newfilename=date('YmdHis').rand(100,1000) . '.' . $file->extension;
@@ -133,8 +134,8 @@ class RegForm extends Model
             }
 
             return true;
-        //} else {            
-        //   return false;
-        //}
+        } else {            
+            return false;
+        }
     }
 }

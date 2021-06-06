@@ -36,7 +36,7 @@ $identity = Yii::$app->user->identity;
 				// модальное окно - О Себе					
 					Modal::begin([
 					    'header' => '<h2>Редактирование информации</h2>',
-					     'id' => "myself_win",	
+					    'id' => "myself_win",	
 					    'toggleButton' => [
 					     	'label' => 'Редактировать',
 					     	'tag' => "a",

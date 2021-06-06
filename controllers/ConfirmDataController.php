@@ -72,6 +72,8 @@ class ConfirmDataController extends Controller {
                 if ($_SESSION['what_confirm'] == 'Email')            
                      $user->email_confirm = 1;
                 else $user->phone_confirm = 1;
+
+                //debug($user);
                 $user->save();                               
 
              	// авторизуем пользователя.	

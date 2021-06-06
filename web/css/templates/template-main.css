@@ -1489,7 +1489,7 @@ footer {
   }
 
   .modal-dialog {
-    width: 436px !important;
+    width: 436px;   /*!important;*/
     height: 541px;
     margin-top: 150px!important;
     border-radius: 16px;

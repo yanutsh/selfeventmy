@@ -462,9 +462,8 @@ class PageController extends AppController
           $user->setPassword($model->password);
           $user->generateAuthKey();
           //$user->generateEmailVerificationToken();
-          if (isset($_SESSION['avatar'])) $user->avatar =  $_SESSION['avatar'];   
-          
-          //debug($user);     
+          if (isset($_SESSION['avatar'])) $user->avatar =  $_SESSION['avatar'];           
+            
           if ($user->save()){ // && $this->sendEmail($user);
             $new_id = $user->getId(); //получили id нового юзера
             $_SESSION['user_id'] = $new_id;
@@ -476,8 +475,7 @@ class PageController extends AppController
                 //debug($model->imageFiles);
 
                 if ($model->upload()) {   // file is uploaded successfully ? 
-                  //debug($_SESSION['doc_photo']);
-
+                  //debug ("Загрузили файлы документов")
                   // записываем фотографии в БД  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                   $user_doc = new UserDoc();
                   $user_doc->saveUserDoc($new_id);
@@ -486,7 +484,7 @@ class PageController extends AppController
                   $user->isnewdocs = 1;
                   $user->save();
                   
-                } else debug("Ошибка - Фотографии не загружены");
+                } //else debug("Нет фото документов для загрузки");
               }
 
               // Записываем города пользователя  

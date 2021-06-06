@@ -5,16 +5,16 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "yii_dialog".
+ * This is the model class for table "dialog".
  *
  * @property int $id
- * @property int $order_id по какому заказу
- * @property int $user_id кто написал
- * @property string $message сообщение
+ * @property int $chat_id
+ * @property int $user_id Кто написал
  * @property string $send_time
- * @property int $new Новое сообщение-1
+ * @property string $message
+ * @property int $new 1-новое сообщение
  *
- * @property Order $order
+ * @property Chat $chat
  * @property User $user
  */
 class Dialog extends \yii\db\ActiveRecord
@@ -24,7 +24,7 @@ class Dialog extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'yii_dialog';
+        return 'dialog';
     }
 
     /**
@@ -33,11 +33,11 @@ class Dialog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'user_id', 'message'], 'required'],
-            [['order_id', 'user_id', 'new'], 'integer'],
-            [['message'], 'string'],
+            [['chat_id', 'user_id', 'message'], 'required'],
+            [['chat_id', 'user_id', 'new'], 'integer'],
             [['send_time'], 'safe'],
-            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
+            [['message'], 'string'],
+            [['chat_id'], 'exist', 'skipOnError' => true, 'targetClass' => Chat::className(), 'targetAttribute' => ['chat_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -49,22 +49,22 @@ class Dialog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'order_id'  => 'по какому заказу',
-            'user_id'   => 'кто написал',
-            'message'   => 'сообщение',
+            'chat_id' => 'Chat ID',
+            'user_id' => 'Кто написал',
             'send_time' => 'Send Time',
-            'new'       => 'Новое сообщение',
+            'message' => 'Message',
+            'new' => '1-новое сообщение',
         ];
     }
 
     /**
-     * Gets query for [[Order]].
+     * Gets query for [[Chat]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOrder()
+    public function getChat()
     {
-        return $this->hasOne(Order::className(), ['id' => 'order_id']);
+        return $this->hasOne(Chat::className(), ['id' => 'chat_id']);
     }
 
     /**
@@ -72,7 +72,7 @@ class Dialog extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getUser()  // кто написал сообщение
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }

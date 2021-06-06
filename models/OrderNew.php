@@ -3,8 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\helpers\Html;
-
 
 /**
  * This is the model class for table "yii_order".
@@ -26,14 +24,13 @@ use yii\helpers\Html;
  * @property int $status_order_id Статус заказа
  *
  * @property Chat[] $chats
- * @property Dialog[] $dialogs
  * @property User $user
  * @property OrderStatus $statusOrder
  * @property FsCity $city
  * @property OrderCategory[] $orderCategories
  * @property OrderPhoto[] $orderPhotos
  */
-class Order extends \yii\db\ActiveRecord
+class OrderNew extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -49,13 +46,14 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['who_need','user_id', 'city_id', 'date_from'], 'required'],
-            [['user_id', 'status_order_id', 'city_id', 'members', 'order_budget', 'budget_from', 'budget_to', 'prepayment'], 'integer'],
+            [['user_id', 'details', 'members', 'date_from'], 'required'],
+            [['user_id', 'city_id', 'members', 'order_budget', 'budget_from', 'budget_to', 'prepayment', 'status_order_id'], 'integer'],
             [['details', 'wishes'], 'string'],
-            [['added_time', 'date_from', 'date_to'], 'safe'],
+            [['date_from', 'date_to', 'added_time'], 'safe'],
             [['who_need'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['status_order_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrderStatus::className(), 'targetAttribute' => ['status_order_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => FsCity::className(), 'targetAttribute' => ['city_id' => 'id']],
         ];
     }
 
@@ -67,19 +65,19 @@ class Order extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'status_order_id' => 'Статус заказа',
-            'details' => 'Детали',
-            'added_time' => 'Added Time',
             'who_need' => 'Кто нужен',
-            'city_id' => 'Город',
+            'details' => 'Details',
+            'city_id' => 'City ID',
             'members' => 'Число участников',
-            'date_from' => 'Дата с',
-            'date_to' => 'Дата до',
+            'date_from' => 'Date From',
+            'date_to' => 'Date To',
             'wishes' => 'Пожелания',
-            'order_budget' => 'Бюджет',
-            'budget_from' => 'Бюджет от',
-            'budget_to' => 'Бюджет до',
+            'order_budget' => 'Order Budget',
+            'budget_from' => 'Budget From',
+            'budget_to' => 'Budget To',
             'prepayment' => 'Предоплата',
+            'added_time' => 'Added Time',
+            'status_order_id' => 'Статус заказа',
         ];
     }
 
@@ -93,7 +91,6 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasMany(Chat::className(), ['order_id' => 'id']);
     }
 
-    
     /**
      * Gets query for [[User]].
      *
@@ -104,19 +101,24 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getWorkForm()
-    {
-        return $this->hasOne(WorkForm::className(), ['id' => 'work_form_id'])->viaTable('yii_user', ['id' => 'user_id']);
-    }
-
     /**
      * Gets query for [[StatusOrder]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderStatus()
+    public function getStatusOrder()
     {
         return $this->hasOne(OrderStatus::className(), ['id' => 'status_order_id']);
+    }
+
+    /**
+     * Gets query for [[City]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(FsCity::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -124,19 +126,9 @@ class Order extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderCategory()
+    public function getOrderCategories()
     {
         return $this->hasMany(OrderCategory::className(), ['order_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Categories]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategory()
-    {
-        return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('yii_order_category', ['order_id' => 'id']);
     }
 
     /**
@@ -148,32 +140,4 @@ class Order extends \yii\db\ActiveRecord
     {
         return $this->hasMany(OrderPhoto::className(), ['order_id' => 'id']);
     }
-
-    public function getOrderCity()
-    {
-        return $this->hasOne(City::className(), ['id' => 'city_id']);
-    }
-
-
-   public function saveOrder($fields) {
-        //debug($fields,0);
-        $order=new Order();
-
-        $order->user_id = Yii::$app->user->id;
-        $order->who_need = Html::encode($fields['who_need']);
-        $order->city_id = $fields['city_id'];
-        $order->members = $fields['members'];
-        $order->date_from = convert_date_ru_en($fields['date_from']);
-       // $order->date_to = convert_date_ru_en($fields['date_to']);
-        $order->details= Html::encode($fields['details']);
-        $order->wishes = Html::encode($fields['wishes']);
-        $order->budget_from = $fields['budget_from'];
-        $order->budget_to = $fields['budget_to'];
-        $order->order_budget = $fields['order_budget'];
-        $order->prepayment = $fields['prepayment'];
-
-        if ($order->save()) return $order->id;    //debug ("Записано");
-        else return false;                        //debug(" НЕ записано");
-   }
-
 }

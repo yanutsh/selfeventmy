@@ -1,21 +1,5 @@
-// $(window).unload(function(){ 
-//         alert('Пoka, пользователь!'); 
-// });
-$(window).on('unload', function(){ 
-        alert('Пoka 2, пользователь!'); 
-});
-
-$(window).bind('unload',function(){ 
-        alert('Пoka 2, пользователь!'); 
-});
-
-
-$(window).ready(function(){ 
-        //alert('Привет, пользователь!'); 
-}); 
-  
 $(document).ready(function() {
-    
+        
     // Предотвращение отправки формы по ENTER
     // $("input").keydown(function(event){
     //   if(event.keyCode == 13){

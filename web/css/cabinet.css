@@ -1005,6 +1005,26 @@ body{
 		display: inline-block;
     	width: 85%;
 	}
+
+	.b_response{
+		display: flex;
+	    justify-content: space-around;
+	}
+
+	.b_response_item{
+		width: 45%;
+	}
+
+	.register__user.active__button.response{
+		width: 40%;
+		display: block;
+		margin: 0 auto;
+	}
+
+	.otklic.otklic_right{
+		margin: 0 0 0 auto;
+	}
+	    
 /*******************  Лента исполнителей ExecList  Конец  ********************/
 
 /*******************  Карточка исполнителя **********************************/
@@ -1205,6 +1225,7 @@ body{
 	}
 
 	.answer{
+		position: relative;
 		display: flex;
 	    justify-content: space-between;
 	    align-items: center;
@@ -1219,6 +1240,15 @@ body{
 		font-size: 18px;
 		font-weight: bold;
 		color: #AE4A84;
+	}
+
+	a[id^="toggle_response_"]{
+		color: #AE4A84!important;
+		cursor: pointer;
+	}
+
+	div[id^="modal_response_"] .modal-dialog {
+		width: 944px;
 	}
 
 /*******************  Карточка исполнителя  Конец**********************************/
@@ -1736,7 +1766,7 @@ body{
 	}
 
 	.modal-content {
-		width: 500px;
+		width: 100%; /* 500px;*/
 		padding: 20px;
 	}
 

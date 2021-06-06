@@ -24,6 +24,7 @@ use app\models\Review;
 use app\models\OrderCategory;
 use app\models\OrderStatus;
 use app\models\OrderPhoto;
+use app\models\OrderResponseForm;
 use app\models\User;
 use app\models\UserCity;
 use app\models\UserEducation;
@@ -51,20 +52,70 @@ class CabinetController extends AppController {
     
     // ЛК - фильтр и список Заказов  ***********************************************
     public function actionIndex()	
-    {
+    { 
       // получить число новых сообщений из БД по заказам текущего Юзера
         Yii::$app->runAction('cabinet/get-new-mess'); 
       // получить информацию из БД и записать в кеш         
-        Yii::$app->runAction('cabinet/get-data-from-cache');            
-              
-        $model = new OrderFiltrForm();
+        Yii::$app->runAction('cabinet/get-data-from-cache'); 
+        $user_id = Yii::$app->user->id;   
+      
+      $model = new OrderFiltrForm();
+      $orderResponseForm = new orderResponseForm();
+
       // Если пришёл AJAX запрос
         if (Yii::$app->request->isAjax) { 
           // Устанавливаем формат ответа JSON
           //debug('Еесть Ajax');
           Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
           $data = Yii::$app->request->post();
+          //debug($data);
+          
+          // Если пришёл запрос от формы отклика на заказ - создаем чат и сообщение
+          if ($data['form_name'] == 'order-response') {          
+          
+            //debug($data);
 
+            // получаем id заказчика
+            $customer_id = Order::find()->select('user_id')->where(['id'=>$data['order_id']])
+                          ->asArray()->one();
+            //debug( $customer_id);              
+
+            // создаем чат
+            $chat = new Chat();
+            $chat->order_id = $data['order_id'];
+            $chat->exec_id = Yii::$app->user->id;
+            $chat->customer_id = $customer_id['user_id'];
+            //debug ($chat) ; 
+
+            $chat->save();
+            $chat_id = $chat->id; // определяем id нового чата
+            //debug ($chat_id) ; 
+
+            // записываем сообщение исполнителя в чат
+            $dialog = new Dialog();
+            $dialog->chat_id = $chat_id;
+            $dialog->user_id = Yii::$app->user->id;  // написал текущий юзер
+
+            
+            $dialog->message = $data['OrderResponseForm']['exec_message'];
+            if (!empty($data['OrderResponseForm']['exec_price']) || 
+               !empty($data['OrderResponseForm']['exeс_prepayment'])) {
+              $dialog->message .= chr(13).'Мои предварительные условия:';
+            
+              if(!empty($data['OrderResponseForm']['exec_price']))
+                $dialog->message .= chr(13).'Стоимость - '.$data['OrderResponseForm']['exec_price'].' ₽. ';
+              
+              if(!empty($data['OrderResponseForm']['exeс_prepayment']))
+                $dialog->message .= chr(13).'Предоплата - '.$data['OrderResponseForm']['exeс_prepayment'].' ₽';
+            }
+            //debug($dialog);
+            
+            $dialog->save();
+            
+            goto met_first;
+          }   
+
+          
           if ($data['data']=='reset'){ // сброс фильтра = модель не загружаем
             $date_from = convert_date_ru_en(Yii::$app->params['date_from']);
             $date_to = convert_date_ru_en(Yii::$app->params['date_to']);  
@@ -139,20 +190,23 @@ class CabinetController extends AppController {
               $this->layout='contentonly';
               return [
                   "data" => $count,
-                  "orders" => $this->render('@app/views/partials/orderslist.php', compact('orders_list')), //$html_list, 
+                  "orders" => $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'orderResponseForm')), //$html_list, 
                   "error" => null
               ];             
         } 
 
-        //  первый раз открываем страницу - показываем все заказы
+met_first:
+        //  первый раз открываем страницу - показываем все заказы        
+
         $orders_list = Order::find()
                   ->filterWhere(['AND',                     
                     ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
                               ])
-                ->with('category','orderStatus','orderCity')
+                ->with('category','orderStatus','orderCity','chats')                
                 ->orderBy('added_time DESC')
                 ->asArray()->all();  //count();
-
+        //debug( $orders_list);  
+              
         $count= count($orders_list);            
                
         // получение неизменных исходные данные из кеша или БД 
@@ -171,18 +225,12 @@ class CabinetController extends AppController {
             {return Abonement::find() ->orderBy('price ASC')->asArray()->all();});  
         //debug( $abonement);
 
-        return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats'));
-
-      echo("<script>
-                $(window).unload(function(){ 
-                alert('Пока, пользователь!''); 
-      }); 
-      </script>");             
+        return $this->render('index', compact('orders_list','model', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats','orderResponseForm'));
+                   
     }
     
     // ЛК - список Чатов  ********************************************
     public function actionChatList() {
-        //$model = new ExecFiltrForm();
         // получить число новых сообщений из БД по заказам текущего Юзера
           Yii::$app->runAction('cabinet/get-new-mess');            
         // запомнили в сессию   
@@ -275,8 +323,9 @@ class CabinetController extends AppController {
         //       ];  
 
            
-         } //else { //  первый раз открываем страницу - показываем все заказы
-          
+         } //else { 
+
+        //  первый раз открываем страницу - показываем все         
         $chat_list = Chat::find()
                 //->Where(['isexec' => 1])
                 
@@ -1068,10 +1117,18 @@ class CabinetController extends AppController {
     return"НЕ Установлена предоплата";    
   } 
 
+  // Присвоение рейтинга ***********************************************************
   public function actionProcessStarRating(){
     require_once($_SERVER['DOCUMENT_ROOT']."/libs/process_star_rating.php");
   } 
 
+  // отклик Исполнителя на Заказ ****************************************************
+  public function actionOrderResponse(){
+    $model = new orderResponseForm();
+    return $this->render('orderResponseForm',compact('model'));
+
+  }
+  
   // Пользовательская функция Сортировки многомерного массива По возрастанию:
   public function cmp_function($a, $b){
       return ($a['name'] > $b['name']);

@@ -5,16 +5,19 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "yii_chat".
+ * This is the model class for table "chat".
  *
  * @property int $id
- * @property int $order_id
- * @property int $exec_id
- * @property bool $chat_status Закрыт -0, Открыт -1
- * @property string $create_time
+ * @property string $chat_date Время создания чата
+ * @property int $order_id По какому заказу диалог
+ * @property int $customer_id Заказчик
+ * @property int $exec_id Мастер-Исполнитель
+ * @property int $chat_status 0- закрыт 1- открыт
  *
+ * @property User $customer
  * @property User $exec
  * @property Order $order
+ * @property Dialog[] $dialogs
  */
 class Chat extends \yii\db\ActiveRecord
 {
@@ -23,7 +26,7 @@ class Chat extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'yii_chat';
+        return 'chat';
     }
 
     /**
@@ -32,10 +35,10 @@ class Chat extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'exec_id'], 'required'],
-            [['order_id', 'exec_id'], 'integer'],
-            [['chat_status'], 'boolean'],
-            [['create_time'], 'safe'],
+            [['chat_date'], 'safe'],
+            [['order_id', 'customer_id', 'exec_id'], 'required'],
+            [['order_id', 'customer_id', 'exec_id', 'chat_status'], 'integer'],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['customer_id' => 'id']],
             [['exec_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['exec_id' => 'id']],
             [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
         ];
@@ -48,11 +51,22 @@ class Chat extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'order_id' => 'Order ID',
-            'exec_id' => 'Exec ID',
-            'chat_status' => 'Закрыт -0, Открыт -1',
-            'create_time' => 'Create Time',
+            'chat_date' => 'Время создания чата',
+            'order_id' => 'По какому заказу диалог',
+            'customer_id' => 'Заказчик',
+            'exec_id' => 'Мастер-Исполнитель',
+            'chat_status' => '0- закрыт 1- открыт',
         ];
+    }
+
+    /**
+     * Gets query for [[Customer]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(User::className(), ['id' => 'customer_id']);
     }
 
     /**
@@ -73,5 +87,15 @@ class Chat extends \yii\db\ActiveRecord
     public function getOrder()
     {
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
+    }
+
+    /**
+     * Gets query for [[Dialogs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDialogs()
+    {
+        return $this->hasMany(Dialog::className(), ['chat_id' => 'id']);
     }
 }

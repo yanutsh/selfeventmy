@@ -156,7 +156,7 @@ RegistrationAsset::register($this);
 			                    </div>
 		                	</div>   -->
 		    				<?php  	
-								echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages'));
+								echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages','orderResponseForm'));
 							?>	
 		    			</div>
 		    			
