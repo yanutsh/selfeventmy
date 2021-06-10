@@ -54,7 +54,10 @@ class CabinetController extends AppController {
     public function actionIndex()	
     { 
       // получить число новых сообщений из БД по заказам текущего Юзера
-        Yii::$app->runAction('cabinet/get-new-mess'); 
+        //if(isset(Yii::$app->session['kol_new_chats']) )
+        //      $kol_new_chats=Yii::$app->session['kol_new_chats'];
+       // else 
+        $kol_new_chats = Yii::$app->runAction('cabinet/get-new-mess'); 
       // получить информацию из БД и записать в кеш         
         Yii::$app->runAction('cabinet/get-data-from-cache'); 
         $user_id = Yii::$app->user->id;   
@@ -231,113 +234,132 @@ met_first:
     
     // ЛК - список Чатов  ********************************************
     public function actionChatList() {
-        // получить число новых сообщений из БД по заказам текущего Юзера
-          Yii::$app->runAction('cabinet/get-new-mess');            
-        // запомнили в сессию   
+        // получить число новых сообщений из БД по чатам текущего Юзера
+          Yii::$app->runAction('cabinet/get-new-mess'); 
+          $new_mess_chat = Yii::$app->session['new_mess_chat'];
+          //debug($new_mess_chat);
+
+          $user_id = Yii::$app->user->identity->id;           
+         
         // Если пришёл PJAX запрос
         if (Yii::$app->request->isPjax) { 
         //   // Устанавливаем формат ответа JSON
-        //   //debug('Еесть Ajax');
         //   Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //   $data = Yii::$app->request->post();
-             //debug($_GET['var']);
-            if ($_GET['var']=="first") $msg="первый"; 
-            return $this->render('chatList', compact('msg')); 
+        //   debug($data);
 
-        //   if ($data['data']=='reset'){ // сброс фильтра = модель не загружаем
-        //     $date_from = convert_date_ru_en(Yii::$app->params['date_from']);
-        //     $date_to = convert_date_ru_en(Yii::$app->params['date_to']);  
-        //   }elseif ($model->load($data)) { // Получаем данные модели из запроса
-        //     $date_from = convert_date_ru_en($model->date_from);
-        //     $date_to = convert_date_ru_en($model->date_to);
-        //   }else {
-        //       // Если нет, отправляем ответ с сообщением об ошибке
-        //       return [
-        //           "data" => null,
-        //           "error" => "error1"
-        //       ];
-        //   } 
-            
-        //   //debug($model);
-
-        //     // фильтрация и определение количества заказов 
-        //     // астройки фильтра по предоплате
-        //     if ( $model->prepayment == 1)  {      // без предоплаты
-        //         $prep_compare = "=";
-        //         $prep_value = '0';
-        //     }elseif ( $model->prepayment == 2) {  // c предоплатoй
-        //         $prep_compare = ">=";
-        //         $prep_value = '100';
-        //     }else{
-        //         $prep_compare = ">=";             // любой вариант
-        //         $prep_value = '0';
-        //     } 
-
-        //     //debug ($model); 
-
-        //     $query = User::find()
-        //       ->filterWhere(['AND',
-        //           ['isexec' => 1],                       
-        //           //['between', 'added_time', $date_from, $date_to],
-        //           ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
-        //           ['<=', 'budget_from', $model->budget_to],
-        //           ['work_form_id' => $model->work_form_id],
-        //          // ['in','city_id', $model->city_id],
-        //          // [$prep_compare, 'prepayment', $prep_value],
-                                      
-        //                     ]);
-        //        /////->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');
-
-        //     if ($model->category_id)  
-        //         $query->andWhere(['id' => ExecCategory::find()->select('user_id')->andWhere(['category_id'=>  $model->category_id])]);                 
-              
-        //     // debug( $pages);
-        //     $exec_list = $query->all();       
-        //     $count=$query->count(); // найдено заказов Всего
-        //     //debug( $count);
-        //     $category = Category::find() ->orderBy('name')->all();
-        //     $city = City::find() ->orderBy('name')->all();
-            
-        //     $work_form= WorkForm::find() ->orderBy('work_form_name')->all();
-        //     $payment_form= PaymentForm::find() ->orderBy('payment_name')->all();
-        //     //$order_status = OrderStatus::find() ->orderBy('name')->all();
-
-        //       // Фильтр по Формам работы
-        //       // if (!$model->work_form_id == "") {  // если значение фильтра установлено
-        //       //   foreach ($orders_list as $key=>$order) {
-        //       //     if (!($order['workForm']['id'] == $model->work_form_id)) {
-        //       //        unset($orders_list[$key]); // удаляем заказ из списка               
-        //       //     }                  
-        //       //   }                  
-        //       // }
-                    
-
-        //       $count= count($exec_list); 
-        //       //debug($count) ;            
-
-        //       $this->layout='contentonly';
-        //       return [
-        //           "data" => $count,
-        //           "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list')), //$html_list, 
-        //           "error" => null
-        //       ];  
-
-           
+        //  ТЕСТ
+        //debug($_GET['var']);
+            // if ($_GET['var']=="first") $msg="первый"; 
+            // return $this->render('chatList', compact('msg')); 
+          
          } //else { 
 
-        //  первый раз открываем страницу - показываем все         
-        $chat_list = Chat::find()
-                //->Where(['isexec' => 1])
-                
-                ->with('exec', 'order')
-                // ->orderBy('added_time DESC')
+        // первый раз открываем страницу - показываем все 
+        // чаты по заказам где текущий юзер - Заказчик   
+
+        // чаты по заказам где текущий юзер - Исполнитель 
+        if(Yii::$app->user->identity->isexec) {    
+          $chat_list = Chat::find()->Where(['and',['exec_id' => $user_id, 'chat_status'=> 1]])    
+                ->with('customer','exec', 'order','dialogs')
+                ->orderBy('chat_date DESC')
                 ->asArray()->all();  //count();
 
-        //$count= count($chat_list);            
-        //debug( $chat_list);        
-              
-        return $this->render('chatList', compact('chat_list'));              
+          $count= count($chat_list);             
+        }else{
+        // чаты по заказам где текущий юзер - Заказчик 
+          $chat_list = Chat::find()->Where(['and',['customer_id' => $user_id, 'chat_status'=> 1]])
+                ->with('customer','exec', 'order','dialogs')
+                ->orderBy('chat_date DESC')
+                ->asArray()->all();  //count();
+
+          $count= count($chat_list);           
+        }
+
+        //debug( $chat_list); 
+        return $this->render('chatList', compact('chat_list','new_mess_chat'));              
     }
+  
+    // ЛК - список Диалогов по данному чату  ********************************************
+    public function actionDialogList($chat_id, $work_form_name) {        
+
+        // получить список всех сообщений из БД по данному чату
+        $user_id = Yii::$app->user->identity->id;        
+        // определяем второго участника диалога
+        $chat = Chat::find()->where(['id'=>$chat_id])->one(); 
+        // помечаем все сообщения из данного чата как прочитанные - сброс new
+        $dialog = Dialog::find()->where(['and','chat_id='.$chat_id, 'new=1',['<>','user_id',$user_id] ])
+                  ->all();
+        foreach($dialog as $d) {
+          $d->new = 0;
+          $d->save();
+        }            
+        
+        if ($user_id == $chat->exec_id) $user_id_2 = $chat->customer_id;
+        else $user_id_2 = $chat->exec_id;
+
+        // дата последней активности второго юзера
+        $max_date = VisitLog::find()->select(['max(update_time) as update_time'])
+                    ->where(['user_id' => $user_id_2])
+                    ->asArray()->one();  // последняя активность юзера  
+
+        // Если пришёл PJAX запрос
+        if (Yii::$app->request->isPjax) { 
+        //   // Устанавливаем формат ответа JSON
+        //   Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+           $data = Yii::$app->request->post();
+           //debug($data);
+           // записываем сообщение в диалог
+           $dialog = new Dialog();
+           $dialog->message = $data['message'];
+           $dialog->chat_id = $chat_id;
+           $dialog->user_id = $user_id;
+           $dialog->save();
+           //debug($dialog);
+
+
+        //  ТЕСТ
+        //debug($_GET['var']);
+            // if ($_GET['var']=="first") $msg="первый"; 
+            // return $this->render('chatList', compact('msg')); 
+          
+        } //else { 
+
+        // первый раз открываем страницу - показываем все 
+        // диалоги по чату  
+
+        $dialog_list = Dialog::find()->Where(['and',"chat_id= $chat_id",
+            ['or',"user_id = $user_id", "user_id = $user_id_2"]])            
+                ->with('chat','user')
+                ->orderBy('send_time ASC')
+                ->asArray()->all();  //count();
+
+        // заказ по этому чату  
+        $order=Order::find()->where(['id'=> $chat->order_id])->asArray()->one();
+        //debug($order);   
+        //$count= count($dialog_list); 
+        // echo "chat_id=".$chat_id." user_id=".$user_id." user_id_2=".$user_id_2;
+        // debug($dialog_list ); 
+        // сбросить в диалогах пометку new 
+
+        $kol_new_chats = Yii::$app->runAction('cabinet/get-new-mess'); 
+        $new_mess_chat = Yii::$app->session['new_mess_chat']; 
+
+        // если текущий юзер - заказчик - выводим диалог с исполнителем 
+        if (!Yii::$app->user->identity->isexec) {
+          $isexec=1;
+          $user_category=UserCategory::find()->where(['user_id'=>$user_id_2]) 
+              ->with('category')->asArray()->all();             
+               
+          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec'));
+        }else{
+          $isexec=0;
+          //debug("Я-Исполнитель. Выводим диалог с заказчиком");
+          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec'));
+        }                
+    }
+
+
 
     // ЛК - фильтр и список Исполнителей ********************************************
     public function actionExecutiveList() {
@@ -562,8 +584,6 @@ met_first:
       return $this->render('orderCard', compact('order', 'max_date')); 
     }
 
-    // вывести карточку Исполнителя  Заказчику****************************************
-    //public function actionExecCard() {
     // вывести карточку Исполнителя или Заказчика ************************************ 
     public function actionUserCard() {  
       // отображение карточки Исполнителя или Заказчика
@@ -601,32 +621,7 @@ met_first:
       // вывести карточку Юзера
       return $this->render('userCard', compact('user','orders_list','reviews', 'albums','max_date')); 
     }
-
-    // вывести карточку Заказчика  Исполнителю ***************************************
-    public function actionUserCardOldddd() {
-
-      // получить данные Заказчика из БД
-      $user = User::find()
-              ->Where(['id'=> $_GET['id']])
-              ->with('category', 'workForm', 'cities')
-              ->asArray()
-              ->one();
-      //debug($user);
-              
-      //Список заказов Заказчика
-      $orders_list=Order::find()->where([ 'user_id'=> $_GET['id'] ])
-                  ->with('category','orderStatus','orderCity')
-                  ->orderBy('added_time DESC')->asArray()->all();
-                 
-      //Отзывы о Заказчике 
-      $reviews=Review::find()->where([ 'for_user_id'=> $_GET['id'] ])
-                ->with('fromUser')->asArray()->all();
-      //debug($reviews); 
-
-      // вывести карточку Заказчика
-      return $this->render('userCard', compact('user','orders_list','reviews')); 
-    }
-
+    
     // вывести Профиль текущего Пользователя (Заказчика  или Исполнителя) *********
     public function actionUserProfile() {
 

@@ -1607,7 +1607,13 @@ body{
 	}
 /*******************  Помощь  Конец *****************************************/	
 
-/*******************  Чат - главная ******************************************/
+/*******************  Чат-лист - ******************************************/
+	.badge.bage_messages{
+		position: relative;
+	    top: -15px;
+	    left: 45px;
+	    background-color: red;
+	}
 
 	.order_content.tabs_header{
 		padding: 0;
@@ -1673,9 +1679,22 @@ body{
 
 	.chat .last_message{
 		margin-top: 8px;
-	}		
+	}
 
-/*******************  Чат - главная Конец ******************************************/
+	a.dialog_ref{
+		text-decoration: none;
+	    color: black;
+	}
+
+	.order_info.chat{
+		padding: 5px;
+	}
+	.order_info.chat:hover{		
+    	border: 1px solid #C9C9C9;
+    }	
+		
+
+/*******************  Чат лист - Конец ******************************************/
 
 /*******************  Редактирование профиля ******************************************/
 	.text_details.profile{
@@ -1879,6 +1898,112 @@ body{
 	}
 
 /*******************  Cтраница добавления документов Конец ************************/
+
+/*******************  Cтраница диалога по чату ************************************/
+
+.b_header.b_header__tuning.__dialog{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	text-align: left;
+	/*line-height: 120px;*/
+}
+.b_avatar.b_avatar__tuning.__dialog{
+	margin-left: 30px;
+	margin-right: 20px;
+}
+
+.b_text.b_text__tuning.__dialog{
+	margin-left: 0;	
+}
+
+.__dialog .checked{
+	display: 	block;
+	top: 0;
+	margin: 10px 0 10px;
+}
+
+.__dialog .addition{
+	line-height: 22px;
+	text-align: right;
+    margin-right: 30px;
+}
+
+a.white_btn{
+	display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    color: #ae4a84;
+}
+
+.addition .price_from{
+	font-size: 14px;
+}
+
+.__dialog .visited{
+	font-weight: normal;
+    font-size: 14px;
+}  
+
+.message__dialog {
+	width: 80%;
+    margin: 20px 0 20px auto;
+    background-color: #DEDEDE;
+    padding: 20px;
+    border-radius: 10px;
+    line-height: 1.3;
+}
+
+.my_message__dialog{
+	width: 80%;
+    margin: 20px auto 20px 0;
+    background-color: #F3E6E6;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+p.message_time{
+	font-size: 14px;
+    text-align: right;
+    margin-bottom: 0;
+}
+
+.__dialog .date-now{
+	margin: 20px auto;
+    text-align: center;
+}
+
+.dialog_rules{
+	text-align: center;
+	font-size: 14px;
+} 
+
+.__dialog .order_inf{
+	line-height: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.form-group.send-message{
+	display: inline-block;
+}
+
+.message_text{
+	width: 80%;
+}
+
+.message_time.message_time__my,
+.isread {
+	display: inline-block;
+	font-size: 14px;
+}
+
+.isread {
+	float: right;
+}
+/*******************  Cтраница диалога по чату Конец ******************************/    
 
 /******************************  Выключатель  ********************************/
 	.toggle-button-cover{

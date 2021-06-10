@@ -31,7 +31,7 @@ class GetDataFromCacheAction extends Action
 
 	        // формы работы
 	        $cache_data['work_form'] = $cache->getOrSet('work_form',function()
-	             {return WorkForm::find()->orderBy('work_form_name')->all();});
+	             {return WorkForm::find()->orderBy('work_form_name')->asArray()->all();});
 
 	        // формы оплаты
 	        $cache_data['payment_form'] = $cache->getOrSet('payment_form',function()

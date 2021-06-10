@@ -93,6 +93,7 @@ function convert_datetime_en_ru($str_date){
     
     $date_ru['dmY']=date_format($date, 'd.m.Y');  			// без времени
     $date_ru['dmYHis']=date_format($date, 'd.m.Y H:i:s'); 	// со временем 
+    $date_ru['HidmY']=date_format($date, 'H:i d.m.Y'); 
     $date_ru['Hi']=date_format($date, 'H:i'); 	            // часы + минуты 
 
     $timeunix = strtotime($str_date); 						// строка в timestamp				
