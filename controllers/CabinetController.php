@@ -74,48 +74,9 @@ class CabinetController extends AppController {
           //debug($data);
           
           // Если пришёл запрос от формы отклика на заказ - создаем чат и сообщение
-          if ($data['form_name'] == 'order-response') {          
-          
-            //debug($data);
-
-            // получаем id заказчика
-            $customer_id = Order::find()->select('user_id')->where(['id'=>$data['order_id']])
-                          ->asArray()->one();
-            //debug( $customer_id);              
-
-            // создаем чат
-            $chat = new Chat();
-            $chat->order_id = $data['order_id'];
-            $chat->exec_id = Yii::$app->user->id;
-            $chat->customer_id = $customer_id['user_id'];
-            //debug ($chat) ; 
-
-            $chat->save();
-            $chat_id = $chat->id; // определяем id нового чата
-            //debug ($chat_id) ; 
-
-            // записываем сообщение исполнителя в чат
-            $dialog = new Dialog();
-            $dialog->chat_id = $chat_id;
-            $dialog->user_id = Yii::$app->user->id;  // написал текущий юзер
-
-            
-            $dialog->message = $data['OrderResponseForm']['exec_message'];
-            if (!empty($data['OrderResponseForm']['exec_price']) || 
-               !empty($data['OrderResponseForm']['exeс_prepayment'])) {
-              $dialog->message .= chr(13).'Мои предварительные условия:';
-            
-              if(!empty($data['OrderResponseForm']['exec_price']))
-                $dialog->message .= chr(13).'Стоимость - '.$data['OrderResponseForm']['exec_price'].' ₽. ';
-              
-              if(!empty($data['OrderResponseForm']['exeс_prepayment']))
-                $dialog->message .= chr(13).'Предоплата - '.$data['OrderResponseForm']['exeс_prepayment'].' ₽';
-            }
-            //debug($dialog);
-            
-            $dialog->save();
-            
-            goto met_first;
+          if ($data['form_name'] == 'order-response') {
+              require_once('order-response-process.php');
+              goto met_first;
           }   
 
           
@@ -334,6 +295,10 @@ met_first:
                 ->orderBy('send_time ASC')
                 ->asArray()->all();  //count();
 
+        // считываем данные второго юзера        
+        $user2 = User::find()->where(['id'=> $user_id_2])->asArray()->one();
+        //debug($user2);
+
         // заказ по этому чату  
         $order=Order::find()->where(['id'=> $chat->order_id])->asArray()->one();
         //debug($order);   
@@ -351,11 +316,11 @@ met_first:
           $user_category=UserCategory::find()->where(['user_id'=>$user_id_2]) 
               ->with('category')->asArray()->all();             
                
-          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec'));
+          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2'));
         }else{
           $isexec=0;
           //debug("Я-Исполнитель. Выводим диалог с заказчиком");
-          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec'));
+          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2'));
         }                
     }
 
@@ -587,6 +552,23 @@ met_first:
     // вывести карточку Исполнителя или Заказчика ************************************ 
     public function actionUserCard() {  
       // отображение карточки Исполнителя или Заказчика
+
+      // Если пришёл AJAX запрос
+        if (Yii::$app->request->isAjax) { 
+          // Устанавливаем формат ответа JSON
+          //debug('Еесть Ajax');
+          Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+          $data = Yii::$app->request->post();
+          //debug($data);
+          
+          // Если пришёл запрос от формы отклика на заказ - создаем чат и сообщение
+          if ($data['form_name'] == 'order-response') {
+              require_once('order-response-process.php');
+              //goto met_first;
+          }
+        }     
+
+      $orderResponseForm = new orderResponseForm();
       // получить данные Юзера из БД
       $user = User::find()
               ->Where(['id'=> $_GET['id']])
@@ -594,11 +576,12 @@ met_first:
               ->asArray()
               ->one();
 
-      //debug($exec);
+      //debug($user);
+             
       // для получения картинок слайдера -ЗАМЕНИТЬ НА ФОТО иЗ ПОРТФОЛИО       
       $orders_list = Order::find()
               ->Where([ 'user_id'=> $_GET['id'] ])
-              ->with('category','orderStatus','orderCity', 'orderCategory', 'orderPhotos', 'workForm', 'user')
+              ->with('category','orderStatus','orderCity', 'orderCategory', 'orderPhotos', 'workForm', 'user','chats')
               ->asArray()
               ->all();
       //debug($orders_list);        
@@ -619,7 +602,7 @@ met_first:
       //debug($max_date);
                     
       // вывести карточку Юзера
-      return $this->render('userCard', compact('user','orders_list','reviews', 'albums','max_date')); 
+      return $this->render('userCard', compact('user','orders_list','reviews', 'albums','max_date','orderResponseForm')); 
     }
     
     // вывести Профиль текущего Пользователя (Заказчика  или Исполнителя) *********
@@ -1123,7 +1106,7 @@ met_first:
     return $this->render('orderResponseForm',compact('model'));
 
   }
-  
+    
   // Пользовательская функция Сортировки многомерного массива По возрастанию:
   public function cmp_function($a, $b){
       return ($a['name'] > $b['name']);

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use app\assets\TemplateAsset;
+//use app\assets\TemplateAsset;
 use app\assets\CabinetAsset;
 use kartik\date\DatePicker;
 use app\components\page\PageAttributeWidget as PAW;
@@ -12,11 +12,11 @@ use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
 
-TemplateAsset::register($this);
+//TemplateAsset::register($this);
 //CabinetAsset::register($this);
 
 ?>
-<?php //Pjax::begin(); ?>
+<?php Pjax::begin(); ?>
 
 <?php
 //debug($_SESSION['identity']);
@@ -52,8 +52,11 @@ foreach ($orders_list as $ol)
                  <div class="order_added"><?= showDate(strtotime($ol['added_time']))?></div>
             </div>
         </div>
-    </a>
-    
+    </a>   
+
+
+<?php //debug($ol) ?>
+
     <?php 
     if (yii::$app->user->identity->isexec && 
         yii::$app->user->identity->isconfirm) 
@@ -62,7 +65,7 @@ foreach ($orders_list as $ol)
             <!-- <div class="text">Ваше предложение будет Х в рейтинге заказа</div> -->
            
             <!-- <div> -->
-            <?php Pjax::begin(); ?> 
+        <?php //Pjax::begin(); ?> 
         <div class="answer">     
             <?
             // проверяем открыт ли чат по Этому заказу с Этим Исполнителем
@@ -128,7 +131,7 @@ foreach ($orders_list as $ol)
                 }
             ?>
             
-            <?php Pjax::end(); ?>
+            <?php //Pjax::end(); ?>
 
             <?php
                 $script = <<< JS
@@ -156,4 +159,4 @@ foreach ($orders_list as $ol)
     //]);    
     ?>    
 </div> 
-<?php //Pjax::end(); ?>   
+<?php Pjax::end(); ?>   

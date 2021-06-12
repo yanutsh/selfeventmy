@@ -91,7 +91,7 @@ CabinetAsset::register($this);
 					                </div>
 					        	</div>
 					        </div>
-
+		
 					        <?php if($user['isexec']) {?>	
 					         	<p  class="top100">?Входит в ТОП 100 исполнителей?</p>
 					         	
@@ -120,7 +120,6 @@ CabinetAsset::register($this);
 		    			</div>
 		    		</div>		
 		    	</div>
-
 
 		    	<div class="col-md-8">
 		    		<div class="lk__main lk__main__exec">
@@ -229,11 +228,12 @@ CabinetAsset::register($this);
 		           					</p>
 		           					<div class="user_orders">
 		           						<?php 
-		           						echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages'));
+		           						echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages', 'orderResponseForm'));					
 		           						 ?>
 		           					</div>	           						
 				    		</div>
 			    		<?php }	 ?>
+			 	
 		    		<!-- Отзывы -->
 		    		<div class="lk__main lk__main__exec">
 		    			<div class="refer" id="show_user_reviews">Смотреть все</div>

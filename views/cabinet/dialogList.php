@@ -20,20 +20,20 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 //debug($dialog_list );
 //debug($user_category);   
 ?>
-<?php Pjax::begin(); ?>
+<?php //Pjax::begin(); ?>
 
 <div class="wrapper__addorder wrapper__addorder__card">
 
     <div class="b_header b_header__tuning __dialog">
-        <div class="b_avatar b_avatar__tuning  __dialog">
-            <a href="<?=Url::to(['/cabinet/user-card','id'=>$dialog_list[0]['user']['id'] ]) ?>">
-                <img src="<?= user_photo($dialog_list[0]['user']['avatar'])?>" alt="">
+        <div class="b_avatar b_avatar__tuning  __dialog">          
+            <a href="<?=Url::to(['/cabinet/user-card','id'=>$user2['id'] ]) ?>">
+                <img src="<?= user_photo($user2['avatar'])?>" alt="">
             </a>
         </div>
 
         <div class="b_text b_text__tuning __dialog">
-            <span class="fio"><?= $work_form_name ?> - <?= $dialog_list[0]['user']['username']?></span>
-
+            <!-- <span class="fio"><?= $work_form_name ?> - <?= $dialog_list[0]['user']['username']?></span> -->
+            <span class="fio"><?= $work_form_name ?> - <?= $user2['username']?></span>
             <?php 
             if($isexec) {  
                 if ( $dialog_list[0]['user']['isconfirm']==1){ //Если Исполнитель и профиль проверен-показываем?>     
@@ -50,29 +50,31 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                     ?>                                    
             </div>
         </div>
-        <?php
-        if($isexec) { ?>
+       
             <div class="addition">
-                <p><?php           
-                    $ucarr=array(); // для неповторяющиеся категории услуг
-                    $price=array(); // для определения мин цены
-                    foreach($user_category as $uc){
-                        // собираем неповторяющиеся категории услуг в массив
-                        if (!in_array($uc['category']['name'],$ucarr)) $ucarr[]=$uc['category']['name'];
-                        $price[]=$uc['price_from'];
-                    }    
-                    foreach($ucarr as $uca) {echo $uca." ";}
-                    $minprice= min($price);
-                ?>                
-                </p>
+                <?php
+                if($isexec) { ?>    
+                    <p><?php           
+                        $ucarr=array(); // для неповторяющиеся категории услуг
+                        $price=array(); // для определения мин цены
+                        foreach($user_category as $uc){
+                            // собираем неповторяющиеся категории услуг в массив
+                            if (!in_array($uc['category']['name'],$ucarr)) $ucarr[]=$uc['category']['name'];
+                            $price[]=$uc['price_from'];
+                        }    
+                        foreach($ucarr as $uca) {echo $uca." ";}
+                        $minprice= min($price);
+                    ?>                
+                    </p>                
+                    <p class='price_from'>от <?= $minprice ?> ₽</p>
+                <?php } ?>
 
-                <p class='price_from'>от <?= $minprice ?> Р</p>
-                <a href='<?=Url::to(['/cabinet/user-card','id'=>$dialog_list[0]['user']['id'] ]) ?>' class="white_btn">Перейти к исполнителю</a>
+                <a href='<?= Url::to(['/cabinet/user-card','id'=>$user2['id'] ]) ?>' class="white_btn">Перейти к исполнителю</a>
             </div> 
-        <?php } ?>            
+                  
     </div>    
 
-   
+    <?php Pjax::begin(); ?>
     <div class="order_content order_content__tuning __dialog">
         <div class="date-now"><?= date('d.m.Y')?></div>
         <div class="dialog_rules">Правила переписки<br>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure blanditiis consectetur quaerat dolor repellat possimus molestiae, accusamus ullam pariatur in, consequuntur voluptatibus obcaecati delectus, ratione error maxime neque! Vero, pariatur.
@@ -114,20 +116,24 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                 ],
             ]); ?>
 
-            <!-- <input hidden type="text" name="field_name" value="myself"> -->
-            <input type="text" class="message_text" name="message" placeholder="Введите сообщение">
-            <?//= //$form->field($user, 'myself')->textarea(['style'=>'resize:vertical', 'rows'=>'5']);?>
-            
-            <div class="form-group send-message">
-                <?= Html::submitButton('Отправить', [
-                    'class' => 'message-button', 
-                    'name' => 'message-button',
-                    'id'=> 'message-button'
-                ]) ?>
+            <div class="center">
+                <input type="text" class="message_text" name="message" placeholder="Введите сообщение">
+                            
+                <div class="form-group send-message">
+                    <input type="submit" name="ok" value="" class = 'message-button', 
+                        name = 'message-button', id="message-button" title="Отправить сообщение"/>             
+                </div>
             </div>
 
         <?php ActiveForm::end(); ?>
-        <?php Pjax::end(); ?>       
+        <div class="buttons__dialog">
+            <a href="#!" class="contacts">Показать контакты</a>
+            <a href="#!" class="choose">Выбрать исполнителем</a>
+            <a href="#!" class="cancel">Отказаться</a>
+        </div>   
 
-    </div>        
+    </div>
+    <?php Pjax::end(); ?>
+
+           
 </div>

@@ -632,6 +632,7 @@ body{
 	}
 
 	.b_text span.fio{
+		display: block;
 		font-size: 18px;
 		line-height: 18px;
 	}
@@ -1959,7 +1960,7 @@ a.white_btn{
 .my_message__dialog{
 	width: 80%;
     margin: 20px auto 20px 0;
-    background-color: #F3E6E6;
+    background-color: #E0F7E1;
     padding: 20px;
     border-radius: 10px;
 }
@@ -1986,6 +1987,21 @@ p.message_time{
     font-size: 14px;
 }
 
+#message-button{
+	width: 35px;
+	height: 35px;
+    position: relative;
+    top: 11px;
+    left: 20px;
+
+    border: 0;
+  	padding: 0;
+  	margin: 0;
+ 	background: url('/web/uploads/images/play32x32.png') no-repeat;
+  
+  
+}
+
 .form-group.send-message{
 	display: inline-block;
 }
@@ -2002,6 +2018,22 @@ p.message_time{
 
 .isread {
 	float: right;
+}
+
+.buttons__dialog{
+	margin-top: 30px;
+	display: flex;
+	justify-content: space-around;
+}
+
+.buttons__dialog >a{
+	font-weight: bold;
+	color: #ae4a84;
+	text-decoration: none;
+}
+
+div.center{
+	text-align: center;
 }
 /*******************  Cтраница диалога по чату Конец ******************************/    
 

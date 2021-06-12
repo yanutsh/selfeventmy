@@ -135,7 +135,6 @@ RegistrationAsset::register($this);
 
 		    	<div class="col-md-8">
 		    		<div class="lk__main">
-
 		    			  
 		    			<!-- <p id='orders_list_header'></p> -->
 		    			
@@ -155,8 +154,9 @@ RegistrationAsset::register($this);
 									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 			                    </div>
 		                	</div>   -->
-		    				<?php  	
-								echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages','orderResponseForm'));
+		    				<?php
+		    					require_once('../views/partials/orderslist.php');		    					
+								//echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages','orderResponseForm'));
 							?>	
 		    			</div>
 		    			
