@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
 
 use yii\web\User;
 use app\assets\TemplateAsset;
@@ -18,7 +19,12 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => $page->seo_keywords])
 $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_description]);
 
 //debug($dialog_list );
-//debug($user_category);   
+//debug($user_category); 
+//debug($order_exec); 
+$order_id = $dialog_list[0]['chat']['order_id'] ;
+$exec_id  = $dialog_list[0]['chat']['exec_id'] ;
+//echo("order_id".$order_id);
+//debug($exec_id);
 ?>
 <?php //Pjax::begin(); ?>
 
@@ -107,7 +113,6 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
                 </div>
             <?php  }
         }  ?> 
-
         
         <?php $form = ActiveForm::begin([
             'id' => 'message-form',
@@ -126,12 +131,175 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
             </div>
 
         <?php ActiveForm::end(); ?>
-        <div class="buttons__dialog">
-            <a href="#!" class="contacts">Показать контакты</a>
-            <a href="#!" class="choose">Выбрать исполнителем</a>
-            <a href="#!" class="cancel">Отказаться</a>
-        </div>   
 
+
+        <!-- вывод flesh - сообщения об ошибках-->
+            <div class="flash_choose">
+            <?php if( Yii::$app->session->hasFlash('payment_ok') ): ?>
+                 <div class="alert alert-danger alert-dismissible choose" role="alert">
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <?php echo Yii::$app->session->getFlash('payment_ok'); ?>
+                 </div>
+            <?php endif;?>
+            </div>
+
+        <div class="buttons__dialog">
+            <!-- модальное окно - показать контакты исполнителя -->
+            <?php 
+                if(!$ischoose){   ?> 
+                    <a href="#!" class="contacts">Показать контакты</a>           
+                <?php } ?>
+            <!-- модальное окно - выбрать исполнителя -->
+                <?php
+                if(!$ischoose) {      
+                    // исполнитель НЕ выбран
+                    // модальное окно - Выбрать исполнителем                  
+                        Modal::begin([
+                            'header' => '<h2>Выбрать исполителем</h2><h3>(зафиксировать результаты переговоров)<h3>',
+                            'id' => "win_choose",   
+                            'toggleButton' => [
+                                'label' => 'Выбрать исполнителем',
+                                'tag' => "a",
+                                'class' => 'choose',
+                                'id' => 'modal_choose',
+                             ],                     
+                        ]);
+                    ?>   
+                            
+                    <div class="OrderExec">                
+
+                            <?php $form = ActiveForm::begin([
+                                'id' => 'choose-form',
+                                'options' => [
+                                    'data-pjax' => true,                           
+                                    ],
+                                ]); ?>
+
+                                <input hidden type="text" name="field_name" value="choose">
+                           
+                                <?= $form->field($order_exec, 'order_id')->hiddenInput(['value' => $order_id])->label(false) ?>
+                                <?= $form->field($order_exec, 'exec_id')->hiddenInput(['value' => $exec_id])->label(false) ?>
+                                <?= $form->field($order_exec, 'price') ?>
+                                <?= $form->field($order_exec, 'prepayment_summ') ?>
+                                <?//= $form->field($order_exec, 'safe_deal') ?>
+                                
+                                <!-- Безопасная сделка -->
+                                <div class="form-group exactly">                    
+                                    <div class="control-label choose__safe">Безопасная сделка <span>Selfevent</span></div>                           
+                                    <div class="toggle-button-cover"> 
+                                          <div class="button-cover">
+                                            <div class="button r" id="button-1">
+                                              <input type="checkbox" class="checkbox tuning" name= 'OrderExec[safe_deal]' id="orderexec-safe_deal" 
+                                              <?php if ($order_exec['safe_deal']) echo 'checked';?>>
+                                              <div class="knobs"></div>
+                                              <div class="layer"></div>
+                                            </div>
+                                          </div>
+                                    </div>
+                                </div>
+
+                                <div class="b_balance">
+                                    <div class="control-label choose__safe">Ваш баланс</div>
+                                    <div class="balance">10000 Р</div>  
+                                </div>
+                            
+                                <div class="choose_buttons">
+                                    <?= Html::submitButton('Оплатить', ['class' => 'register active']) ?>
+                                </div>                                 
+
+                            <?php ActiveForm::end(); ?>
+                    </div><!-- OrderExec -->               
+
+                    <?php 
+                    Modal::end();                   
+                    // модальное окно - Выбрать исполнителем -Конец   
+                    ?>          
+                
+                   <?php            
+                        //$script = <<< JS
+                            // Закрытие фона модального окна
+                        //     $('.register.active').click(function(e){
+                        //         // отправка формы по pjax и потом удаление фона:        
+                        //         $('.modal-backdrop.fade.in').css('display','none'); 
+                        //         $('body').removeAttr('class');              
+                        //     });
+
+                        // JS;
+                        //маркер конца строки, обязательно сразу, без пробелов и табуляции
+                        //$this->registerJs($script, yii\web\View::POS_READY);
+                    ?>
+                    <?php //Pjax::end(); 
+                    // <!--Выбрать исполнителем -Конец       -->
+                }else{ ?>     
+            
+            <!-- модальное окно - подтвердить выполнение   -->
+           
+                <a href="#!" class='choose'>Подтвердить выполнение</a>
+                <?php } ?>              
+
+            <!-- модальное окно - отказать Исполнителю  -->           
+                <!-- <a href="#!" class="cancel">Отказаться</a> -->
+                <?php 
+                // модальное окно - Отказать  исполнителю                  
+                    Modal::begin([
+                        'header' => '<h2>Отказ от исполнителя</h2>',
+                        'id' => "win_cancel_exec",   
+                        'toggleButton' => [
+                            'label' => 'Отказаться',
+                            'tag' => "a",
+                            'class' => 'choose',
+                            'id' => 'modal_cancel_exec',
+                         ],                     
+                    ]);
+                ?>
+
+                <div class="cancel_subtitle">Вы действительно хотите отказать исполнителю в заказе?   
+                </div>
+                <div class="center">Это действие невозможно изменить и вы не сможете общаться с исполнителем по текущему заказу. Предоплату исполнитель вправе не возвращать!</div>
+                <?php 
+                $form = ActiveForm::begin([
+                        'id' => 'cancel-form',
+                        'options' => [
+                            'data-pjax' => true,                           
+                            ],
+                        ]); ?>
+
+                <input hidden type="text" name="field_name" value="win_cancel_exec">
+
+                <?= $form->field($order_exec, 'order_id')->hiddenInput(['value' => $order_id])->label(false) ?>
+                <?= $form->field($order_exec, 'exec_id')->hiddenInput(['value' => $exec_id])->label(false) ?>
+
+                <div class="choose_buttons">
+                    <?= Html::submitButton('Отказать', ['class' => 'register active']) ?>
+                </div>
+                <?php ActiveForm::end(); ?>
+                <?php 
+                Modal::end();                   
+                // модальное окно - Отказать  исполнителю -Конец   
+                ?>           
+            
+            <!-- модальное окно - пожаловаться на Исполнителя  -->
+                <?php 
+                if($ischoose){   ?> 
+                    <a href="#!" class="contacts">Пожаловаться на исполнителя</a>
+                <?php } ?>      
+        </div>
+        <?php // закрытие фона модального окна           
+            $script = <<< JS
+                // Закрытие фона модального окна
+                $('.register.active').click(function(e){
+                    // отправка формы по pjax и потом удаление фона:        
+                    $('.modal-backdrop.fade.in').css('display','none'); 
+                    $('body').removeAttr('class');              
+                });
+
+            JS;
+            //маркер конца строки, обязательно сразу, без пробелов и табуляции
+            $this->registerJs($script, yii\web\View::POS_READY);
+        ?>
+
+        
+        
     </div>
     <?php Pjax::end(); ?>
 
