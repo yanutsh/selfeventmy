@@ -21,8 +21,10 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 //debug($dialog_list );
 //debug($user_category); 
 //debug($order_exec); 
+
 $order_id = $dialog_list[0]['chat']['order_id'] ;
 $exec_id  = $dialog_list[0]['chat']['exec_id'] ;
+$work_form_name = $_GET['work_form_name'];
 //echo("order_id".$order_id);
 //debug($exec_id);
 ?>
@@ -114,26 +116,29 @@ $exec_id  = $dialog_list[0]['chat']['exec_id'] ;
             <?php  }
         }  ?> 
         
-        <?php $form = ActiveForm::begin([
-            'id' => 'message-form',
-            'options' => [
-                'data-pjax' => true,
-                ],
-            ]); ?>
+        <?php
+        // ввод сообщения 
+        if(!$order_exec['result']) { // исполнитель успешно завершил заказа 
+            $form = ActiveForm::begin([
+                'id' => 'message-form',
+                'options' => [
+                    'data-pjax' => true,
+                    ],
+                ]); ?>
 
-            <div class="center">
-                <input type="text" class="message_text" name="message" placeholder="Введите сообщение">
-                            
-                <div class="form-group send-message">
-                    <input type="submit" name="ok" value="" class = 'message-button', 
-                        name = 'message-button', id="message-button" title="Отправить сообщение"/>             
+                <div class="center">
+                    <input type="text" class="message_text" name="message" placeholder="Введите сообщение">
+                                
+                    <div class="form-group send-message">
+                        <input type="submit" name="ok" value="" class = 'message-button', 
+                            name = 'message-button', id="message-button" title="Отправить сообщение"/>             
+                    </div>
                 </div>
-            </div>
+        <?php ActiveForm::end(); 
+        }?>
 
-        <?php ActiveForm::end(); ?>
 
-
-        <!-- вывод flesh - сообщения об ошибках-->
+        <!-- вывод flesh - сообщения -->
             <div class="flash_choose">
             <?php if( Yii::$app->session->hasFlash('payment_ok') ): ?>
                  <div class="alert alert-danger alert-dismissible choose" role="alert">
@@ -144,11 +149,16 @@ $exec_id  = $dialog_list[0]['chat']['exec_id'] ;
             </div>
 
         <div class="buttons__dialog">
+            <?php  
+            if(!$order_exec['result']) { // исполнитель успешно завершил заказа ?>
             <!-- модальное окно - показать контакты исполнителя -->
-            <?php 
+                
+
+                <?php 
                 if(!$ischoose){   ?> 
                     <a href="#!" class="contacts">Показать контакты</a>           
                 <?php } ?>
+            
             <!-- модальное окно - выбрать исполнителя -->
                 <?php
                 if(!$ischoose) {      
@@ -200,7 +210,7 @@ $exec_id  = $dialog_list[0]['chat']['exec_id'] ;
 
                                 <div class="b_balance">
                                     <div class="control-label choose__safe">Ваш баланс</div>
-                                    <div class="balance">10000 Р</div>  
+                                    <div class="balance">10000 ₽</div>  
                                 </div>
                             
                                 <div class="choose_buttons">
@@ -213,28 +223,15 @@ $exec_id  = $dialog_list[0]['chat']['exec_id'] ;
                     <?php 
                     Modal::end();                   
                     // модальное окно - Выбрать исполнителем -Конец   
-                    ?>          
-                
-                   <?php            
-                        //$script = <<< JS
-                            // Закрытие фона модального окна
-                        //     $('.register.active').click(function(e){
-                        //         // отправка формы по pjax и потом удаление фона:        
-                        //         $('.modal-backdrop.fade.in').css('display','none'); 
-                        //         $('body').removeAttr('class');              
-                        //     });
-
-                        // JS;
-                        //маркер конца строки, обязательно сразу, без пробелов и табуляции
-                        //$this->registerJs($script, yii\web\View::POS_READY);
-                    ?>
+                    ?>                
+                  
                     <?php //Pjax::end(); 
                     // <!--Выбрать исполнителем -Конец       -->
                 }else{ ?>     
             
             <!-- модальное окно - подтвердить выполнение   -->
            
-                <a href="#!" class='choose'>Подтвердить выполнение</a>
+                <a href="/cabinet/dialog-list?chat_id=<?=$dialog_list[0]['chat_id'] ?>&work_form_name=<?= $work_form_name ?>&confirm=order_confirm" title="Подтвердить выполнение" class='choose'>Подтвердить выполнение</a>
                 <?php } ?>              
 
             <!-- модальное окно - отказать Исполнителю  -->           
@@ -283,6 +280,18 @@ $exec_id  = $dialog_list[0]['chat']['exec_id'] ;
                 if($ischoose){   ?> 
                     <a href="#!" class="contacts">Пожаловаться на исполнителя</a>
                 <?php } ?>      
+            
+            <?php 
+            }else{ ?> 
+            <!-- кнопка оставить отзыв      -->
+                <?php //debug($exec_id) ?>
+                <div class="buttons">
+                    <a href="/cabinet/exec-review?exec_id=<?= $exec_id ?>&chat_id=<?= $dialog_list[0]['chat_id']?>" title="Оставить отзыв" class='register active'>Оставить отзыв</a>
+                </div>    
+            <?php } ?>  
+
+            
+
         </div>
         <?php // закрытие фона модального окна           
             $script = <<< JS
@@ -303,5 +312,5 @@ $exec_id  = $dialog_list[0]['chat']['exec_id'] ;
     </div>
     <?php Pjax::end(); ?>
 
-           
+       
 </div>

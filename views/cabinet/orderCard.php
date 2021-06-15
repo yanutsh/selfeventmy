@@ -76,7 +76,7 @@ $city = City::find() ->orderBy('name')->all();
                 else $name .= ", ".$cat['name'];                 
             } echo $name; ?>        
         </div>
-        <div class="order_content__budget"><?= $order['budget_to']?> Р</div>
+        <div class="order_content__budget"><?= $order['budget_to']?> ₽</div>
         <div class="order_content__declare">Описание события</div>
         <p><?= $order['details']?></p>
 

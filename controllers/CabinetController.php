@@ -291,6 +291,31 @@ met_first:
 
         // Если пришёл PJAX запрос
         if (Yii::$app->request->isPjax) { 
+
+           // команда подтвердить выполнение заказа 
+           if(isset($_GET['confirm']) && $_GET['confirm']=='order_confirm') {
+            //debug($_GET['confirm']);
+            // отмечаем выполнение заказа?? Исполнителем??
+              $order_exec =  OrderExec::find()
+                      ->where(['order_id'=>$chat->order_id, 'exec_id'=>$chat->exec_id]) ->one(); 
+              if (!empty($order_exec)) {         // исполнитель был выбран
+                  $order_exec->result = 1;       // записываем - успешное окончание
+                  $order_exec->save();
+              }else debug('order_exec не найден');    
+            // переводим деньги Исполнителю (если безопасная сделка)
+
+            // генерируем сообщение Исполнителю
+              $message = "Заказ выполнен. Спасибо за работу.";
+              if($order_exec->safe_deal=='on') $message .= "<br>Деньги Вам переведены - ".$order_exec->price." ₽";
+              $dialog = new Dialog();  // сообщение исполнителю 
+              $dialog->message = $message;
+              $dialog->chat_id = $chat_id;
+              $dialog->user_id = $user_id;
+              $dialog->save();            
+         
+            goto met_first;
+           }
+            
            $data = Yii::$app->request->post();
            
            if($data['field_name'] == 'win_cancel_exec') { // Нажата кнопка Отказать
@@ -314,17 +339,37 @@ met_first:
            if($data['field_name'] == 'choose') { // Нажата кнопка Выбрать исполнителем
               // проверить наличие и снять предоплату, забронировать остальную сумму
 
-              // если отмечена Безопасная сделка и денег хватает
-              $mess = "Вы внесли денежные средства в безопасную сделку: 10000 Р.";
-
-              // если отмечена предоплата:
-              $mess .= "<br>Сумма предоплаты переведена исполнителю: 2000 Р.";
-              Yii::$app->session->setFlash('payment_ok', $mess);
+              // если отмечена Безопасная сделка и денег хватает             
+             
 
               // сохранить исполнителя заказа
               $order_exec -> load($data);
               $order_exec->save();
               $ischoose = 1;                    // исполнитель выбран
+
+              // сгенерировать сообщение исполнителю
+              $message = "Вы выбраны исполнителем!";
+              
+              // если отмечена Безопасная сделка    
+              if($order_exec['safe_deal']) { 
+                $message ="<br>В рамках безопасной сделки зарезервирована сумма в размере ".($order_exec['price']-$order_exec['prepayment_summ'])." ₽";  //  исполнителю
+
+                $mess = "<br>Вы внесли денежные средства в безопасную сделку: ".($order_exec['price']-$order_exec['prepayment_summ'])." ₽";            // на сайт
+              }
+
+              // если отмечена предоплата:
+              if($order_exec['prepayment_summ']) {
+                $message .="<br>Вам переведена предоплата в размере ".$order_exec['prepayment_summ']." ₽<br>";        //  исполнителю       
+                 
+                $mess .= "<br>Сумма предоплаты переведена исполнителю: ".$order_exec['prepayment_summ']." ₽.";    // на сайт             
+              }
+              Yii::$app->session->setFlash('payment_ok', $mess); // сообщение на сайт 
+                
+              $dialog = new Dialog();  // сообщение исполнителю 
+              $dialog->message = $message;
+              $dialog->chat_id = $chat_id;
+              $dialog->user_id = $user_id;
+              $dialog->save();
 
                goto met_first;
            }
@@ -376,12 +421,12 @@ met_first:
           $user_category=UserCategory::find()->where(['user_id'=>$user_id_2]) 
               ->with('category')->asArray()->all();             
                
-          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2','order_exec','ischoose'));
+          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2','order_exec','ischoose','isorder_confirm'));
         }else{
           $isexec=0;
           //debug("Я-Исполнитель. Выводим диалог с заказчиком");
 
-          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2','order_exec','ischoose'));
+          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2','order_exec','ischoose','isorder_confirm'));
         }                
     }
 
@@ -1167,11 +1212,35 @@ met_first:
     return $this->render('orderResponseForm',compact('model'));
 
   }
+
+  // страница оценки исполнителя
+  public function actionExecReview($exec_id,$chat_id) {    
+    $review = new Review();
+
+    if (Yii::$app->request->isPost) { 
+        $data = Yii::$app->request->post();
+        $review->load($data);
+        //debug($review);
+        $review->save();
+
+        // закрываем чат
+        //echo("Закрываем чат"); 
+        //debug($chat_id);
+        $chat = Chat::find()->where(['id'=>$chat_id])->one();
+        if ($chat) {
+          $chat->chat_status=0;
+          $chat->save();
+        }
+        return $this->redirect('/cabinet/chat-list'); 
+    }    
+    return $this->render('execReview', compact('review','exec_id'));
+  }
     
   // Пользовательская функция Сортировки многомерного массива По возрастанию:
   public function cmp_function($a, $b){
       return ($a['name'] > $b['name']);
   } 
+  
 
 }  
 

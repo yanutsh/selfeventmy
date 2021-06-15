@@ -44,10 +44,10 @@ CabinetAsset::register($this);
 
 								<?php 
 								// только для отображения рейтинга:
-								require_once($_SERVER['DOCUMENT_ROOT'].'/libs/star_reting_get_html.php') 
-
+								$userid=$user['id'];
+								require_once($_SERVER['DOCUMENT_ROOT'].'/libs/star_reting_get_html.php'); 
 								// для установки рейтинга:
-								//require_once($_SERVER['DOCUMENT_ROOT'].'/libs/star_reting_html.php') ?>
+								//require_once($_SERVER['DOCUMENT_ROOT'].'/libs/star_reting_html.php'); ?>
 
 							<!-- star rating data-id="page-1" Конец ********************-->
 		        
