@@ -15,6 +15,7 @@ use app\models\UserCategory;
 use app\models\Subcategory;
 use app\models\City;
 use app\models\Chat;
+use app\models\Complain;
 use app\models\Dialog;
 use app\models\DocList;
 use app\models\WorkForm;
@@ -204,7 +205,7 @@ met_first:
           $user_id = Yii::$app->user->identity->id;           
          
         // Если пришёл PJAX запрос
-        if (Yii::$app->request->isPjax) { 
+        //if (Yii::$app->request->isPjax) { 
         //   // Устанавливаем формат ответа JSON
         //   Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //   $data = Yii::$app->request->post();
@@ -215,20 +216,41 @@ met_first:
             // if ($_GET['var']=="first") $msg="первый"; 
             // return $this->render('chatList', compact('msg')); 
           
-         } //else { 
+        // } //else { 
 
         // первый раз открываем страницу - показываем все 
         // чаты по заказам где текущий юзер - Заказчик   
 
         // чаты по заказам где текущий юзер - Исполнитель 
-        if(Yii::$app->user->identity->isexec) {    
-          $chat_list = Chat::find()->Where(['and',['exec_id' => $user_id, 'chat_status'=> 1]])    
-                ->with('customer','exec', 'order','dialogs')
-                ->orderBy('chat_date DESC')
-                ->asArray()->all();  //count();
+        if(Yii::$app->user->identity->isexec) {           
+          
+          // заказы от которых Заказчик отказался - исключить из списка чатов
+          $del_chats_where = OrderExec::find()->where(['exec_id'=>$user_id, 'exec_cancel'=>1])              ->asArray()->all();
+          //debug($del_chats_where,0);
 
+
+          $chat_list = Chat::find()->Where(['exec_id' => $user_id, 'chat_status'=> 1])    
+              ->with('customer','exec', 'order','dialogs')
+              //->andWhere(['order_id' => OrderExec::find()->select('order_id')->andWhere([      
+              // 'and',  ['<>','result', 1], ['=','exec_cancel', 0] ]) 
+              //  ])
+              ->orderBy('chat_date DESC')
+              ->asArray()->all();  //count();
+          //debug($chat_list);       
+          // удаляем чаты с отказавшимися Исполнителями 
+          
+            foreach($del_chats_where as $dcw){
+              foreach($chat_list as $k=>$chl){
+                if ($dcw['order_id']==$chl['order_id'] &&
+                    $dcw['exec_id']==$chl['exec_id']) {                    
+                    unset($chat_list[$k]);
+                    break;
+                }                
+              }
+            }
           $count= count($chat_list);             
         }else{
+
         // чаты по заказам где текущий юзер - Заказчик 
           $chat_list = Chat::find()->Where(['and',['customer_id' => $user_id, 'chat_status'=> 1]])
                 ->with('customer','exec', 'order','dialogs')
@@ -255,7 +277,16 @@ met_first:
     }
   
     // ЛК - список Диалогов по данному чату  ********************************************
-    public function actionDialogList($chat_id, $work_form_name) {        
+    public function actionDialogList($chat_id, $work_form_name) {  
+
+        if($work_form_name=='cancel') { //поступила  команда закрыть чат
+          //debug("cancel") ; 
+          $chat = Chat::find()->where(['id'=>$chat_id])->one();
+          $chat->chat_status = 0;
+          $chat->save(); 
+          // переход на chat-list
+          return $this->redirect('/cabinet/chat-list');
+        }     
 
         // получить список всех сообщений из БД по данному чату
         $user_id = Yii::$app->user->identity->id;        
@@ -289,10 +320,13 @@ met_first:
           $order_exec = new OrderExec();          
         }
 
-        // Если пришёл PJAX запрос
-        if (Yii::$app->request->isPjax) { 
+        $complain = new Complain(); // жалобы
 
-           // команда подтвердить выполнение заказа 
+        // Если пришёл PJAX запрос
+        if (Yii::$app->request->isPjax) {
+           $data = Yii::$app->request->post();  
+
+          // команда подтвердить выполнение заказа 
            if(isset($_GET['confirm']) && $_GET['confirm']=='order_confirm') {
             //debug($_GET['confirm']);
             // отмечаем выполнение заказа?? Исполнителем??
@@ -314,24 +348,60 @@ met_first:
               $dialog->save();            
          
             goto met_first;
-           }
-            
-           $data = Yii::$app->request->post();
-           
-           if($data['field_name'] == 'win_cancel_exec') { // Нажата кнопка Отказать
+           }      
+                  
+
+          // Заказчик Отказал испонителю ИЛИ Исполнитель отказался от заказа
+            if($data['field_name'] == 'win_cancel_exec' || $data['field_name'] == 'win_cancel_order')
+            {       
+                                   
               // записываем в БД признак Отказа 
               $order_exec =  OrderExec::find()
-                      ->where(['order_id'=>$data['OrderExec']['order_id'], 'exec_id'=>$data['OrderExec']['exec_id'] ]) ->one(); 
+                      ->where(['order_id'=>$data['OrderExec']['order_id'], 'exec_id'=>$data['OrderExec']['exec_id'] ])->one(); 
+                     
               if (!empty($order_exec)) {         // исполнитель был выбран
-                  $order_exec->result = 0;       // записываем - отказать
-                  $order_exec->save();
+                
+                if($data['field_name'] == 'win_cancel_exec') // Заказчик отказал
+                  $order_exec->result = 0;       // записываем - отказ Заказчика
+                
+                if($data['field_name'] == 'win_cancel_order') // Исполитель отказалcя
+                  $order_exec->exec_cancel = 1;  // записываем - отказ Исполнителя  
+                
+                $order_exec->save();
               }else  {                           // исполнитель не был выбран
-                $order_exec = new OrderExec();  
-                $order_exec->load($data);
+                $order_exec = new OrderExec();
+                //debug($data);  
+                $order_exec->order_id = $data['OrderExec']['order_id'];
+                $order_exec->exec_id = $data['OrderExec']['exec_id'];
                 $order_exec->price = 0;
-                $order_exec->result = 0;       // записываем - отказать                
+                if($data['field_name'] == 'win_cancel_exec') // Заказчик отказал
+                  $order_exec->result = 0;       // записываем - отказ Заказчика
+                
+                if($data['field_name'] == 'win_cancel_order') // Исполитель отказал
+                  $order_exec->exec_cancel = 1;  // записываем - отказ Исполнителя
+
+                //debug($order_exec);        
                 $order_exec->save(); 
-              }        
+              } 
+
+              // генерируем сообщение Исполнителю
+              if($data['field_name'] == 'win_cancel_exec')     // Заказчик отказал
+                $message = "К сожалению, заказчик отказался от ваших услуг.";
+              if($data['field_name'] == 'win_cancel_order')  { // Исполитель отказал
+              // генерируем сообщение Заказчику  
+                $message = "К сожалению, исполнитель отказался от выполнения заказа."; 
+                if( $order_exec->prepayment_summ > 0){
+                  $message .="<br>Предоплата возвращена на ваш эккаунт и средства разблокированы" ;
+
+                  // Вернуть предоплату
+                }
+              }  
+              $dialog = new Dialog();  // сообщение исполнителю 
+              $dialog->message = $message;
+              $dialog->chat_id = $chat_id;
+              $dialog->user_id = $user_id;
+              $dialog->save();            
+                           
               // возвращаемся к списку чатов
               return $this->redirect('/cabinet/chat-list');              
            }
@@ -371,7 +441,7 @@ met_first:
               $dialog->user_id = $user_id;
               $dialog->save();
 
-               goto met_first;
+              goto met_first;
            }
            //debug($data);
            // записываем сообщение в диалог
@@ -383,8 +453,8 @@ met_first:
            //debug($dialog);
 
 
-        //  ТЕСТ
-        //debug($_GET['var']);
+          //  ТЕСТ
+          //debug($_GET['var']);
             // if ($_GET['var']=="first") $msg="первый"; 
             // return $this->render('chatList', compact('msg')); 
           
@@ -421,15 +491,14 @@ met_first:
           $user_category=UserCategory::find()->where(['user_id'=>$user_id_2]) 
               ->with('category')->asArray()->all();             
                
-          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2','order_exec','ischoose','isorder_confirm'));
+          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2','order_exec','ischoose','complain'));
         }else{
           $isexec=0;
           //debug("Я-Исполнитель. Выводим диалог с заказчиком");
 
-          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2','order_exec','ischoose','isorder_confirm'));
+          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','isexec','user2','order_exec','ischoose','complain'));
         }                
     }
-
 
 
     // ЛК - фильтр и список Исполнителей ********************************************

@@ -31,9 +31,9 @@ $work_form = change_key_new($work_form, 'id');
     <div class="order_content tabs_header">
         <!-- список вкладок  -->
         <ul class="nav nav-pills">
-            <li class="active"><a href="#tab-1" data-toggle="tab">Недавние</a></li>
-            <li><a href="#tab-2" data-toggle="tab">В работе</a></li>
-            <li><a href="#tab-3" data-toggle="tab">Выполнено</a></li>
+            <li class="active"><a href="#tab-1" data-toggle="tab">В работе</a></li>
+            <li><a href="#tab-2" data-toggle="tab">Выполнено</a></li>
+            <li><a href="#tab-3" data-toggle="tab">Недавние</a></li>
             <li><a href="#tab-4" data-toggle="tab">Архив</a></li>
         </ul>
     </div>
@@ -54,6 +54,10 @@ $work_form = change_key_new($work_form, 'id');
                 <!-- Список чатов для Заказчика -->
                 <?php                
                 if(!Yii::$app->user->identity->isexec){
+                    if(!$chat_list) { // нет открытых чатов?>
+                        <div class="subtitle">У вас нет открытых чатов</div>
+                    <?php }
+                    
                     foreach($chat_list as $k=>$chl) { ?>
                     <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?>" title="Перейти к диалогу в этом чате">
                         <div class="order_info chat">
@@ -85,7 +89,11 @@ $work_form = change_key_new($work_form, 'id');
                 <!-- Список чатов для Исполнителя    --> 
                     <?php
                     //debug($chat_list);
-    
+
+                    if(!$chat_list) { // нет открытых чатов?>
+                        <div class="subtitle">У вас нет открытых чатов</div>
+                    <?php  }
+
                     foreach($chat_list as $k=>$chl) { ?>
                     <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?>" title="Перейти к диалогу в этом чате">
                         <div class="order_info chat">

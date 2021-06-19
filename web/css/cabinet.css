@@ -1693,7 +1693,12 @@ body{
 	.order_info.chat:hover{		
     	border: 1px solid #C9C9C9;
     }	
-		
+	
+    .subtitle{
+		text-align: center;
+	    font-size: 22px;
+	    font-weight: bold;
+	}    	
 
 /*******************  Чат лист - Конец ******************************************/
 
