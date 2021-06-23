@@ -1,4 +1,25 @@
 $(document).ready(function() {
+
+
+    // прокрутка до элемента
+    $(document).ready(function() {
+        // сперва получаем позицию элемента относительно документа
+        if ($('div').is('.buttons__dialog')) {
+
+            var destination = $('.buttons__dialog').offset().top -500;
+
+            // скроллим страницу на значение равное позиции элемента
+            // if ($.browser.safari) {
+            //     $('body').animate({ scrollTop: destination }, 1100); //1100 - скорость
+            // } else {
+                $('html').animate({ scrollTop: destination }, 1100);
+            //}
+            //return false; 
+        }    
+
+    })
+
+
         
     // Предотвращение отправки формы по ENTER
     // $("input").keydown(function(event){

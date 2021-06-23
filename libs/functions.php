@@ -18,6 +18,15 @@ function confirm_code($len=6){
 	return $str;		
 }
 
+function cht_status($chat_list) {
+  if( $chat_list['exec_cancel']==1) $cht_status="Отказ Исполнителя"; 
+  elseif( $chat_list['result']===0) $cht_status="Отказ заказчика"; 
+  elseif( $chat_list['result']==1) $cht_status="Заказ выполнен"; 
+  elseif( $chat_list['isaccepted']==1) $cht_status="Принят к исполнению";
+  else    $cht_status ="Диалог открыт";
+  return   $cht_status; 
+}
+
 // отправка email
 function send_email($email,$email_subject,$text){	
 	// отправка смс OT Aдмина на email Юзера с текстом  $text
@@ -217,4 +226,28 @@ function sort_files($files) {
 	}		
 	//$files = $files_sort;
 	return $files_sort;
-}	
+}
+
+// возвращает процент роялти от суммы заказа
+function get_royalty($summ) {
+	switch ($summ) {
+    case ($summ>0 and $summ<=30000):
+       return 0.1;
+       break;
+     case ($summ>30000 and $summ<=70000):
+       return 0.08;
+       break;
+     case ($summ>70000 and $summ<=110000):
+       return 0.06;
+       break;
+     case ($summ>110000 and $summ<=150000):
+       return 0.05;
+       break;
+     case ($summ>150000 and $summ<=1000000):
+       return 0.03;
+       break;
+     case ($summ>1000000):
+       return 0.01;
+       break;                      
+	}
+}		

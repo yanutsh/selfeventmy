@@ -24,65 +24,60 @@ $work_form = $cache->get('work_form');
 $work_form = change_key_new($work_form, 'id');
 //debug($work_form);
 //debug($chat_list);
+
 ?>
 <div class="wrapper__addorder wrapper__addorder__card">
     
-
+    <?php  Pjax::begin(['timeout' => false ]); 
+    echo $jscr; ?>
     <div class="order_content tabs_header">
         <!-- список вкладок  -->
-        <ul class="nav nav-pills">
-            <li class="active"><a href="#tab-1" data-toggle="tab">В работе</a></li>
-            <li><a href="#tab-2" data-toggle="tab">Выполнено</a></li>
-            <li><a href="#tab-3" data-toggle="tab">Недавние</a></li>
-            <li><a href="#tab-4" data-toggle="tab">Архив</a></li>
+        <ul class="nav nav-pills">            
+            <li id="tab1"><a href="chat-list?tab=1">В работе</a></li>
+            <li id="tab2"><a href="chat-list?tab=2">Выполнено</a></li>
+            <li id="tab3"><a href="chat-list?tab=3">Недавние</a></li>
+            <li id="tab4"><a href="chat-list?tab=4">Архив</a></li>           
         </ul>
     </div>
-
+  
     <div class="order_content">
 
-        <?php  //Pjax::begin(); ?>
-        <h3> Тест <?= $msg ?></h3>
-        <a href="/cabinet/chat-list?var=first">Тест Pjax</a> 
-
-        <div class="tab-content">
-            <div id="tab-1" class="tab-pane fade in active">
-                <!-- цикл по Недавним чатам -->
+        <!-- <div class="tab-content"> -->
+            <div id="tab-1" class="tab-pane fade in active">                     
+                <!-- цикл по чатам В работе-->
                 <?php //debug($chat_list) 
-                      //debug($new_mess_chat);
+                    //debug($msg,0);
                     $user_id = Yii::$app->user->identity->id; 
                 ?>
                 <!-- Список чатов для Заказчика -->
                 <?php                
                 if(!Yii::$app->user->identity->isexec){
                     if(!$chat_list) { // нет открытых чатов?>
-                        <div class="subtitle">У вас нет открытых чатов</div>
+                        <div class="subtitle">В этой категории чатов нет.</div>
                     <?php }
                     
-                    foreach($chat_list as $k=>$chl) { ?>
-                    <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?>" title="Перейти к диалогу в этом чате">
-                        <div class="order_info chat">
-                            <div class="number_info"><span>#<?= substr((string)$chl['order_id'],-2)?></span>
-                                <!-- <div id="badge_chat" class="badge ">15</div> -->
-                                <div class="badge bage_messages"><?= $new_mess_chat[$chl['id']]['kol_new_mess'] ?></div>
-                            </div>
-                            <div class="text_info">
-                                <div class="full_number">Заказ № <?= $chl['order_id']?></div>
-                                <div class="fio"><?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?> <?= $chl['exec']['username'] ?></div>
-                                <div class="last_message">
-                                    <?php  
-                                    echo end($chl['dialogs'])['message'];
-                                    // foreach($chl['dialogs'] as $chd) {
-                                    //     if ($chd['new'] && ($chd['user_id']<>$user_id) ) {
-                                    //         echo $chd['message'];
-                                    //         break;
-                                    //     }
-                                    // }?>
+                    foreach($chat_list as $k=>$chl) { ?>                        
+                        <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?>" data-pjax="0" title="Перейти к диалогу в этом чате">
+                            <div class="order_info chat">
+                                <div class="number_info"><span>#<?= substr((string)$chl['order_id'],-2)?></span>
+                                    <!-- <div id="badge_chat" class="badge ">15</div> -->
+                                    <div class="badge bage_messages"><?= $new_mess_chat[$chl['id']]['kol_new_mess'] ?></div>
                                 </div>
-                            </div>                    
-                        </div>                   
-                    </a>
-                    <hr>
-                <?php }
+                                <div class="text_info">
+                                    <div class="full_number">Заказ № <?= $chl['order_id']?></div>
+                                    <div class="fio"><?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?> <?= $chl['exec']['username'] ?></div>
+                                    <div class="last_message">
+
+                                        <?php  
+                                        echo end($chl['dialogs'])['message'];
+                                        ?>
+                                    </div>
+                                    <div class="status"><?= $cht_status ?></div> 
+                                </div>                    
+                            </div>                   
+                        </a>
+                        <hr>
+                    <?php }
                 } else { ?>
                 <!-- Список чатов для Заказчика Конец-->
                                 
@@ -91,61 +86,43 @@ $work_form = change_key_new($work_form, 'id');
                     //debug($chat_list);
 
                     if(!$chat_list) { // нет открытых чатов?>
-                        <div class="subtitle">У вас нет открытых чатов</div>
+                        <div class="subtitle">В этой категории чатов нет.</div>
                     <?php  }
 
                     foreach($chat_list as $k=>$chl) { ?>
-                    <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?>" title="Перейти к диалогу в этом чате">
-                        <div class="order_info chat">
-                            <div class="number_info"><span>#<?= substr((string)$chl['order_id'],-2)?></span>
-                                <!-- <div id="badge_chat" class="badge ">15</div> -->
-                                <div class="badge bage_messages"><?= $new_mess_chat[$chl['id']]['kol_new_mess'] ?></div>
-                            </div>
-                            <div class="text_info">
-                                <div class="full_number">Заказ № <?= $chl['order_id']?></div>
-                                <div class="fio"><?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?> <?= $chl['customer']['username'] ?></div>
-                                <div class="last_message">
-                                    <?php echo end($chl['dialogs'])['message']; ?>
+
+                        <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?>" data-pjax="0" title="Перейти к диалогу в этом чате">
+
+                            <div class="order_info chat">
+                                <div class="number_info"><span>#<?= substr((string)$chl['order_id'],-2)?></span>
+                                    <!-- <div id="badge_chat" class="badge ">15</div> -->
+                                    <div class="badge bage_messages"><?= $new_mess_chat[$chl['id']]['kol_new_mess'] ?></div>
                                 </div>
-                            </div>                    
-                        </div>                   
-                    </a>
-                    <hr>
+                                <div class="text_info">
+                                    <div class="full_number">Заказ № <?= $chl['order_id']?></div>
+                                    <div class="fio"><?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?> <?= $chl['customer']['username'] ?></div>
+                                    <div class="last_message">
+                                        <?php echo end($chl['dialogs'])['message']; ?>
+                                    </div>
+                                </div>                    
+                            </div>                   
+                        </a>
+                        <hr>
                     <?php }
                 }?>
-                <!-- Список чатов для Исполнителяец Кон-->
-            </div>
+                <!-- Список чатов для Исполнителя Конец-->
+            </div>            
+        <!-- </div> -->
+        <?php  //Pjax::end(); ?> 
 
-            <div id="tab-2" class="tab-pane fade">
-                <!-- цикл по открытым Чатам  -->
-                <div class="order_info chat">
-                    <div class="number_info"><span>#22</span></div>
-                    <div class="text_info">
-                        
-                    </div>
-                </div>                
-            </div>
-
-            <div id="tab-3" class="tab-pane fade">
-               <!-- цикл по закрытым Чатам  -->
-                <div class="order_info chat">
-                    <div class="number_info"><span>#33</span></div>
-                    <div class="text_info">
-                        
-                    </div>
-                </div>                
-            </div>
-
-            <div id="tab-4" class="tab-pane fade">
-               <!-- цикл по архивным Чатам  -->
-                <div class="order_info chat">
-                    <div class="number_info"><span>#44</span></div>
-                    <div class="text_info">
-                        
-                    </div>
-                </div>                
-            </div>
-        </div>
     </div>
-    <?php  //Pjax::end(); ?>        
+        <?php     
+        $script = <<< JS
+            console.log(tab);
+            $('#tab'+tab).addClass('active');            
+        JS;
+        //маркер конца строки, обязательно сразу, без пробелов и табуляции
+        $this->registerJs($script, yii\web\View::POS_READY);
+        ?>          
+     <?php  Pjax::end(); ?>    
 </div>

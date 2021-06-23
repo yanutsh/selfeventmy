@@ -24,6 +24,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $page->seo_descrip
 
 $order_id = $dialog_list[0]['chat']['order_id'] ;
 $exec_id  = $dialog_list[0]['chat']['exec_id'] ;
+$customer_id = $dialog_list[0]['chat']['customer_id'] ;
 $work_form_name = $_GET['work_form_name'];
 $user_id = Yii::$app->user->identity->id;
 //echo("order_id".$order_id);
@@ -42,10 +43,10 @@ $user_id = Yii::$app->user->identity->id;
         </div>
 
         <div class="b_text b_text__tuning __dialog">
-            <!-- <span class="fio"><?= $work_form_name ?> - <?= $dialog_list[0]['user']['username']?></span> -->
+            <!-- <span class="fio"><?//= $work_form_name ?> - <?//= $dialog_list[0]['user']['username']?></span> -->
             <span class="fio"><?= $work_form_name ?> - <?= $user2['username']?></span>
             <?php 
-            if($isexec) {  
+            if($is_show_exec) {  
                 if ( $dialog_list[0]['user']['isconfirm']==1){ //Если Исполнитель и профиль проверен-показываем?>     
                     <div class="checked">Профиль проверен</div>             
                 <?php   } 
@@ -61,33 +62,33 @@ $user_id = Yii::$app->user->identity->id;
             </div>
         </div>
        
-            <div class="addition">
-                <?php
-                if($isexec) { ?>    
-                    <p><?php           
-                        $ucarr=array(); // для неповторяющиеся категории услуг
-                        $price=array(); // для определения мин цены
-                        foreach($user_category as $uc){
-                            // собираем неповторяющиеся категории услуг в массив
-                            if (!in_array($uc['category']['name'],$ucarr)) $ucarr[]=$uc['category']['name'];
-                            $price[]=$uc['price_from'];
-                        }    
-                        foreach($ucarr as $uca) {echo $uca." ";}
-                        $minprice= min($price);
-                    ?>                
-                    </p>                
-                    <p class='price_from'>от <?= $minprice ?> ₽</p>
-                <?php } ?>
+        <div class="addition">
+            <?php
+            if($is_sghow_exec) { ?>    
+                <p><?php           
+                    $ucarr=array(); // для неповторяющиеся категории услуг
+                    $price=array(); // для определения мин цены
+                    foreach($user_category as $uc){
+                        // собираем неповторяющиеся категории услуг в массив
+                        if (!in_array($uc['category']['name'],$ucarr)) $ucarr[]=$uc['category']['name'];
+                        $price[]=$uc['price_from'];
+                    }    
+                    foreach($ucarr as $uca) {echo $uca." ";}
+                    $minprice= min($price);
+                ?>                
+                </p>                
+                <p class='price_from'>от <?= $minprice ?> ₽</p>
+            <?php } ?>
 
-                <a href='<?= Url::to(['/cabinet/user-card','id'=>$user2['id'] ]) ?>' class="white_btn">
-                    <?php if($user_id==$dialog_list[0]['chat']['exec_id']) echo"Перейти к заказчику";
-                            else echo"Перейти к исполнителю"?>
-                </a>
-            </div>                   
+            <a href='<?= Url::to(['/cabinet/user-card','id'=>$user2['id'] ]) ?>' class="white_btn">
+                <?php if($user_id==$dialog_list[0]['chat']['exec_id']) echo"Перейти к заказчику";
+                        else echo"Перейти к исполнителю"?>
+            </a>
+        </div>                   
     </div>    
 
     <!-- заголовок -->
-    <?php Pjax::begin(); ?>
+    <?php Pjax::begin(['timeout' => false ]); ?>
     <div class="order_content order_content__tuning __dialog">
         <div class="date-now"><?= date('d.m.Y')?></div>
         <div class="dialog_rules">Правила переписки<br>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure blanditiis consectetur quaerat dolor repellat possimus molestiae, accusamus ullam pariatur in, consequuntur voluptatibus obcaecati delectus, ratione error maxime neque! Vero, pariatur.
@@ -158,7 +159,8 @@ $user_id = Yii::$app->user->identity->id;
     <?php if($user_id==$dialog_list[0]['chat']['customer_id']) 
     { ?>
         <div class="buttons__dialog">
-            <?php           
+            <?php 
+
             if($order_exec['result']<>1 && $order_exec['result']<>0 || Empty($order_exec['result'])) 
             {   // исполнитель не завершил заказ - диалог открыт ?>
                 <!-- модальное окно - показать контакты исполнителя -->
@@ -347,10 +349,19 @@ $user_id = Yii::$app->user->identity->id;
     <!-- кнопки для Заказчика Конец-->
 
     <!-- кнопки для Исполнителя -->
-        <div class="buttons__dialog">
-        <!-- модальное окно - Отказать  Заказчику (от заказа)  -->
+        <div class="buttons__dialog" id='buttons__dialog'>
+        
+        <!-- Кнопка Принять к исполнению -->
+            <?php  
+            if($ischoose==1 && $order_exec['isaccepted'] == 0 &&  $order_exec['result'] === null ) 
+            { ?>                 
+                <a href="<?= URL::to(['dialog-list','chat_id'=>$dialog_list[0]['chat_id'], 'work_form_name'=>"accepted"]) ?>"  class="choose",>Принять к исполнению</a>
+            <?php }?> 
+
+        <!-- модальное окно - Отказать  Заказчику (от заказа) или Закрыть Чат -->
             <?php // если получили отказ Заказчика
-            if(!($order_exec['result']==null) && $order_exec['result']==0) {  // кнопка Закрыть чат?>
+            // debug($order_exec,0);
+            if( $order_exec->result === 0 ) { ?>
                 <a href="dialog-list?chat_id=<?= $dialog_list[0]['chat_id']?>&work_form_name=cancel" class="choose">Закрыть чат</a>
             <?php
             }else{  // кнопка Отказать                              
@@ -388,9 +399,53 @@ $user_id = Yii::$app->user->identity->id;
                 <?php 
                 Modal::end();                   
                 // модальное окно - Отказаться от заказа-Конец   
-            }    ?>               
-    
-   
+            }    ?>                   
+        <!-- модальное окно - Отказать  Заказчику (от заказа) Конец -->
+        
+        <!-- модальное окно - пожаловаться на Заказчика  -->
+                    <?php 
+                    //if($ischoose){                     
+                        // модальное окно - Пожаловаться на Заказчика                  
+                        Modal::begin([
+                                'header' => '<h2>Жалоба на заказчика</h2>',
+                                'id' => "win_complain_cust",   
+                                'toggleButton' => [
+                                    'label' => 'Пожаловаться',
+                                    'tag' => "a",
+                                    'class' => 'choose',
+                                    'id' => 'modal_complain_cust',
+                                 ],                     
+                        ]);
+                        ?>   
+                                
+                        <div class="complain">                
+
+                            <?php $form = ActiveForm::begin([
+                                'id' => 'complain-cust-form',
+                                'options' => [
+                                    'data-pjax' => true,                           
+                                    ],
+                                ]); ?>
+
+                                <input hidden type="text" name="field_name" value="complain">
+                                <?= $form->field($complain, 'from_user_id')->hiddenInput(['value' => $user_id])->label(false) ?>
+                                <?= $form->field($complain, 'for_user_id')->hiddenInput(['value' => $customer_id])->label(false) ?>
+                                <?= $form->field($complain, 'order_id')->hiddenInput(['value' => $order_id])->label(false) ?>
+                                <?= $form->field($complain, 'complain')->textarea(['style'=>'resize:vertical', 'rows'=>'5']); ?>
+                
+                                                                             
+                                <div class="choose_buttons">
+                                    <?= Html::submitButton('Отправить', ['class' => 'register active']) ?>
+                                </div>                                 
+
+                            <?php ActiveForm::end(); ?>
+                        </div>               
+
+                        <?php 
+                        Modal::end();               
+                        ?>   
+
+                    <?php //} ?>      
         </div>
     <?php } ?>
     <!-- кнопки для Исполнителя Конец--> 
@@ -404,6 +459,14 @@ $user_id = Yii::$app->user->identity->id;
                     $('body').removeAttr('class');              
                 });
 
+                // прокрутка до элемента
+                // $(document).ready(function() {
+                //     // сперва получаем позицию элемента относительно документа
+                //     var scrollTop = $('#buttons__dialog').offset().top;
+
+                //     // скроллим страницу на значение равное позиции элемента
+                //     $(document).scrollTop(scrollTop);
+                // })    
             JS;
             //маркер конца строки, обязательно сразу, без пробелов и табуляции
             $this->registerJs($script, yii\web\View::POS_READY);
@@ -414,5 +477,4 @@ $user_id = Yii::$app->user->identity->id;
     </div>
     <?php Pjax::end(); ?>
 
-       
 </div>

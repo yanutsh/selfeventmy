@@ -85,13 +85,14 @@ foreach ($orders_list as $ol)
                 }else{   // нет чата ?>
                     <div class="text">Ваше предложение будет Х-м в рейтинге заказа</div>
                     <?php 
-                // модальное окно - Отклик на заказ                 
+                // модальное окно - Отклик на заказ 
+                    $otklik_price = round($ol['budget_to']*get_royalty($ol['budget_to']));               
                     Modal::begin([
                         'header' => '<h2>Отклик на заказ</h2>',
                         'id' => "modal_response_".$k, 
                         'class' => 'modal_response',
                         'toggleButton' => [
-                            'label' => 'Откликнуться за ZZZ ₽',
+                            'label' => 'Откликнуться за '.$otklik_price.' ₽',
                             'tag' => "a",
                             'class' => 'otklic',
                             'id' => 'toggle_response_'.$k,
@@ -118,7 +119,7 @@ foreach ($orders_list as $ol)
                             </div>
                         </div>
                         <div class="form-group">
-                            <?= Html::submitButton('Отправить отклик за 50 ₽', [
+                            <?= Html::submitButton('Отправить отклик за '.$otklik_price.' ₽', [
                                 'class' => 'register__user active__button response',
                                 'name' => 'order-response-button',
                                 'id'=> 'order-response-button_'.$k]) ?>
