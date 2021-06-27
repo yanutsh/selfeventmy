@@ -19,15 +19,15 @@ class GetNewMessAction extends Action
 	        
 	        // Количество новых сообщений  по ЧАТАМ	для Заказчика 
 	        if(!$identity->isexec) {     
-				$new_mess_chat_sql = "SELECT dialog.chat_id, Count(chat.exec_id) AS kol_new_mess, Min(chat.order_id) AS order_id, Min(chat.exec_id) AS exec_id, Min(chat.customer_id) AS customer_id
-				FROM dialog INNER JOIN chat ON dialog.chat_id = chat.id
-				WHERE (((dialog.user_id) != chat.customer_id) AND ((dialog.new)=1) AND ((chat.customer_id)=".$id."))
+				$new_mess_chat_sql = "SELECT dialog.chat_id, Count(yii_chat.exec_id) AS kol_new_mess, Min(yii_chat.order_id) AS order_id, Min(yii_chat.exec_id) AS exec_id, Min(yii_chat.customer_id) AS customer_id
+				FROM dialog INNER JOIN yii_chat ON dialog.chat_id = yii_chat.id
+				WHERE (((dialog.user_id) != yii_chat.customer_id) AND ((dialog.new)=1) AND ((yii_chat.customer_id)=".$id."))
 				GROUP BY dialog.chat_id";
 			}else{
 			// Количество новых сообщений  по ЧАТАМ	для Исполнителя 	
-				$new_mess_chat_sql = "SELECT dialog.chat_id, Count(chat.exec_id) AS kol_new_mess, Min(chat.order_id) AS order_id, Min(chat.exec_id) AS exec_id, Min(chat.customer_id) AS customer_id
-				FROM dialog INNER JOIN chat ON dialog.chat_id = chat.id
-				WHERE (((dialog.user_id) != chat.exec_id) AND ((dialog.new)=1) AND ((chat.exec_id)=".$id."))
+				$new_mess_chat_sql = "SELECT dialog.chat_id, Count(yii_chat.exec_id) AS kol_new_mess, Min(yii_chat.order_id) AS order_id, Min(yii_chat.exec_id) AS exec_id, Min(yii_chat.customer_id) AS customer_id
+				FROM dialog INNER JOIN yii_chat ON dialog.chat_id = yii_chat.id
+				WHERE (((dialog.user_id) != yii_chat.exec_id) AND ((dialog.new)=1) AND ((yii_chat.exec_id)=".$id."))
 				GROUP BY dialog.chat_id";
 			}
 

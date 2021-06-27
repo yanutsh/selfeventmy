@@ -18,11 +18,16 @@ function confirm_code($len=6){
 	return $str;		
 }
 
-function cht_status($chat_list) {
-  if( $chat_list['exec_cancel']==1) $cht_status="Отказ Исполнителя"; 
-  elseif( $chat_list['result']===0) $cht_status="Отказ заказчика"; 
-  elseif( $chat_list['result']==1) $cht_status="Заказ выполнен"; 
-  elseif( $chat_list['isaccepted']==1) $cht_status="Принят к исполнению";
+function cht_status($chat) {
+	// var_dump($chat['ischoose']);
+	// debug($chat,0);
+	$cht_status="";
+	
+  if(     $chat['exec_cancel']==1) $cht_status="Отказ Исполнителя"; 
+  elseif( $chat['result']==0 and !is_null($chat['result'])) $cht_status="Отказ Заказчика"; 
+  elseif( $chat['result']==1) $cht_status="Заказ выполнен"; 
+  elseif( $chat['isaccepted']==1) $cht_status="Принят к исполнению";
+  elseif( $chat['ischoose']==1) $cht_status="Исполнитель выбран";
   else    $cht_status ="Диалог открыт";
   return   $cht_status; 
 }

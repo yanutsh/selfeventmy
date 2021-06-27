@@ -14,8 +14,8 @@ use Yii;
  * @property string $message
  * @property int $new 1-новое сообщение
  *
- * @property Chat $chat
  * @property User $user
+ * @property Chat $chat
  */
 class Dialog extends \yii\db\ActiveRecord
 {
@@ -37,8 +37,8 @@ class Dialog extends \yii\db\ActiveRecord
             [['chat_id', 'user_id', 'new'], 'integer'],
             [['send_time'], 'safe'],
             [['message'], 'string'],
-            [['chat_id'], 'exist', 'skipOnError' => true, 'targetClass' => Chat::className(), 'targetAttribute' => ['chat_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['chat_id'], 'exist', 'skipOnError' => true, 'targetClass' => Chat::className(), 'targetAttribute' => ['chat_id' => 'id']],
         ];
     }
 
@@ -58,6 +58,16 @@ class Dialog extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
      * Gets query for [[Chat]].
      *
      * @return \yii\db\ActiveQuery
@@ -65,15 +75,5 @@ class Dialog extends \yii\db\ActiveRecord
     public function getChat()
     {
         return $this->hasOne(Chat::className(), ['id' => 'chat_id']);
-    }
-
-    /**
-     * Gets query for [[User]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()  // кто написал сообщение
-    {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

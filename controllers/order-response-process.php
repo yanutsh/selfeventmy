@@ -26,14 +26,12 @@ if (Yii::$app->request->isAjax) {
             // создаем чат
             $chat = new Chat();
             $chat->order_id = $data['order_id'];
-            $chat->exec_id = Yii::$app->user->id;
+            $chat->exec_id = Yii::$app->user->identity->id;
             $chat->customer_id = $customer_id['user_id'];
-            //debug ($chat) ; 
-
+            
             $chat->save();
             $chat_id = $chat->id; // определяем id нового чата
-            //debug ($chat_id) ; 
-
+           
             // записываем сообщение исполнителя в чат
             $dialog = new Dialog();
             $dialog->chat_id = $chat_id;

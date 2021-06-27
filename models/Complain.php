@@ -51,7 +51,7 @@ class Complain extends \yii\db\ActiveRecord
             'from_user_id' => 'From User ID',
             'for_user_id' => 'For User ID',
             'order_id' => 'Order ID',
-            'complain' => 'жалоба',
+            'complain' => 'Опишите суть претензий',
         ];
     }
 

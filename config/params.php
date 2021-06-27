@@ -8,7 +8,8 @@ $cache = \Yii::$app->cache;
 return [
     //'adminEmail'      => 'mail@v-stepanov.ru',
     'adminEmail'      => 'selfevent@toppartner.ru',
-    'serverEmail'     => 'noreply@se.k-store.ru'/* . $_SERVER['HOST_NAME'] /* . str_replace('www.', '', \Yii::$app->request->getHostInfo()) */,
+    'serverEmail'     => 'noreply@se.k-store.ru'
+    /* . $_SERVER['HOST_NAME'] /* . str_replace('www.', '', \Yii::$app->request->getHostInfo()) */,
     'upload_dir'      => '@webroot/uploads/',
     'image_dir'       => '@webroot/uploads/images/',
     'image_dir_url'   => '/uploads/images/',

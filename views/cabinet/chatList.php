@@ -42,9 +42,9 @@ $work_form = change_key_new($work_form, 'id');
   
     <div class="order_content">
 
-        <!-- <div class="tab-content"> -->
-            <div id="tab-1" class="tab-pane fade in active">                     
-                <!-- цикл по чатам В работе-->
+            <div id="tab" class="tab-pane fade in active">
+                <div class="chat_title"><?=$chat_title?></div>                
+                <!-- цикл по чатам -->
                 <?php //debug($chat_list) 
                     //debug($msg,0);
                     $user_id = Yii::$app->user->identity->id; 
@@ -54,30 +54,33 @@ $work_form = change_key_new($work_form, 'id');
                 if(!Yii::$app->user->identity->isexec){
                     if(!$chat_list) { // нет открытых чатов?>
                         <div class="subtitle">В этой категории чатов нет.</div>
-                    <?php }
-                    
-                    foreach($chat_list as $k=>$chl) { ?>                        
-                        <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?>" data-pjax="0" title="Перейти к диалогу в этом чате">
-                            <div class="order_info chat">
-                                <div class="number_info"><span>#<?= substr((string)$chl['order_id'],-2)?></span>
-                                    <!-- <div id="badge_chat" class="badge ">15</div> -->
-                                    <div class="badge bage_messages"><?= $new_mess_chat[$chl['id']]['kol_new_mess'] ?></div>
-                                </div>
-                                <div class="text_info">
-                                    <div class="full_number">Заказ № <?= $chl['order_id']?></div>
-                                    <div class="fio"><?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?> <?= $chl['exec']['username'] ?></div>
-                                    <div class="last_message">
+                    <?php 
+                    }else{
+                   
+                        foreach($chat_list as $k=>$chl) { ?> 
 
-                                        <?php  
-                                        echo end($chl['dialogs'])['message'];
-                                        ?>
+                            <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?>&status=<?= $cht_status[$chl['id']]?>" data-pjax="0" title="Перейти к диалогу в этом чате">
+                                <div class="order_info chat">
+                                    <div class="number_info"><span>#<?= substr((string)$chl['order_id'],-2)?></span>
+                                        <!-- <div id="badge_chat" class="badge ">15</div> -->
+                                        <div class="badge bage_messages"><?= $new_mess_chat[$chl['id']]['kol_new_mess'] ?></div>
                                     </div>
-                                    <div class="status"><?= $cht_status ?></div> 
-                                </div>                    
-                            </div>                   
-                        </a>
-                        <hr>
-                    <?php }
+                                    <div class="text_info">
+                                        <div class="full_number">Заказ № <?= $chl['order_id']?></div>
+                                        <div class="fio"><?= $work_form[$chl['exec']['work_form_id']]['work_form_name'] ?> <?= $chl['exec']['username'] ?></div>
+                                        <div class="last_message">
+
+                                            <?php  
+                                            echo end($chl['dialogs'])['message'];
+                                            ?>
+                                        </div>
+                                        <div class="status"><?= $cht_status[$chl['id']] ?></div>
+                                    </div>                    
+                                </div>                   
+                            </a>
+                            <hr>
+                        <?php }
+                    }    
                 } else { ?>
                 <!-- Список чатов для Заказчика Конец-->
                                 
@@ -91,7 +94,10 @@ $work_form = change_key_new($work_form, 'id');
 
                     foreach($chat_list as $k=>$chl) { ?>
 
-                        <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?>" data-pjax="0" title="Перейти к диалогу в этом чате">
+                        <a class="dialog_ref" href="/cabinet/dialog-list?
+                            chat_id=<?=$chl['id'] ?>&
+                            work_form_name=<?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?>&
+                            status=<?= $cht_status[$chl['id']]?>" data-pjax="0" title="Перейти к диалогу в этом чате">
 
                             <div class="order_info chat">
                                 <div class="number_info"><span>#<?= substr((string)$chl['order_id'],-2)?></span>
@@ -104,6 +110,7 @@ $work_form = change_key_new($work_form, 'id');
                                     <div class="last_message">
                                         <?php echo end($chl['dialogs'])['message']; ?>
                                     </div>
+                                    <div class="status"><?= $cht_status[$chl['id']] ?></div> 
                                 </div>                    
                             </div>                   
                         </a>

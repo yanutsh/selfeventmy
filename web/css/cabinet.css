@@ -1609,6 +1609,13 @@ body{
 /*******************  Помощь  Конец *****************************************/	
 
 /*******************  Чат-лист - ******************************************/
+	.chat_title{
+		text-align: center;
+	    color: #AE4A84;
+	    font-weight: bold;
+	    margin-bottom: 20px;
+	}
+
 	.status{
 		margin-top: 5px;
 	    font-size: 12px;
@@ -1666,7 +1673,7 @@ body{
 	}  
 
 	.tab-pane{
-		padding-top: 40px;	
+		padding-top: 30px;	
 	} 
 
 	.chat .text_info {
