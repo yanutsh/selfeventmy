@@ -93,7 +93,7 @@ $city = City::find() ->orderBy('name')->all();
         <div class="order_content__subtitle">Город</div>
         <div class="text"><?= $order['orderCity']['name']?></div>
         <div class="order_content__subtitle">Когда</div>
-        <div class="text"><?= convert_date_en_ru($order['date_from']) ?> (<?= convert_datetime_en_ru($order['added_time'])['w']?>) в 13:00???</div>
+        <div class="text"><?= convert_datetime_en_ru($order['date_from']) ?> (<?= convert_datetime_en_ru($order['added_time'])['w']?>) в 13:00???</div>
 
         <?php if($order['user']['isexec']) { ?>
             <div class="order_content__subtitle">Цена отклика</div>

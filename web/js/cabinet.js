@@ -194,6 +194,7 @@ $(document).ready(function() {
 
     // Слайдер Заказов - Указываем что будем выводить по 3 слайда на экран
     $('.slider').slick({
+    // $('.slider').not('.slick-initialized').slick({    
       //dots:true,
       centerMode: true,
       centerPadding: '10px',  
@@ -203,7 +204,8 @@ $(document).ready(function() {
     });
 
     // Cлайдер Портфолио исполнителя- Указываем что будем выводить по 3 слайда на экран
-    $('.portfolio-slider').slick({
+    // $('.portfolio-slider').slick({
+    $('[class ^= portfolio-slider]').slick({
       //dots:true,
       centerMode: false,
       centerPadding: '10px',  

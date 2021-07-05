@@ -2,6 +2,7 @@ $(function () {
 
     var
         processURL = 'http://selfeventmy.loc/cabinet/process-star-rating',
+        //processURL = 'https://selfevent.toppartner.ru/cabinet/process-star-rating',
         maxStars = 5,
         output = [],
         ratingStarClass = '.star-rating_active .star-rating__item';

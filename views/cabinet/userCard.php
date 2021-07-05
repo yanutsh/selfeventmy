@@ -217,27 +217,30 @@ CabinetAsset::register($this);
 
 	           				<p class="subtitle">Портфолио</p>
 	           				<?php 
-	           				// цикл по альбомам 	
+	           				// цикл по альбомам 
+	           				$i=1;	
 	           				foreach($albums as $alb) { ?>
 	           				
 		           				<p class="text subtitle_text">Альбом: <?= $alb['album_name']?></p>
-		           				<div class="slider portfolio-slider">	
+		           				<div class="slider portfolio-slider<?//=$i?>">	
 						            <?php 
 						            // цикл по фоткам альбома
-						            foreach($alb['albumPhotos'] as $photo){ ?>}
+						            if(!empty($alb['albumPhotos'])) {
+						            foreach($alb['albumPhotos'] as $photo){ ?>
 						                <div>
 						                	<a href="/web/uploads/images/portfolio/<?= $photo['photo_name']?>" class="highslide" onclick="return hs.expand(this)" >
 						                		<img src="/web/uploads/images/portfolio/<?= $photo['photo_name']?>" alt="">
 						                    </a>
 						                </div>
-						            <?php } ?>
+						            <?php } 
+						        	}?>
 						        </div>
 
-					        <?php } ?>	
+					        <?php $i++; } ?>	
 				        <?php } ?>	
 		    		</div>
 
-		    		<!-- Заказы  олько для карточки Заказчика-->
+		    		<!-- Заказы  только для карточки Заказчика-->
 		    			<?php if($user['isexec']==0) {?>	
 				    		<div class="lk__main lk__main__exec">
 				    			<div class="refer" id="show_user_orders">Смотреть все</div>

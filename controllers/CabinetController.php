@@ -1541,7 +1541,8 @@ met_first:
 
     // готовим список заказов данного заказчика
     $orders_list = Order::find()->where(['user_id'=>$user_id, 'status_order_id'=>0])
-                    ->with('category','orderStatus','orderCity','chats')  
+                    ->with('category','orderStatus','orderCity','chats')
+                    ->orderBy('added_time DESC')  
                     ->asArray()->all();
     //debug($orders_list);
     return $this->render('orderListOffer', compact('orders_list', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats'));
