@@ -10,6 +10,7 @@ use app\models\Abonement;
 use app\models\OrderFiltrForm;
 use app\models\ExecFiltrForm;
 use app\models\ExecCategory;
+use app\models\ExecEvent;
 use app\models\Category;
 use app\models\UserCategory;
 use app\models\Subcategory;
@@ -27,6 +28,7 @@ use app\models\OrderCategory;
 use app\models\OrderStatus;
 use app\models\OrderPhoto;
 use app\models\OrderResponseForm;
+use app\models\StarRating;
 use app\models\User;
 use app\models\UserCity;
 use app\models\UserEducation;
@@ -226,8 +228,7 @@ met_first:
           $sqlc = "SELECT yii_chat.* FROM yii_chat"; 
 
         // Если пришёл PJAX запрос
-        if (Yii::$app->request->isPjax) { 
-          //debug($tab,0);
+        //if (Yii::$app->request->isPjax) { 
           $jscr = "<script> var tab=".$tab.";</script>";
           
           if($tab == 1) {
@@ -237,8 +238,7 @@ met_first:
             $chat_title = "Открытые чаты по выполненным заказам";
             // чаты по заказам где текущий юзер - Исполнитель 
             if(Yii::$app->user->identity->isexec) {  
-              $sql = $sqlc." WHERE ((chat_status=1) AND (exec_id =".$user_id.") AND (result=1))";      
-                    
+              $sql = $sqlc." WHERE ((chat_status=1) AND (exec_id =".$user_id.") AND (result=1))"; 
               $chat_list = Chat::findBySql($sql)
                           ->with('customer','exec', 'order','dialogs')
                           ->orderBy('chat_date DESC')->asArray()->all();              
@@ -294,32 +294,23 @@ met_first:
           }
           //debug( $cht_status);
      
-          return $this->render('chatList', compact('chat_list','new_mess_chat','jscr','cht_status',
-              'chat_title'));
-        }
+          return $this->render('chatList', compact('chat_list','new_mess_chat','jscr','cht_status','chat_title'));
+        //}
 
         met_first:
         // первый раз открываем страницу - показываем все рабочие чаты
         
         // чаты по незавершенным заказам где текущий юзер - Исполнитель 
-        if(Yii::$app->user->identity->isexec) {           
-          
-          // заказы без тех в которых Заказчик отказался 
+        if(Yii::$app->user->identity->isexec) {         
+          // заказы без тех в которых Заказчик отказался или Исполнитель 
           $sql = $sqlc." WHERE (((chat_status = 1) AND (exec_id =".$user_id."))
-                        AND ( (result <> 0) OR (result IS null)))";
+                        AND (result IS null) 
+                        AND (exec_cancel=0))";
 
           $chat_list = Chat::findBySql($sql)  
                         ->with('customer','exec', 'order','dialogs')              
                         ->orderBy('chat_date DESC')
-                        ->asArray()->all();
-                        
-          // определяем состояние (статус) заказов
-          //debug($chat_list,0) ;             
-          $cht_status = array();                
-          foreach($chat_list as $cht) {            
-             $cht_status[$cht['id']] = cht_status($cht);
-          }       
-                   
+                        ->asArray()->all();                       
         }else{
         // чаты по незавершенным заказам где текущий юзер - Заказчик. Без отказавшихся
           $sql = $sqlc." WHERE ((chat_status = 1) AND (customer_id =".$user_id.")
@@ -329,23 +320,21 @@ met_first:
           $chat_list = Chat::findBySql($sql)  
                         ->with('customer','exec', 'order','dialogs')              
                         ->orderBy('chat_date DESC')
-                        ->asArray()->all();
-
-          // определяем состояние (статус) заказов
+                        ->asArray()->all();                                 
+        }
+        // определяем состояние (статус) заказов
           //debug($chat_list,0) ;             
           $cht_status = array();                
-          foreach($chat_list as $cht) {
-             //debug($cht,0) ; 
+          foreach($chat_list as $cht) {            
              $cht_status[$cht['id']] = cht_status($cht);
-          } 
-          //debug($cht_status);                        
-        }
+          }
+          //debug($cht_status);        
         
         return $this->render('chatList', compact('chat_list','new_mess_chat','jscr','cht_status','chat_title'));              
     }
   
     // ЛК - список Диалогов по данному чату  ********************************************
-    public function actionDialogList($chat_id, $work_form_name) { 
+    public function actionDialogList($chat_id, $work_form_name="Физ.лицо") { 
 
         $user_id = Yii::$app->user->identity->id;  
           
@@ -366,52 +355,7 @@ met_first:
         //debug($chat);
         // определяем второго участника диалога
         if ($user_id == $chat->exec_id) $user_id_2 = $chat->customer_id;
-        else $user_id_2 = $chat->exec_id;
-
-        // определяем был ли отзыв о партнере по данному заказу
-        $review = Review::find()->where(['from_user_id'=>$user_id, 'for_user_id'=> $user_id_2, 'order_id'=>$chat['order_id']])
-                  ->one();
-        if($review) $isreview = 1;  // есть отзыв 
-        else $isreview = 0;         // нет отзыва  
-
-        // определяем была ли жалоба на партнера по данному заказу
-        $complain = Complain::find()->where(['from_user_id'=>$user_id, 'for_user_id'=> $user_id_2, 'order_id'=>$chat['order_id']])
-                  ->one();
-        if($complain) $iscomplain = 1;  // есть жалоба 
-        else $iscomplain = 0;           // нет жалобы          
-  
-        //поступила  команда закрыть чат
-        if($work_form_name=='cancel') {
-            //debug("cancel") ; 
-            //$chat = Chat::find()->where(['id'=>$chat_id])->one(); // уже есть
-            $chat->chat_status = 0;
-            $chat->save(); 
-            // переход на chat-list
-            return $this->redirect('/cabinet/chat-list');
-        }   
-
-        // Если пришёл PJAX запрос
-        if (Yii::$app->request->isPjax) {
-          //debug("PJAX-2");
-      
-          if($work_form_name=='accepted') { // Исполнитель принял заказ
-            //debug($chat) ; 
-            $message = "Админ: Исполнитель принял заказ к исполнению;";
-            $dialog = new Dialog();  // сообщение исполнителю 
-            $dialog->message = $message;
-            $dialog->chat_id = $chat_id;
-            $dialog->user_id = $user_id;
-            $dialog->save(); 
-
-            // записываем - принято к исполнению
-            $chat['isaccepted'] = 1;
-            $chat['accepted_time'] = date('Y-m-d H:i:s');
-            $chat->save();
-
-            // переход на dialog-list
-            goto met_first;
-          }     
-        }  
+        else $user_id_2 = $chat->exec_id;  
 
         // дата последней активности второго юзера
         $max_date = VisitLog::find()->select(['max(update_time) as update_time'])
@@ -426,24 +370,119 @@ met_first:
 
         // Если пришёл PJAX запрос
         if (Yii::$app->request->isPjax) {
-           $data = Yii::$app->request->post();  
-           //debug($data);
+          $data = Yii::$app->request->post();  
+          //debug($data);
 
-          // команда - пожаловаться
-            if($data['field_name'] == 'complain'){
-              $complain = new Complain();
-              $complain->load($data);
-              //debug($complain);
-              $complain->save();
-            }
+          // Нажата кнопка Выбрать исполнителем
+            if($data['field_name'] == 'choose') { 
+              // проверить наличие и снять предоплату, забронировать остальную сумму
+              // если отмечена Безопасная сделка и денег хватает             
+             
 
-          // команда подтвердить выполнение заказа 
+              // сохранить выбор исполнителя заказа в чате
+              //debug($data['OrderExecForm'],0);
+              $chat->price = $data['OrderExecForm']['price'];
+              $chat->prepayment_summ = $data['OrderExecForm']['prepayment_summ'];
+              $chat->safe_deal = $data['OrderExecForm']['safe_deal'];
+              $chat->ischoose = 1;  // исполнитель выбран
+              $chat->ischoose_time = date('Y-m-d H:i:s');
+              //debug($chat);
+              $chat->save();              
+
+              // сгенерировать сообщение исполнителю
+              $message = "Админ: Вы выбраны исполнителем!";
+              
+              // если отмечена Безопасная сделка    
+              if($chat->safe_deal == 'on') { 
+                $message .="<br>В рамках безопасной сделки зарезервирована сумма в размере ".($chat->price)." ₽";  //  исполнителю
+
+                $mess = "<br>Вы внесли денежные средства в безопасную сделку: ".($chat->price-$chat->prepayment_summ)." ₽";            // на сайт              
+
+                // если отмечена предоплата:
+                if($chat->prepayment_summ) {
+                  $message .="<br>Вам переведена предоплата в размере ".$chat->prepayment_summ." ₽.";        //  исполнителю       
+                   
+                  $mess .= "<br>Сумма предоплаты переведена исполнителю: ".$chat->prepayment_summ." ₽.";    // на сайт             
+                }
+                Yii::$app->session->setFlash('payment_ok', $mess); // сообщение на сайт 
+              }else{ // не безопасная сделка
+                  $message .="<br>Стоимость работ - ".($chat->price)." ₽";  
+                  if($chat->prepayment_summ) {
+                    $message .="<br>Предоплата - ".$chat->prepayment_summ." ₽.";  }      //  исполнителю   
+              }
+              $message .="<br>Подтвердите прием задания к выполнению.";
+              $dialog = new Dialog();  // сообщение исполнителю 
+              $dialog->message = $message;
+              $dialog->chat_id = $chat_id;
+              $dialog->user_id = $user_id;
+              $dialog->save();
+
+              goto met_first;
+            } 
+          
+          // Исполнитель принял заказ  
+            if($work_form_name=='accepted') { 
+              //debug($chat) ; 
+              $message = "Админ: Исполнитель принял заказ к исполнению;";
+              $dialog = new Dialog();  // сообщение исполнителю 
+              $dialog->message = $message;
+              $dialog->chat_id = $chat_id;
+              $dialog->user_id = $user_id;
+              $dialog->save(); 
+
+              // записываем - принято к исполнению
+              $chat->isaccepted = 1;
+              $chat->accepted_time = date('Y-m-d H:i:s');
+              $chat->save();
+
+              // меняем статус заказа на 1 - исполнители определены
+              $order = Order::find()->where(['id'=>$chat->order_id])->one();
+              $order->status_order_id = 1; // исполнители определены
+              $order->save();
+
+              // записываем событие в календарь Исполнителя.
+              $exec_event = new ExecEvent();
+              $exec_event->exec_id = $user_id;
+              $exec_event->event_date = $order->date_from;
+              $exec_event->event_description = $order->details;
+              
+              $exec_event->save();
+
+              // переход на dialog-list
+              goto met_first;
+            } 
+
+          // Исполнитель выполнил заказ  
+            if($work_form_name=='done') { 
+              //debug($chat) ; 
+              $message = "Админ: Исполнитель сообщил, что Ваш заказ выполнен. Подтвердите выполнение заказа";
+              $dialog = new Dialog();  // сообщение исполнителю 
+              $dialog->message = $message;
+              $dialog->chat_id = $chat_id;
+              $dialog->user_id = $user_id;
+              $dialog->save(); 
+
+              // записываем - исполнитель выполнил
+              $chat->exec_done = 1;
+              $chat->exec_done_time = date('Y-m-d H:i:s');
+              $chat->save();
+
+              // переход на dialog-list
+              goto met_first;
+            } 
+                        
+          // Команда подтвердить выполнение заказа 
             if(isset($_GET['confirm']) && $_GET['confirm']=='order_confirm') {
               //debug($_GET['confirm']);
               // отмечаем выполнение заказа?? Исполнителем??
                 $chat->result = 1;       // записываем - успешное окончание
                 $chat->result_time = date('Y-m-d H:i:s');
                 $chat->save();
+
+                // меняем статус заказа на 2 - подтверждено выполнение заказчиком
+                $order = Order::find()->where(['id'=>$chat->order_id])->one();
+                $order->status_order_id = 2; // подтверждено выполнение
+                $order->save();
                 
               // переводим деньги Исполнителю (если безопасная сделка)
 
@@ -463,106 +502,65 @@ met_first:
             if($data['field_name'] == 'win_cancel_exec' || $data['field_name'] == 'win_cancel_order')
             {       
                                    
-              // записываем в БД признак Отказа 
-              //$order_exec =  Chat::find()
-              //        ->where(['order_id'=>$data['chat']['order_id'], //'exec_id'=>$data['chat']['exec_id'] ])->one(); 
-                     
-              //if (!empty($order_exec)) {         // исполнитель был выбран
-                
+              // записываем в БД признак Отказа                               
                 if($data['field_name'] == 'win_cancel_exec') {// Заказчик отказал
                   $chat->result = 0;       // записываем - отказ Заказчика
-                  $order_exec['result_time'] = date('Y-m-d H:i:s');
+                  $chat->result_time = date('Y-m-d H:i:s');
+                  $message = "Админ: К сожалению, заказчик отказался от ваших услуг.";
+
                 }
                 if($data['field_name'] == 'win_cancel_order') {// Исполитель отказалcя
                   $chat->exec_cancel = 1;  // записываем - отказ Исполнителя  
-                  $chat['cancel_time'] = date('Y-m-d H:i:s');
+                  $chat->cancel_time = date('Y-m-d H:i:s');
+                  
+                  $message = "Админ: К сожалению, исполнитель отказался от выполнения заказа."; 
+                  if( $chat->prepayment_summ > 0){
+                    $message .="<br>Предоплата возвращена на ваш эккаунт и средства разблокированы" ;
+                    // Вернуть предоплату
+                  }
                 }  
                 $chat->save();
-               //}else  {                           // исполнитель не был выбран
-                // $order_exec = new OrderExec();
-                // //debug($data);  
-                // $chat->order_id = $data['OrderExec']['order_id'];
-                // $chat->exec_id = $data['OrderExec']['exec_id'];
-                // $chat->price = 0;
-                // if($data['field_name'] == 'win_cancel_exec') {// Заказчик отказал
-                //   $chat->result = 0;       // записываем - отказ Заказчика
-                //   $order_exec['result_time'] = date('Y-m-d H:i:s');
-                // }  
-                // if($data['field_name'] == 'win_cancel_order') {// Исполитель отказал
-                //   $chat->exec_cancel = 1;  // записываем - отказ Исполнителя
-                //   $order_exec['cancel_time'] = date('Y-m-d H:i:s');
-                // }  
-                //debug($order_exec);        
-                //$chat->save(); 
-              //} 
 
-              // генерируем сообщение Исполнителю
-              if($data['field_name'] == 'win_cancel_exec')     // Заказчик отказал
-                $message = "Админ: К сожалению, заказчик отказался от ваших услуг.";
-              if($data['field_name'] == 'win_cancel_order')  { // Исполитель отказал
-              // генерируем сообщение Заказчику  
-                $message = "Админ: К сожалению, исполнитель отказался от выполнения заказа."; 
-                if( $chat->prepayment_summ > 0){
-                  $message .="<br>Предоплата возвращена на ваш эккаунт и средства разблокированы" ;
-
-                  // Вернуть предоплату
-                }
-              }  
-              $dialog = new Dialog();  // сообщение исполнителю 
-              $dialog->message = $message;
-              $dialog->chat_id = $chat_id;
-              $dialog->user_id = $user_id;
-              $dialog->save();            
-                           
-              // возвращаемся к списку чатов
-              return $this->redirect('/cabinet/chat-list');              
-            }
-
-          // Нажата кнопка Выбрать исполнителем
-            if($data['field_name'] == 'choose') { 
-              // проверить наличие и снять предоплату, забронировать остальную сумму
-
-              // если отмечена Безопасная сделка и денег хватает             
-             
-
-              // сохранить выбор исполнителя заказа в чате
-              //debug($data['OrderExecForm'],0);
-              $chat->price = $data['OrderExecForm']['price'];
-              $chat->prepayment_summ = $data['OrderExecForm']['prepayment_summ'];
-              $chat->safe_deal = $data['OrderExecForm']['safe_deal'];
-              $chat->ischoose = 1;  // исполнитель выбран
-              $chat->ischoose_time = date('Y-m-d H:i:s');
-              //debug($chat);
-              $chat->save();
-
-              // сгенерировать сообщение исполнителю
-              $message = "Админ: Вы выбраны исполнителем!";
+              // меняем статус заказа обратно с 1 на 0 - в поиске исполнителя
+                $order = Order::find()->where(['id'=>$chat->order_id])->one();
+                $order->status_order_id = 0; // в поиске исполнителя
+                $order->save();
               
-              // если отмечена Безопасная сделка    
-              if($chat->safe_deal == 'on') { 
-                $message ="<br>В рамках безопасной сделки зарезервирована сумма в размере ".($chat['price']-$chat['prepayment_summ'])." ₽";  //  исполнителю
-
-                $mess = "<br>Вы внесли денежные средства в безопасную сделку: ".($chat['price']-$chat['prepayment_summ'])." ₽";            // на сайт
-              }
-
-              // если отмечена предоплата:
-              if($chat['prepayment_summ']) {
-                $message .="<br>Вам переведена предоплата в размере ".$chat['prepayment_summ']." ₽<br>";        //  исполнителю       
-                 
-                $mess .= "<br>Сумма предоплаты переведена исполнителю: ".$chat['prepayment_summ']." ₽.";    // на сайт             
-              }
-              Yii::$app->session->setFlash('payment_ok', $mess); // сообщение на сайт 
+              // генерируем сообщение Юзеру              
+                $dialog = new Dialog();  // сообщение 
+                $dialog->message = $message;
+                $dialog->chat_id = $chat_id;
+                $dialog->user_id = $user_id;
+                $dialog->save(); 
                 
-              $dialog = new Dialog();  // сообщение исполнителю 
-              $dialog->message = $message;
-              $dialog->chat_id = $chat_id;
-              $dialog->user_id = $user_id;
-              $dialog->save();
+              // возвращаемся в диалог оставить отзыв
+                goto met_first;             
+            }
+          
+          // Команда - пожаловаться
+            if($data['field_name'] == 'complain'){
+              $complain = new Complain();
+              $complain->load($data);
+              //debug($complain);
+              $complain->save();
+
+              // флеш сообщение - Жалоба отправлена
+              Yii::$app->session->setFlash('dialog_msg','Жалоба отправлена. Она рассматривается в течении 48 часов.<br>Решение будет отправлено на Ваш e-mail.');
 
               goto met_first;
             }
+
+          // Команда закрыть чат
+              // if($work_form_name=='cancel') {
+              //     //debug("cancel") ; 
+              //     //$chat = Chat::find()->where(['id'=>$chat_id])->one(); // уже есть
+              //     $chat->chat_status = 0;
+              //     $chat->save(); 
+              //     // переход на chat-list
+              //     return $this->redirect('/cabinet/chat-list');
+              // } 
            
-          // или просто записываем сообщение в диалог
+          // Если кнопки не нажимались - просто записываем сообщение в диалог
              $dialog = new Dialog();
              $dialog->message = $data['message'];
              $dialog->chat_id = $chat_id;
@@ -571,10 +569,23 @@ met_first:
              //debug($dialog);
         } 
 
-met_first:
+        met_first:
 
         // первый раз открываем страницу - показываем все 
-        // диалоги по чату  
+        // диалоги по чату 
+
+        // определяем был ли отзыв о партнере по данному заказу
+          $review = Review::find()->where(['from_user_id'=>$user_id, 'for_user_id'=> $user_id_2, 'order_id'=>$chat->order_id])
+                    ->one();
+          if($review) $isreview = 1;  // есть отзыв 
+          else $isreview = 0;         // нет отзыва  
+
+        // определяем была ли жалоба на партнера по данному заказу
+          $complain = Complain::find()->where(['from_user_id'=>$user_id, 'for_user_id'=> $user_id_2, 'order_id'=>$chat->order_id])
+                    ->one();
+          if($complain) $iscomplain = 1;  // есть жалоба 
+          else $iscomplain = 0;           // нет жалобы     
+        
         $complain = new Complain(); // жалобы
         $order_exec_form = new OrderExecForm(); // форма при выборе исполнителя
 
@@ -594,23 +605,23 @@ met_first:
         $kol_new_chats = Yii::$app->runAction('cabinet/get-new-mess'); 
         $new_mess_chat = Yii::$app->session['new_mess_chat']; 
 
+      
+        $chat = Chat::find()->where(['id'=>$chat_id])->asArray()->one();          
+        $status = cht_status($chat);         
+
         // если текущий юзер - заказчик - выводим диалог с исполнителем 
         if (!Yii::$app->user->identity->isexec) {
           $is_show_exec=1; // показываем исполнителя          
           $user_category=UserCategory::find()->where(['user_id'=>$user_id_2]) 
               ->with('category')->asArray()->all();             
           
-          //debug($chat);
-          $status = cht_status($chat); 
-
-          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','is_show_exec','user2','order_exec_form','ischoose','complain','status','isreview','iscomplain'));
         }else{
           $is_show_exec=0; // показываем Заказчика
           //debug("Я-Исполнитель. Выводим диалог с заказчиком");
+        }
 
-          
-          return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','is_show_exec','user2','order_exec','ischoose','complain','status','isreview','iscomplain'));
-        }                
+        return $this->render('dialogList', compact('dialog_list','work_form_name','user_category','max_date','order','$kol_new_chats','is_show_exec','user2','order_exec_form','ischoose','complain','status','isreview','iscomplain'));
+                        
     }
 
 
@@ -661,7 +672,7 @@ met_first:
           //debug($model);
 
           if ($model['reyting']) $reyting_order="DESC"; // 1 - по убыванию
-          else $reyting_order = "ASC";                     // 0 - по возрастанию
+          else $reyting_order = "ASC";                  // 0 - по возрастанию
           //debug ($reyting_order);
 
           // фильтрация и определение количества заказов 
@@ -678,17 +689,31 @@ met_first:
           // } 
 
             //debug ($model); 
+            //$rows = (new \yii\db\Query())
+            //    ->from('user')
 
-            $query = User::find()
+          // SELECT yii_user.*, star_rating.rating_avg, yii_user.isexec
+          // FROM yii_user LEFT JOIN star_rating ON yii_user.id = star_rating.rating_id
+          // WHERE (((yii_user.isexec)=1));
+
+  
+            
+            $query = User::find()            
+              ->select(['yii_user.*', 'star_rating.rating_avg'])
+              ->from(['yii_user'])
+              ->join('LEFT JOIN', 'star_rating', 'star_rating.rating_id=yii_user.id')
               ->filterWhere(['AND',
-                  ['isexec' => 1],                       
-                  //['between', 'added_time', $date_from, $date_to],
-                  // ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
-                  //['<=', 'budget_from', $model->budget_to],
-                  ['work_form_id' => $model->work_form_id],     // по форме работы
-                  ['isprepayment' => $model->prepayment],       // по предоплате
-                            ])
-              ->orderBy('reyting '.$reyting_order);
+                 ['isexec' => 1],                       
+                 //['between', 'added_time', $date_from, $date_to],
+                 // ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', //$model->budget_from] ],                 
+                 //['<=', 'budget_from', $model->budget_to],
+                 ['work_form_id' => $model->work_form_id],     // по форме работы
+                 ['isprepayment' => $model->prepayment],       // по предоплате
+                           ])             
+              ->orderBy('star_rating.rating_avg '.$reyting_order);
+
+              // $list = $query->with('userCities','starRating')->asArray()->all();
+              // debug($list);
                
             // Фильтр исполнителей по категориям услуг 
             if ($model->category_id)                    
@@ -696,7 +721,7 @@ met_first:
 
             // Фильтр исполнителей по городам  
             if ($model->city_id)                    
-                $query->andWhere(['id' => UserCity::find()->select('user_id')->andWhere(['city_id'=>  $model->city_id])]); 
+                $query->andWhere(['yii_user.id' => UserCity::find()->select('user_id')->andWhere(['city_id'=>  $model->city_id])]); 
 
             // Фильтр исполнителей по стоимости            
             if ($model->budget_from)              
@@ -707,9 +732,6 @@ met_first:
               $query->andWhere(['id' => UserCategory::find()->select('user_id')->andWhere([
                 '<=', 'price_to', $model->budget_to]) ]);
 
-            
-
-
               // Фильтр по Формам работы
               // if (!$model->work_form_id == "") {  // если значение фильтра установлено
               //   foreach ($orders_list as $key=>$order) {
@@ -718,12 +740,12 @@ met_first:
               //     }                  
               //   }                  
               // }
-
               
-              $exec_list = $query->all();       
+              $exec_list = $query->with('userCities','starRating')->asArray()->all();     
               $count = $query->count(); // найдено исполнителей Всего              
 
               //debug($model);          
+              //debug($exec_list);
 
               $this->layout='contentonly';
               return [
@@ -732,15 +754,16 @@ met_first:
                   "error" => null
               ]; 
         } //else { //  первый раз открываем страницу - показываем всех исполнителей
-          
-        $exec_list = User::find()
-                ->Where(['isexec' => 1])
-                //  ->filterWhere(['AND',                     
-                //    ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
-                              //])
+        
+        $sql = "SELECT yii_user.*,star_rating.rating_avg
+                FROM yii_user LEFT JOIN star_rating ON yii_user.id = star_rating.rating_id
+                WHERE (isexec = 1)
+                ORDER BY star_rating.rating_avg DESC";  
+
+        $exec_list = User::findBySql($sql)
                 ->with('workForm', 'category', 'userCities')
-                ->orderBy( 'reyting DESC')
-                // ->orderBy('added_time DESC')
+                // ->filtrWhere()
+                ->orderBy( 'rating_avg DESC')
                 ->asArray()->all();  //count();
 
         $count= count($exec_list);            
@@ -838,8 +861,40 @@ met_first:
     }
 
     // вывести карточку Исполнителя или Заказчика ************************************ 
-    public function actionUserCard() {  
+    public function actionUserCard($id) {  
       // отображение карточки Исполнителя или Заказчика
+      $month_num = date('n');
+      $year_num = date('Y');
+     
+      // Если пришёл PJAX запрос - изменение месяца
+        if (Yii::$app->request->isPjax && isset($_GET['move'])){
+          //debug($_GET['year'],0);
+          if($_GET['move']=='prev'){
+            if($_GET['month'] == 1) {
+              $month_num = 12;
+              $year_num = $_GET['year']-1;           
+            }else {
+              $month_num = $_GET['month']-1;
+              $year_num = $_GET['year']; 
+            }                    
+          }
+          if($_GET['move']=='next'){
+            if($_GET['month'] == 12) {
+              $month_num = 1;
+              $year_num = $_GET['year']+1;           
+            }else {
+              $month_num = $_GET['month']+1;
+              $year_num = $_GET['year']; 
+            }           
+          }
+          // Выбрать события Исполнителя в этом месяце из БД
+          // $events=array(
+          //   '20.07'=> 'Свадьба в МАлиновке',
+          //   '15.07'=> 'День рождения тещи',
+          //   '05.08'=> 'Юбилей ветерана');
+          
+          goto met_first;            
+        }      
 
       // Если пришёл AJAX запрос
         if (Yii::$app->request->isAjax) { 
@@ -854,13 +909,33 @@ met_first:
               require_once('order-response-process.php');
               //goto met_first;
           }
-        }     
+        }
 
+      met_first:
+      // Выбрать события Исполнителя в этом месяце
+       $sql = "SELECT event_date, event_description
+              FROM exec_event
+              WHERE ( (exec_id =".$id.") 
+                      AND (Month(event_date)=".$month_num.") 
+                      AND (Year(event_date)=".$year_num.") 
+                    )";
+
+        $exec_events = ExecEvent::findBySql($sql)->asArray()->all();
+        //debug($exec_events);  
+
+        // Переформатируем массив
+        $events=array();          
+        foreach($exec_events as $ee) {
+          $ee_date = convert_datetime_en_ru($ee['event_date']);
+          $events[$ee_date['dmY']] = $ee['event_description'];
+        }          
+        //debug($events);          
+      
       $orderResponseForm = new orderResponseForm();
       // получить данные Юзера из БД
       $user = User::find()
               ->Where(['id'=> $_GET['id']])
-              ->with('category', 'subcategory', 'workForm', 'cities', 'userEducations')
+              ->with('category', 'subcategory', 'workForm', 'cities', 'userEducations','starRating')
               ->asArray()
               ->one();
 
@@ -874,8 +949,11 @@ met_first:
               ->all();
       //debug($orders_list);        
       //Отзывы об Исполнителе 
-      $reviews=Review::find()->where([ 'for_user_id'=> $_GET['id'] ])
-                ->with('fromUser')->asArray()->all();
+      $sql = "SELECT yii_review.*, star_rating.rating_avg
+              FROM yii_review LEFT JOIN star_rating ON yii_review.from_user_id = star_rating.rating_id
+              WHERE (((yii_review.for_user_id)=".$_GET['id']."))";
+
+      $reviews = Review::findBySql($sql)->with('fromUser')->asArray()->all();
       //debug($reviews); 
 
       //Альбомы Исполнителя и их фотографии
@@ -890,7 +968,7 @@ met_first:
       //debug($max_date);
                     
       // вывести карточку Юзера
-      return $this->render('userCard', compact('user','orders_list','reviews', 'albums','max_date','orderResponseForm')); 
+      return $this->render('userCard', compact('user','orders_list','reviews', 'albums','max_date','orderResponseForm','month_num','year_num','events')); 
     }
     
     // вывести Профиль текущего Пользователя (Заказчика  или Исполнителя) *********
@@ -1417,6 +1495,98 @@ met_first:
     }    
     return $this->render('userReview', compact('review','for_user_id','order_id'));
   }
+
+  //Предложение заказа Исполнителю
+  public function actionOrderOffer($exec_id, $order_id=null){ 
+     $user_id = Yii::$app->user->identity->id;
+
+    if(!is_null($order_id)) { // есть заказ, который предложить заказчику
+      // открываем чат
+        $chat=new Chat();
+        $chat->order_id=$order_id;
+        $chat->customer_id=$user_id;
+        $chat->exec_id=$exec_id;
+        $chat->ischoose = 1;
+        $chat->save();
+        $chat_id = $chat->id; // определяем id нового чата
+
+      // записываем предложение в диалог
+        $dialog = new Dialog();
+        $dialog->chat_id = $chat_id;
+        $dialog->user_id = $user_id;  // написал текущий юзер
+        $dialog->message = "Здравствуйте! Предлагаю Вам принять участие в выполнении моего заказа.<br>Жду ВАшего решения 24 часа.";
+        $dialog->save();
+
+      // переходим в диалог
+        //return Yii::$app->getResponse()->redirect(['/cabinet/dialog-list','chat_id'=>$chat_id])
+        //        ->send();
+        return $this->redirect(['/cabinet/dialog-list','chat_id'=>$chat_id]);
+
+    }    
+   
+    // получение неизменных исходные данные из кеша или БД 
+        $cache = \Yii::$app->cache;
+        $category = $cache->getOrSet('category',function()
+            {return Category::find() ->orderBy('name')->asArray()->all();});
+        $city = $cache->getOrSet('city',function()
+            {return City::find() ->orderBy('name')->asArray()->all();});
+        $work_form = $cache->getOrSet('work_form',function()
+            {return WorkForm::find() ->orderBy('work_form_name')->asArray()->all();});
+        $payment_form = $cache->getOrSet('payment_form',function()
+            {return PaymentForm::find() ->orderBy('payment_name')->asArray()->all();});
+        $order_status = $cache->getOrSet('order_status',function()
+            {return OrderStatus::find() ->orderBy('name')->asArray()->all();});
+        //$abonement = $cache->getOrSet('abonement',function()
+        //    {return Abonement::find() ->orderBy('price ASC')->asArray()->all();});
+
+    // готовим список заказов данного заказчика
+    $orders_list = Order::find()->where(['user_id'=>$user_id, 'status_order_id'=>0])
+                    ->with('category','orderStatus','orderCity','chats')  
+                    ->asArray()->all();
+    //debug($orders_list);
+    return $this->render('orderListOffer', compact('orders_list', 'category', 'city', 'work_form', 'payment_form','order_status', 'count','kol_new_chats'));
+  }
+
+  // Cписок жалоб для администратора
+  public function actionComplainList(){ 
+    $sql = "SELECT yii_complain.*, star_rating.rating_avg AS rating1, star_rating_1.rating_avg AS rating2
+            FROM (yii_complain LEFT JOIN star_rating ON yii_complain.from_user_id = star_rating.rating_id) LEFT JOIN star_rating AS star_rating_1 ON yii_complain.for_user_id = star_rating_1.rating_id";
+
+    $complains = Complain::findBySql($sql)->with('forUser','fromUser','order')
+                  ->asArray()->all();        
+    //debug($complains);              
+    return $this->render('complainList',compact('complains'));
+  } 
+
+
+  // Функция Cron - Обновление БД по таймеру
+  public function actionService(){  
+    // Закрываем открытые чаты:
+
+    // по истечению трех дней после того, как один из участников чата нажал выполнено. 
+    $chat = Chat::find()->where(['and','chat_status=1',['or','result=1', 'exec_done=1']])->all();
+    //debug($chat,0);
+    foreach($chat as $c) {
+      $last_time = max($c->result_time, $c->exec_done_time);
+      if (days_from($last_time)>=3){
+        $c->chat_status = 0;
+        $c->save();
+      }  
+    }
+
+    // по истечению 5 дней после того, как отказался Исполнитель или Заказчик 
+    $chat = Chat::find()->where(['and','chat_status=1',['or','result=0', 'exec_cancel=1']])->all();
+    //debug($chat,0);
+    foreach($chat as $c) {
+      $last_time = max($c->result_time, $c->cancel_time);
+      if (days_from($last_time)>=5){
+        $c->chat_status = 0;
+        $c->save();
+      }  
+    }   
+  } 
+
+
     
   // Пользовательская функция Сортировки многомерного массива По возрастанию:
   public function cmp_function($a, $b){

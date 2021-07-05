@@ -3,8 +3,7 @@
   <div class="star-rating__wrapper">
     <div class="star-rating__avg"></div>
       <!-- <div class="star-rating" data-id="page-1"> -->
-      <div class="star-rating" data-id="<?= $userid ?>">  
-      	
+      <div class="star-rating" data-id="<?= $userid ?>">      	
         <div class="star-rating__bg">
           <svg class="star-rating__item" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
             <path fill="currentColor"

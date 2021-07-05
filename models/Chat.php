@@ -46,8 +46,8 @@ class Chat extends \yii\db\ActiveRecord
     {
         return [
             [['order_id', 'customer_id', 'exec_id'], 'required'],
-            [['order_id', 'customer_id', 'exec_id', 'chat_status', 'price', 'prepayment_summ', 'isaccepted', 'result', 'exec_cancel','ischoose'], 'integer'],
-            [['chat_date', 'accepted_time', 'result_time', 'cancel_time','ischoose_time'], 'safe'],
+            [['order_id', 'customer_id', 'exec_id', 'chat_status', 'price', 'prepayment_summ', 'isaccepted', 'result', 'exec_cancel','ischoose','exec_done'], 'integer'],
+            [['chat_date', 'accepted_time', 'result_time', 'cancel_time','ischoose_time','exec_done_time'], 'safe'],
             [['safe_deal'], 'string', 'max' => 2],
             [['order_id', 'exec_id'], 'unique', 'targetAttribute' => ['order_id', 'exec_id']],
             [['exec_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['exec_id' => 'id']],

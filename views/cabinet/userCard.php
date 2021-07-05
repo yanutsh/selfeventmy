@@ -9,6 +9,7 @@ use app\assets\CabinetAsset;
 use kartik\date\DatePicker;
 use app\components\page\PageAttributeWidget as PAW;
 use yii\widgets\Pjax;
+use app\models\Calendar;
 
 //require_once('../libs/days_from.php');
 //require_once('../libs/user_photo.php');
@@ -18,7 +19,8 @@ TemplateAsset::register($this);
 CabinetAsset::register($this);
 
 	//$identity = Yii::$app->user->identity;
-	$avatar = $user['avatar'];		
+	$avatar = $user['avatar'];	
+	//debug($user['starRating']['rating_avg']);	
 ?>
 
 <div class="container">
@@ -67,7 +69,10 @@ CabinetAsset::register($this);
 					        <div class="statistic">
 					        	<div class="st-item">
 									<div class="b_stat">
-					                    <p class="reiting_num first">5.0</p>
+					                    <p class="reiting_num first"><?php
+			                            	if($user['starRating']['rating_avg'])
+					                    		echo round($user['starRating']['rating_avg'],1);
+					                    	else echo"0.0";	 ?></p>
 					                    <p class="reiting_text">Рейтинг</p>
 					                </div>
 					        	</div>
@@ -96,8 +101,24 @@ CabinetAsset::register($this);
 					         	<p  class="top100">?Входит в ТОП 100 исполнителей?</p>
 					         	
 						        <div class="buttons">
-						        	<a href="" class="register active">Начать работу</a>
+						        	<a href="/cabinet/order-offer?exec_id=<?=$user['id']?>" class="register active">Предложить заказ</a>
 						        	<a href="" class="register">Календарь исполнителя</a>
+						        	
+						        	<?php Pjax::begin(['timeout' => false ]); ?>
+						        	<div class="calendar">
+						        		<div class="prev_month">
+						        			<a href="/cabinet/user-card?id=<?=$user['id']?>&move=prev&month=<?=$month_num?>&year=<?= $year_num?>" title="Предыдущий месяц"><img 	src="../web/uploads/images/left-arrow.png" alt="">
+						        			</a>
+						        		</div>		        		
+						        		<?php echo Calendar::getMonth((string)$month_num, (string)$year_num, $events); 
+						        		  	//echo Calendar::getMonth('9', '2022'); ?>
+						        		<div class="next_month">
+						        			<a href="/cabinet/user-card?id=<?=$user['id']?>&move=next&month=<?=$month_num?>&year=<?= $year_num?>" title="Следующий месяц"><img 		src="../web/uploads/images/right-arrow.png" alt="">
+						        			</a>
+						        		</div>
+						        	</div>
+						        	<?php Pjax::end(); ?>
+
 							    </div>
 						    <?php } ?>
 
@@ -251,7 +272,7 @@ CabinetAsset::register($this);
            									<div class="fio">
            										<?= $r['fromUser']['username']?>
            									</div>
-           									<div class="stars">Звезды</div>
+           									<div class="stars">Рейтинг - <?= round($r['rating_avg'],1);?></div>
            								</div>	           								.
            							</div>
 

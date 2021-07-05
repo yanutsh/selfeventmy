@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use app\models\City;
 
+
 /**
  * @property int $id
  * @property string|null $photo
@@ -30,12 +31,12 @@ use app\models\City;
  * @property string|null $verification_token
  *
  * @property Album[] $albums
+ * @property StarRating $starRating
  * @property Chat[] $chats
  * @property Dialog[] $dialogs
  * @property ExecCategory[] $execCategories
  * @property Order[] $orders
  * @property Review[] $reviews
- * @property Review[] $reviews0
  * @property WorkForm $workForm
  * @property Sex $sex
  * @property UserCategory[] $userCategories
@@ -73,30 +74,39 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             'id' => 'ID',
             'username' => 'Контактное лицо',
-            'myself' => 'О себе',
-            'reyting' => 'Рейтинг',
+            'myself' => 'О себе',            
             'blk'=> 'Признак блокировки аккаунта',
         ];
     }
 
-    /**
-     * Gets query for [[Albums]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+    public function getDialogs()
+    {
+        return $this->hasMany(Dialog::className(), ['user_id' => 'id']);
+    }
+
     public function getAlbums()
     {
         return $this->hasMany(Album::className(), ['user_id' => 'id']);
     }
 
-    /**
-     * Gets query for [[Orders]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+    public function getChats()
+    {
+        return $this->hasMany(Chat::className(), ['exec_id' => 'id']);
+    }
+
     public function getOrders()
     {
         return $this->hasMany(Order::className(), ['user_id' => 'id']);
+    }
+
+    public function getComplains()
+    {
+        return $this->hasMany(Complain::className(), ['for_user_id' => 'id']);
+    }
+
+    public function getReviews()
+    {
+        return $this->hasMany(Review::className(), ['from_user_id' => 'id']);
     }
 
     public function getCategory()
@@ -108,71 +118,57 @@ class User extends ActiveRecord implements IdentityInterface
     {
          return $this->hasMany(Subcategory::className(), ['id' => 'subcategory_id'])->viaTable('yii_user_category', ['user_id' => 'id']);
     }
-
-    /** Связь с таблицей WorkForm
-     * Gets query for [[WorkForm]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+    
     public function getWorkForm()
     {
         return $this->hasOne(WorkForm::className(), ['id' => 'work_form_id']);
     }
 
-    /** Связь с таблицей Sex
-     * Gets query for [[Sex]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
     public function getSex()
     {
         return $this->hasOne(Sex::className(), ['id' => 'sex_id']);
     }
 
-    /**
-     * Gets query for [[UserCities]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+     public function getUserAbonements()
+    {
+        return $this->hasMany(UserAbonement::className(), ['user_id' => 'id']);
+    }
+    
     public function getUserCities()
     {
         return $this->hasMany(UserCity::className(), ['user_id' => 'id']);
     }
 
-    /**
-     * Gets query for [[Cities]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
     public function getCities()
     {
         return $this->hasMany(City::className(), ['id' => 'city_id'])->viaTable('yii_user_city', ['user_id' => 'id']);
     }
 
-    /**
-     * Gets query for [[UserDocs]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+    public function getUserCategories()
+    {
+        return $this->hasMany(UserCategory::className(), ['user_id' => 'id']);
+    }
+
     public function getUserDocs()
     {
         return $this->hasMany(UserDoc::className(), ['user_id' => 'id']);
     }
 
-    /**
-     * Gets query for [[UserEducations]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
     public function getUserEducations()
     {
         return $this->hasMany(UserEducation::className(), ['user_id' => 'id']);
     }
+
+    public function getStarRating()
+    {
+        return $this->hasOne(StarRating::className(), ['rating_id' => 'id']);
+    }
+
+    public function getVisitLogs()
+    {
+        return $this->hasMany(VisitLog::className(), ['user_id' => 'id']);
+    }
     
-    
-    /**
-     * {@inheritdoc}
-     */
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);

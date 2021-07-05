@@ -94,11 +94,12 @@ $work_form = change_key_new($work_form, 'id');
 
                     foreach($chat_list as $k=>$chl) { ?>
 
-                        <a class="dialog_ref" href="/cabinet/dialog-list?
-                            chat_id=<?=$chl['id'] ?>&
-                            work_form_name=<?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?>&
-                            status=<?= $cht_status[$chl['id']]?>" data-pjax="0" title="Перейти к диалогу в этом чате">
+                       <!--  <a class="dialog_ref" href="/cabinet/dialog-list?
+                            chat_id=<?//=$chl['id'] ?>&
+                            work_form_name=<?//= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?>&
+                            status=<?//= $cht_status[$chl['id']]?>" data-pjax="0" title="Перейти к диалогу в этом чате"> -->
 
+                        <a class="dialog_ref" href="/cabinet/dialog-list?chat_id=<?=$chl['id'] ?>&work_form_name=<?= $work_form[$chl['customer']['work_form_id']]['work_form_name'] ?>" data-pjax="0" title="Перейти к диалогу в этом чате">    
                             <div class="order_info chat">
                                 <div class="number_info"><span>#<?= substr((string)$chl['order_id'],-2)?></span>
                                     <!-- <div id="badge_chat" class="badge ">15</div> -->

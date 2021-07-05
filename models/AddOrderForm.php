@@ -31,7 +31,7 @@ class AddOrderForm extends Model
     
     public $imageFiles;  // класс - UploadedFile
 
-    public $status_order_id = 2;
+    public $status_order_id = 0;
 
     public function rules()
     {

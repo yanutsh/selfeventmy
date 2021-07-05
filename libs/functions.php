@@ -26,7 +26,8 @@ function cht_status($chat) {
   if(     $chat['exec_cancel']==1) $cht_status="Отказ Исполнителя"; 
   elseif( $chat['result']==0 and !is_null($chat['result'])) $cht_status="Отказ Заказчика"; 
   elseif( $chat['result']==1) $cht_status="Заказ выполнен"; 
-  elseif( $chat['isaccepted']==1) $cht_status="Принят к исполнению";
+  elseif( $chat['exec_done']==1) $cht_status="Выполнен исполнителем";
+  elseif( $chat['isaccepted']==1) $cht_status="Принят к исполнению";  
   elseif( $chat['ischoose']==1) $cht_status="Исполнитель выбран";
   else    $cht_status ="Диалог открыт";
   return   $cht_status; 
@@ -108,6 +109,7 @@ function convert_datetime_en_ru($str_date){
     $date_ru['dmY']=date_format($date, 'd.m.Y');  			// без времени
     $date_ru['dmYHis']=date_format($date, 'd.m.Y H:i:s'); 	// со временем 
     $date_ru['HidmY']=date_format($date, 'H:i d.m.Y'); 
+    $date_ru['dmYHi']=date_format($date, 'd.m.Y H:i'); 
     $date_ru['Hi']=date_format($date, 'H:i'); 	            // часы + минуты 
 
     $timeunix = strtotime($str_date); 						// строка в timestamp				

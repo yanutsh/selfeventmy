@@ -6,8 +6,13 @@ DB_NAME = 'selfeventmy',
 DB_CHARSET = 'utf8',
 DB_USER = 'root',
 DB_PASSWORD = '',
+
+//DB_NAME = 'u0080760_selfeventmy',
+//DB_USER = 'u0080760_yanutsh',
+//DB_PASSWORD = 'y3233207',
+
 MAX_RATING = 5,
-IS_CHECK_IP = true;
+IS_CHECK_IP = false; //true; // защита от многократного голосования
 
 function log_write($message)
 {

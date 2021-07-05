@@ -48,8 +48,14 @@
     flex: 0 0 32px;
 }
 
+.execReview .star-rating__avg{
+    display: block;
+}
+
 .star-rating__avg {
     display: none; /*flex;*/
+    font-size: 22px;
+    line-height: 32px;
     align-items: center;
     justify-content: center;
     font-weight: bold;

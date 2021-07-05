@@ -269,7 +269,7 @@ body{
 
 	.order_number{
 		position: absolute;
-	    right: 60px;
+	    right: 25px;
 	    font-size: 17px;
 	    font-weight: 700;
 	    color: rgb(174, 74, 132);
@@ -313,6 +313,7 @@ body{
 	}	
 
 	.order_item{
+		position: relative;
 		max-width: 644px;
 		box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
 		border-radius: 5px;
@@ -359,6 +360,13 @@ body{
 
 	.color_red{
 	 	color: red;
+	}
+
+	p.offer_header{
+		text-align: center;
+	    font-size: 22px;
+	    font-weight: bold;
+	    color: brown;	
 	}
 
 /*******************  Правая  панель  Конец *****************************/ 
@@ -1028,7 +1036,16 @@ body{
 	    
 /*******************  Лента исполнителей ExecList  Конец  ********************/
 
-/*******************  Карточка исполнителя **********************************/
+/*******************  Карточка Юзера **********************************/
+	.calendar{
+		display: flex;
+    	align-items: center;
+	}
+
+	.calendar img{
+		width: 18px;
+	}
+
 	ul.service {		
 	    list-style-type: disc;
 	    margin-left: 30px;
@@ -1919,6 +1936,10 @@ body{
 /*******************  Cтраница добавления документов Конец ************************/
 
 /*******************  Cтраница диалога по чату ************************************/
+.dialog_msg{
+	text-align: center;
+	color: red;
+}
 
 .b_header.b_header__tuning.__dialog{
 	display: flex;
@@ -1962,6 +1983,7 @@ a.white_btn{
 }
 
 .__dialog .visited{
+	display: block;
 	font-weight: normal;
     font-size: 14px;
 }  
@@ -2114,7 +2136,32 @@ img.img__center{
     font-weight: bold;
     margin-bottom: 14px;
 }
-/*******************  Cтраница оценки Заказчика Конец ******************************/
+/*******************  Cтраница оценки Заказчика Конец *****************************/
+
+/*******************  Cтраница Жалобы-список **************************************/
+	.review_list.complains{
+		display: block;
+	}
+
+	.members{
+		width: 100%;
+		display: flex;
+	    justify-content: space-between;
+	}
+
+	p.for, p.from{
+		display: inline-block;
+	}
+
+	p.from{
+		float: left;
+	}
+
+	p.for{
+		float: right;
+	}
+
+/*******************  Cтраница Жалобы-список Конец *********************************/
 
 /******************************  Выключатель  **************************************/
 	.toggle-button-cover{
@@ -2243,4 +2290,4 @@ img.img__center{
 	{
 	    transition: 0.3s ease all;
 	}
-/******************************  Выключатель Конец ********************************/	
+/******************************  Выключатель Конец *********************************/	

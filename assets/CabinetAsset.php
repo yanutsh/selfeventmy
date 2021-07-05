@@ -29,6 +29,7 @@ class CabinetAsset extends AssetBundle {
         'css/slick-theme.css',
         'css/cabinet.css',
         'css/star_rating.css',
+        'css/calendar.css',
         
     ];
     public $js = [

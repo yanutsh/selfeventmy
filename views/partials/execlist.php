@@ -27,9 +27,9 @@ $min_price_new = change_key_new($min_price, 'user_id');
 //debug($min_price_new); 
   
 //debug("only_top=".$model['only_top'],0);
-
+//debug($exec_list);
 foreach ($exec_list as $el) 
-{   //debug($el,0);
+{   
     ?>
     <a class="block" href="/cabinet/user-card?id=<?= $el['id'] ?>">
         <!-- <div class="order_item"> -->
@@ -50,7 +50,9 @@ foreach ($exec_list as $el)
                 </div>
 
                 <div class="b_right">
-                    <p class="reiting_num"><?= $el['reyting']?></p>
+                    <p class="reiting_num"><?php 
+                        if($el['rating_avg']) echo round($el['rating_avg'],1);
+                        else echo"0.0"; ?></p>
                     <p class="reitibg_text">Рейтинг</p>
                 </div>
 
@@ -105,7 +107,10 @@ foreach ($exec_list as $el)
                     </div>
 
                     <div class="b_right">
-                        <p class="reiting_num"><?= $el['reyting']?></p>
+                        <p class="reiting_num"><?php 
+                            if($el['rating_avg']) echo round($el['rating_avg'],1);
+                            else echo"0.0"; ?>
+                        </p>
                         <p class="reitibg_text">Рейтинг</p>
                     </div>
 
