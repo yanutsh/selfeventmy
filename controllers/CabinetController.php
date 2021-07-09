@@ -69,7 +69,7 @@ class CabinetController extends AppController {
       $model = new OrderFiltrForm();
       $orderResponseForm = new orderResponseForm();
 
-      // Если пришёл AJAX запрос
+      // Если пришёл AJAX запрос (данные фильтра или отклик на заказ)
         if (Yii::$app->request->isAjax) { 
           // Устанавливаем формат ответа JSON
           //debug('Еесть Ajax');
@@ -98,38 +98,31 @@ class CabinetController extends AppController {
               ];
           } 
             
-            //debug($model);
-
             // фильтрация и определение количества заказов 
-            // астройки фильтра по предоплате
-            if ( $model->prepayment == 1)  {      // без предоплаты
+            // Настройки фильтра по предоплате
+            if ( $model->prepayment === '0')  {      // без предоплаты
                 $prep_compare = "=";
                 $prep_value = '0';
-            }elseif ( $model->prepayment == 2) {  // c предоплатoй
-                $prep_compare = ">=";
-                $prep_value = '100';
+            }elseif ( $model->prepayment == 1) {  // c предоплатoй
+                $prep_compare = ">";
+                $prep_value = '0';                 
             }else{
                 $prep_compare = ">=";             // любой вариант
                 $prep_value = '0';
             }
 
-            // сброс фильтра по городам
-            // if ($model['reset_city']) {
-            //   $model->city_id = Null;
-            //   debug($model->city_id);
-            // }  
-
-            //debug ($model); 
-
+            // var_dump((int)$model->order_status_id);
+            // echo "<br>";
+            // debug ($model->order_status_id);
+            
             $query = Order::find()
               ->filterWhere(['AND',                       
                   ['between', 'added_time', $date_from, $date_to],
                   ['or', ['>=', 'budget_from', $model->budget_from], ['>=', 'budget_to', $model->budget_from] ],                 
                   ['<=', 'budget_from', $model->budget_to],
-                  ['=','status_order_id', $model->order_status_id],
+                  ['=','status_order_id', (int)$model->order_status_id],
                   ['in','city_id', $model->city_id],
-                  [$prep_compare, 'prepayment', $prep_value],
-                                      
+                  [$prep_compare, 'prepayment', $prep_value],                                  
                             ]);
                //->with('category','orderStatus','orderCity', 'orderCategory', 'workForm');
 
@@ -143,32 +136,22 @@ class CabinetController extends AppController {
             $orders_list = $query->orderBy('added_time DESC')->all();       
             $count=$query->count(); // найдено заказов Всего
             
-            //debug( $count);            
+            //debug($orders_list);
 
-              // Фильтр по Формам работы
-              // if (!$model->work_form_id == "") {  // если значение фильтра установлено
-              //   foreach ($orders_list as $key=>$order) {
-              //     if (!($order['workForm']['id'] == $model->work_form_id)) {
-              //        unset($orders_list[$key]); // удаляем заказ из списка               
-              //     }                  
-              //   }                  
-              // }
-                 
-
-              $this->layout='contentonly';
-              return [
-                  "data" => $count,
-                  "orders" => $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'orderResponseForm')), //$html_list, 
-                  "error" => null
-              ];             
+            $this->layout='contentonly';
+            return [
+                "data" => $count,
+                "orders" => $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'orderResponseForm')), //$html_list, 
+                "error" => null
+            ];             
         } 
 
 met_first:
-        //  первый раз открываем страницу - показываем все незакрытые заказы       
+        //  первый раз открываем страницу - показываем заказы в поиске исполнителя     
         
         $sql = "SELECT yii_order.*, yii_order_status.name
                 FROM yii_order INNER JOIN yii_order_status ON yii_order.status_order_id = yii_order_status.id
-                WHERE ( ((yii_order_status.id)<>4) AND ((yii_order.added_time) Between '".  
+                WHERE ( ((yii_order_status.id)=0) AND ((yii_order.added_time) Between '".  
                 convert_date_ru_en(Yii::$app->params['date_from'])."' And '".
                 convert_date_ru_en(Yii::$app->params['date_to'])."') )
                 ORDER BY yii_order.added_time DESC";
@@ -179,15 +162,7 @@ met_first:
                               ])                
                   ->with('category','orderStatus','orderCity','chats')                
                   ->asArray()->all(); 
-
-        // $orders_list = Order::find()
-        //           ->filterWhere(['AND',                     
-        //             ['between', 'added_time', convert_date_ru_en(Yii::$app->params['date_from']), convert_date_ru_en(Yii::$app->params['date_to'])],
-        //                       ])                
-        //         ->with('category','orderStatus','orderCity','chats')                
-        //         ->orderBy('added_time DESC')
-        //         ->asArray()->all();  //count();
-        
+                
         //debug( $orders_list);  
               
         $count= count($orders_list);            
@@ -441,12 +416,28 @@ met_first:
               $order->save();
 
               // записываем событие в календарь Исполнителя.
-              $exec_event = new ExecEvent();
-              $exec_event->exec_id = $user_id;
-              $exec_event->event_date = $order->date_from;
-              $exec_event->event_description = $order->details;
+              // если мероприятие длится 1 день:
+              if($order->date_from == $order->date_to || is_null($order->date_to)) {
+                $exec_event = new ExecEvent();
+                $exec_event->exec_id = $user_id;
+                $exec_event->event_date = $order->date_from;
+                $exec_event->event_description = $order->details;
+                $exec_event->save();
+              }else{
+                $date_var = $order->date_from; 
+                while ($date_var <= $order->date_to) {
+                  $exec_event = new ExecEvent();
+                  $exec_event->exec_id = $user_id;
+                  $exec_event->event_date = $date_var;
+                  $exec_event->event_description = $order->details;
+                  $exec_event->save();
+                  $date_var = date("Y-m-d H:i:s", strtotime($date_var.'+ 1 days'));
+                  //debug($date_var);
+                } 
+
+              }
+
               
-              $exec_event->save();
 
               // переход на dialog-list
               goto met_first;
@@ -675,33 +666,13 @@ met_first:
           else $reyting_order = "ASC";                  // 0 - по возрастанию
           //debug ($reyting_order);
 
-          // фильтрация и определение количества заказов 
-          // настройки фильтра по предоплате
-          // if ( $model->prepayment == 0)  {      // без предоплаты
-          //     $prep_compare = "=";
-          //     $prep_value = '0';
-          // }elseif ( $model->prepayment == 1) {  // c предоплатoй
-          //     $prep_compare = ">=";
-          //     $prep_value = '100';
-          // }else{
-          //     $prep_compare = ">=";             // любой вариант
-          //     $prep_value = '0';
-          // } 
-
-            //debug ($model); 
-            //$rows = (new \yii\db\Query())
-            //    ->from('user')
-
-          // SELECT yii_user.*, star_rating.rating_avg, yii_user.isexec
-          // FROM yii_user LEFT JOIN star_rating ON yii_user.id = star_rating.rating_id
-          // WHERE (((yii_user.isexec)=1));
-
-  
-            
+          //debug ($model); 
+                               
             $query = User::find()            
-              ->select(['yii_user.*', 'star_rating.rating_avg'])
+              ->select(['yii_user.*', 'star_rating.rating_avg','yii_user_category.price_from','yii_user_category.price_to'])
               ->from(['yii_user'])
               ->join('LEFT JOIN', 'star_rating', 'star_rating.rating_id=yii_user.id')
+              ->join('LEFT JOIN', 'yii_user_category', 'yii_user_category.user_id=yii_user.id')
               ->filterWhere(['AND',
                  ['isexec' => 1],                       
                  //['between', 'added_time', $date_from, $date_to],
@@ -717,7 +688,7 @@ met_first:
                
             // Фильтр исполнителей по категориям услуг 
             if ($model->category_id)                    
-                $query->andWhere(['id' => UserCategory::find()->select('user_id')->andWhere(['category_id'=>  $model->category_id])]);
+                $query->andWhere(['yii_user.id' => UserCategory::find()->select('user_id')->andWhere(['category_id'=>  $model->category_id])]);
 
             // Фильтр исполнителей по городам  
             if ($model->city_id)                    
@@ -725,34 +696,27 @@ met_first:
 
             // Фильтр исполнителей по стоимости            
             if ($model->budget_from)              
-              $query->andWhere(['id' => UserCategory::find()->select('user_id')->andWhere([
-                '>=', 'price_from', $model->budget_from]) ]);
+                $query->andWhere([ '<=', 'price_from', $model->budget_from]); 
 
             if ($model->budget_to)              
-              $query->andWhere(['id' => UserCategory::find()->select('user_id')->andWhere([
-                '<=', 'price_to', $model->budget_to]) ]);
+                $query->andWhere(['or',['<=', 'price_to', $model->budget_to],  ['price_to'=>null]]); 
+                            
+              $exec_list = $query->with('workForm', 'category', 'userCities','starRating')
+                                  ->asArray()->all();     
+              $count = $query->count(); // найдено исполнителей Всего 
+              //debug($exec_list);             
 
-              // Фильтр по Формам работы
-              // if (!$model->work_form_id == "") {  // если значение фильтра установлено
-              //   foreach ($orders_list as $key=>$order) {
-              //     if (!($order['workForm']['id'] == $model->work_form_id)) {
-              //        unset($orders_list[$key]); // удаляем заказ из списка               
-              //     }                  
-              //   }                  
-              // }
-              
-              $exec_list = $query->with('userCities','starRating')->asArray()->all();     
-              $count = $query->count(); // найдено исполнителей Всего              
-
-              //debug($model);          
-              //debug($exec_list);
-
+              // возвращаем результат запроса по классическому AJAX 
               $this->layout='contentonly';
               return [
                   "data" => $count,
                   "orders" => $this->render('@app/views/partials/execlist.php', compact('exec_list', 'model', 'city', 'min_price')),  
                   "error" => null
               ]; 
+
+              //return $this->render('execList', compact('exec_list','model', 'category', 'city', 'work_form', 'payment_form', 'count', 'min_price'));              
+    
+
         } //else { //  первый раз открываем страницу - показываем всех исполнителей
         
         $sql = "SELECT yii_user.*,star_rating.rating_avg

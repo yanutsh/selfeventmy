@@ -80,21 +80,35 @@ $city = City::find() ->orderBy('name')->all();
         <div class="order_content__declare">Описание события</div>
         <p><?= $order['details']?></p>
 
-        <div class="slider">
-            <?php foreach($order['orderPhotos'] as $photo){ ?>}
-                <div>
-                    <a href="/web/uploads/images/orders/<?= $photo['photo']?>" class="highslide" onclick="return hs.expand(this)" >
-                        <img src="/web/uploads/images/orders/<?= $photo['photo']?>" alt="">
-                    </a>
-                </div>
-            <?php } ?>
-        </div>
+        <!-- ===== Доп информация ===================================== -->
 
+            <div class="who_need">Требуется: <?= $order['who_need']?></div>
+            
+               
+            <?php if(!empty($order['wishes'])) {?>
+                <div class="wishes">Пожелания: <?= $order['wishes']?></div>
+            <?php } ?>             
+            <div class="wishes">Бюджет до: <?= $order['budget_to']?> ₽.</div>
+            <?php if($order['prepayment']>0) {?>
+                <div class="wishes">Предоплата: <?= $order['prepayment']?> ₽.</div>
+            <?php } ?>   
+        <!-- =====  Доп информация Конец ============================== -->
+        
         <div class="order_content__subtitle">Город</div>
         <div class="text"><?= $order['orderCity']['name']?></div>
         <div class="order_content__subtitle">Когда</div>
-        <div class="text"><?= convert_datetime_en_ru($order['date_from']) ?> (<?= convert_datetime_en_ru($order['added_time'])['w']?>) в 13:00???</div>
-
+        <div class="text"><?php 
+            if( ($order['date_from']==$order['date_to']) || is_null($order['date_to'])){
+                echo (convert_datetime_en_ru($order['date_from'])['dmY']);
+                echo (" (".convert_datetime_en_ru($order['date_from'])['w'].")");
+            }else{
+                echo ("с ".convert_datetime_en_ru($order['date_from'])['dmY']);
+                echo (" (".convert_datetime_en_ru($order['date_from'])['w'].")");
+                echo (" по ".convert_datetime_en_ru($order['date_to'])['dmY']);
+                echo (" (".convert_datetime_en_ru($order['date_to'])['w'].")");
+            }?>
+        </div> 
+            
         <?php if($order['user']['isexec']) { ?>
             <div class="order_content__subtitle">Цена отклика</div>
             <div class="text">
@@ -108,6 +122,16 @@ $city = City::find() ->orderBy('name')->all();
             $d = convert_datetime_en_ru($order['added_time']);
             echo $d['dMruY']; ?> в <?= convert_datetime_en_ru($order['added_time'])['Hi']?></div>
 
+        <div class="slider">
+            <?php foreach($order['orderPhotos'] as $photo){ ?>}
+                <div>
+                    <a href="/web/uploads/images/orders/<?= $photo['photo']?>" class="highslide" onclick="return hs.expand(this)" >
+                        <img src="/web/uploads/images/orders/<?= $photo['photo']?>" alt="">
+                    </a>
+                </div>
+            <?php } ?>
+        </div>
+        
         <?php if($order['user']['isexec']) { ?>    
             <div class="reiting">
                 <img src="/web/uploads/images/attention_24px.png" alt="Внимание">

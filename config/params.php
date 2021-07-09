@@ -1,13 +1,8 @@
 <?php
-use app\models\Category;
-
-$cache = \Yii::$app->cache;
-//$category = $cache->getOrSet('category', function(){
-//             return Category::find()->orderBy('name')->asArray()->all();});
 
 return [
     //'adminEmail'      => 'mail@v-stepanov.ru',
-    'adminEmail'      => 'selfevent@toppartner.ru',
+    'adminEmail'      => 'yanutsh@toppartner.ru',
     'serverEmail'     => 'noreply@se.k-store.ru'
     /* . $_SERVER['HOST_NAME'] /* . str_replace('www.', '', \Yii::$app->request->getHostInfo()) */,
     'upload_dir'      => '@webroot/uploads/',
@@ -36,7 +31,7 @@ return [
     'email_subject'   => 'MrSelfevent-Код подтверждения',
     'timer' =>  60,     // таймер повторной отправки кода подтверждения, сек
 
-    // Фильтр поиска заказов - Дата от         
+    // Фильтр поиска заказов размещенных за период- Дата от         
     'date_from' => date('d.m.Y', mktime(0, 0, 0, date("m"), date("d")-365, date("Y"))), 
     'date_to' => date('d.m.Y', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))),    // Дата до
 

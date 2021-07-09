@@ -1042,6 +1042,14 @@ body{
     	align-items: center;
 	}
 
+	.calendar_title{
+		font-weight: bold;
+	    font-size: 14px;
+	    color: brown;
+	    text-align: center;
+	    margin-bottom: 10px;
+	}
+
 	.calendar img{
 		width: 18px;
 	}

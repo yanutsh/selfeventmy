@@ -121,7 +121,7 @@ RegistrationAsset::register($this);
 		                    </div>
 		                 
 
-		                    <?= $form->field($model, 'order_status_id')->dropDownList (ArrayHelper::map($order_status, 'id', 'name'),['prompt'=>'Любой статус заказа']) ?>
+		                    <?= $form->field($model, 'order_status_id')->dropDownList (ArrayHelper::map($order_status, 'id', 'name'),['prompt'=>'В поиске исполнителя']) ?>
 		                    	
 		                    <div class="form-group"> 
 		                    	<div class='register__user active__button'>Показано заказов - <span><?= $count ?></span> шт.</div>
@@ -159,7 +159,7 @@ RegistrationAsset::register($this);
 								//echo $this->render('@app/views/partials/orderslist.php', compact('orders_list', 'pages','orderResponseForm'));
 							?>	
 		    			</div>
-		    			
+
 		    		<div>			    			
 		    	</div>	
 		   		

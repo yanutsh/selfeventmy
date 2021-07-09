@@ -102,7 +102,7 @@ CabinetAsset::register($this);
 					         	
 						        <div class="buttons">
 						        	<a href="/cabinet/order-offer?exec_id=<?=$user['id']?>" class="register active">Предложить заказ</a>
-						        	<a href="" class="register">Календарь исполнителя</a>
+						        	<div class="calendar_title">Календарь исполнителя:</div>
 						        	
 						        	<?php Pjax::begin(['timeout' => false ]); ?>
 						        	<div class="calendar">

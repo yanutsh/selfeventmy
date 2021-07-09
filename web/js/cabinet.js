@@ -141,19 +141,15 @@ $(document).ready(function() {
             if (data.error == null) {
                     // Если ответ сервера успешно получен
                     //console.dir(data);
-                    $('#exec-filter-form .register__user span').text(data.data);
-                    //$("#output").text(data.data);
+                    $('#exec-filter-form .register__user span').text(data.data);                    
                     $("#exec_list").html(data.orders);
-
                 } else {
                     // Если при обработке данных на сервере произошла ошибка
-                    console.log('data='+data.error);
-                    //$("#output").text(data.error)
+                    console.log('data='+data.error);                   
                 }
         }).fail(function(data) {
             // Если произошла ошибка при отправке запроса
-            console.log('error3='+data);
-            //$("#output").text("error3");
+            console.log('error3='+data);            
         })
         // Запрещаем прямую отправку данных из формы
         return false;
