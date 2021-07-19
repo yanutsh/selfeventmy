@@ -131,10 +131,8 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
 
 
                     <!----------------Для исполнителей-------------------------------->
-                    <!----------------Добавить Фотографии документов------------------>
-                    <div class="form_subtitle">Документы</div>
-                    <p>Пришлите скриншоты документов для подтверждения вашего статуса и повышения рейтинга.</p>
-
+                    <!----------------Добавить Фотографии документов------------------>           
+                    
                     <?php 
                     if ($_GET['isexec']==1) {
                         $max_photos_order=6; 
@@ -143,7 +141,8 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                                     var add_new_order=1;
                                 </script>";
                         ?>
-
+                        <div class="form_subtitle">Документы</div>
+                        <p>Пришлите скриншоты документов для подтверждения вашего статуса и повышения рейтинга.</p>
                         <div class="b-add-item registration">                            
                             <div  class="add-photo">Выберите фотографии документов 
                                       <input type="file" name="RegForm[imageFiles][]" id="image" accept="image/*" 
@@ -154,17 +153,19 @@ if (isset($_GET['isexec'])) $_SESSION['isexec'] = $_GET['isexec'];
                         </div>                  
 
                        
-                    <?php 
-                    } ?>
+                    
 
-                    <p class='doc_list'>Необходимые документы дл Юр. лиц:</p>
-                    <!-- <p class='require_list'>Необходимые документы для физ. лиц:</p> -->
-                    <ul>
-                        <?php 
-                        foreach($doc_list as $dl) { ?>                  
-                            <li><?= $dl['doc_name']?></li>                
-                        <?php } ?>
-                    </ul>     
+                        <p class='doc_list'>Необходимые документы дл Юр. лиц:</p>
+                        <!-- <p class='require_list'>Необходимые документы для физ. лиц:</p> -->
+                        <ul>
+                            <?php 
+                            foreach($doc_list as $dl) { ?>                  
+                                <li><?= $dl['doc_name']?></li>                
+                            <?php } ?>
+                        </ul>
+
+                    <?php 
+                    } ?>    
                     <!-----------Добавить Фотографии документов КОНЕЦ---------------> 
 
                     <div class="personal_check">

@@ -1210,6 +1210,7 @@ body{
 		font-size: 18px;
 		font-weight: bold;
 		margin-bottom: 12px;
+		text-align: left;
 	}
 
 	.lk__main__exec p.text{

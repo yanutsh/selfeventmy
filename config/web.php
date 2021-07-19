@@ -37,7 +37,7 @@ $config = [
             //    'class' => 'Swift_SmtpTransport',
             //    'host' => 'mail.hosting.reg.ru',  // e.g. smtp.mandrillapp.com or smtp.gmail.com
             //    'username' => 'selfevent@toppartner.ru',
-            //    'password' => '1953SashA',
+            //    'password' => 'SashAYanutsH1953',
             //    'port' => '465', // 2525 или Port 25 is a very common port too
             //    'encryption' => 'ssl', // It is often used, check your provider or mail server specs
             //],

@@ -1,0 +1,1 @@
+<?php if(mail('yanutsh53@gmail.com', 'test', 'test', 'From: yanutsh@toppartner.ru')) echo 'OK'; else 'ERROR' ?> 

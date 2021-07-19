@@ -81,8 +81,10 @@ class OrderCategory extends \yii\db\ActiveRecord
                 $order_category = new OrderCategory();
 
                 $order_category->order_id = $order_id;
-                $order_category->category_id = $cat_id;        
-                $order_category->subcategory_id = $fields['subcategory_id'][$i];
+                $order_category->category_id = $cat_id; 
+                if(!empty($fields['subcategory_id'][$i]))       
+                    $order_category->subcategory_id = $fields['subcategory_id'][$i];
+                else $order_category->subcategory_id = 0;
 
                 $order_category->save();                
             }

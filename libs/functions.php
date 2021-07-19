@@ -8,7 +8,7 @@ function debug($data,$die=true){
 	if ($die) die;
 }
 
-// Генерация кода из заданного числа цифр
+// Генерация кода из заданного числа цифр для подтверждения почты или телефона
 function confirm_code($len=6){		
 	$str="";
 	for($i=0; $i<$len; $i++){
@@ -18,6 +18,7 @@ function confirm_code($len=6){
 	return $str;		
 }
 
+// формирование статуса чата
 function cht_status($chat) {
 	// var_dump($chat['ischoose']);
 	// debug($chat,0);
@@ -50,6 +51,31 @@ function send_email($email,$email_subject,$text){
 	    Yii::$app->session->setFlash('send_code', $text. ' Письмо отправлено');
 	    //return true;	 
 }
+
+// отправка уведомления Иполнителям о появлении заказа в их городе по их специальности
+function new_order_info($email_list, $order_id){
+	//debug($email_list);
+	$email_from = \Yii::$app->params['adminEmail'];
+	$email_subject_new_order = \Yii::$app->params['email_subject_new_order'];	
+	
+	foreach($email_list as $el){	
+		if (!empty($el['subcat_name']))	$subcat_name = "/".$el['subcat_name'];
+		else $subcat_name = "";
+		$text = "Здравствуйте, ".$el['username']."!<br>В вашем городе (".$el['fs_city_name'].") появился новый заказ (№".$order_id.") по специализации - ".$el['category_name'].$subcat_name.".<br>Ознакомиться с ним можно  на сайте ".\Yii::$app->request->hostInfo."<br><br>Администрация сайта ".\Yii::$app->request->hostInfo;
+
+		Yii::$app->mailer->compose()																							
+		    ->setFrom($email_from)
+		    ->setTo($el['email'])
+		    ->setSubject($email_subject_new_order)
+		    ->setTextBody($text)
+		    ->setHtmlBody($text)
+		    ->send();	
+
+		    Yii::$app->session->setFlash('send_code', $text. ' Письмо отправлено');
+		    //return true;	
+	}
+
+};
 
 function send_email_to_admin($email_subject,$text){	
 	// отправка смс Aдминy от Админа с текстом  $text

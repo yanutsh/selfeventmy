@@ -759,7 +759,7 @@ met_first:
               $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
               if (isset($model->imageFiles)) { 
                 if ($model->upload()) {   // file is uploaded successfully ? 
-                  //debug($_SESSION['order_photo']);               
+                                 
                   // записываем фотографии в БД
                   $order_photo = new OrderPhoto();
                   $order_photo->saveOrderPhoto($new_id);
@@ -768,18 +768,46 @@ met_first:
               }
                 
               // записываем категории и подкатегории заказа
+              //debug($model);
               $order_category = new OrderCategory();
               $order_category->saveOrderCategory($model, $new_id); 
 
+              // Формируем список Исполнителей для уведомления о новом заказе в их городе
+              // и запускаем рассылку
+              // Список исполнителей с городами = город заказа и услугами = услуга заказа 
+              
+              // определяем - кто требуется по этому новому заказу - категории услуг и подкатегориии
+              $sql1 = "SELECT yii_order.id, yii_order_category.category_id, yii_category.name,  
+                              yii_order_category.subcategory_id, yii_subcategory.name AS subcat_name
+                      FROM ((yii_order INNER JOIN yii_order_category ON yii_order.id = yii_order_category.order_id) INNER JOIN yii_category ON yii_order_category.category_id = yii_category.id) LEFT JOIN yii_subcategory ON yii_order_category.subcategory_id = yii_subcategory.id
+                      WHERE (((yii_order.id)=".$new_id."))";
+ 
+              $sql="SELECT 
+                    MAX(yii_user.username) AS username, 
+                    yii_user.email, yii_user_city.city_id, order_cats.subcat_name,
+                    MAX(fs_city.name) AS fs_city_name, 
+                    yii_user_category.category_id, 
+                    MAX(yii_category.name) AS category_name, 
+                    MAX(order_cats.id) AS Order_id
+                    FROM (((yii_user INNER JOIN (yii_user_city INNER JOIN fs_city ON yii_user_city.city_id = fs_city.id) ON yii_user.id = yii_user_city.user_id) INNER JOIN yii_user_category ON yii_user.id = yii_user_category.user_id) INNER JOIN yii_category ON yii_user_category.category_id = yii_category.id) 
+                    INNER JOIN (".$sql1.") as order_cats ON yii_category.id = order_cats.category_id
+                    WHERE (((yii_user.isexec)=1))
+                    GROUP BY yii_user.email, yii_user_city.city_id, yii_user_category.category_id, order_cats.subcat_name
+                    HAVING (((yii_user_city.city_id)=".$model->city_id."))";
+              
+              $email_list = USER::findBySql($sql)->asArray()->all();      
+
+              //debug($email_list);
+              // рассылаем уведомления по этому списку
+             
+              $email_rez = new_order_info($email_list, $new_id);
+
               return $this->redirect(['/cabinet']);
-              // записываем фотки
             }  
             else echo "заказ НЕ записан ";
 
           }       
-          //echo ($model['category_id']);
           //debug($model);
-          //$category = Category::find() ->orderBy('name')->asArray()->all();
           $i=0;
           foreach($model['category_id'] as $cat_id) 
           {
